@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+
+
+    <h1 class="h3 mb-3 font-weight-normal">Créez votre compte</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {{ form_start(form) }}
+        {{ form_row(form.email, { 'label': 'Votre email' }) }}
+
+        {{ form_row(form.password, { 'label': 'Votre mot de passe' }) }}
+
+        {{ form_row(form.fullname, { 'label': 'Votre nom complet' }) }}
+    {{ form_end(form) }}
+{% endblock %}

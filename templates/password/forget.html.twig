@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div style="margin-left : 10px">
+<h2>Mot de passe oublié ?</h2>
+<p>Renseignez votre adresse mail, un email vous sera envoyé pour réinitialiser votre mot de passe.</p>
+</div>
+
+{{ form_start(form, {'action': path('sendmail_password')}) }}
+        {{ form_row(form.email) }}
+{{form_end(form)}}
+{% endblock %}

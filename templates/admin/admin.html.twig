@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+  {% block stylesheets %}
+
+  {{ parent() }}
+  <link rel="stylesheet" href="{{ asset('css/admin.css')}}">
+  {% endblock %}
+  {% block styles %}
+   .row{
+
+   text-align : center
+   }
+   .nav-link {
+     color : black;
+   }
+  {% endblock %}
+
+{% block body %}
+
+<ul class="nav nav-tabs" style="margin-bottom : 1rem";>
+  <li class="nav-item">
+    <a class="nav-link" style="color : black" aria-current="page" href="{{path("app_admin", {role : "user"})}}">Utilisateurs</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link"  style="color : black" href="{{path("app_admin", {role : "author"})}}">Auteurs</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" style="color : black" href="{{path("app_admin", {role : "admin"})}}">Administrateurs</a>
+  </li>
+</ul >
+
+<div >
+
+      <div class="row" >
+        <div class="col-2" > 
+          Nom
+        </div>
+        <div class="col-2">
+        </div>
+        <div class="col-2">
+          Email
+        </div>
+        <div class="col-4">
+        </div>
+        <div class="col-1">
+          Publications
+        </div>
+        <div class="col-1">
+        </div>
+      </div>
+
+<hr/>
+    
+{% for user in users %}
+      <div class="row">
+        <div class="col-2" > 
+          <b>{{user.fullname}}</b>
+        </div>
+        <div class="col-2">
+        </div>
+        <div class="col-2">
+          {{user.email}}
+        </div>
+        <div class="col-4">
+        </div>
+        <div class="col-1">
+          {{ nbPost(user.id, posts) }}
+        </div>
+        <div class="col-1">
+        </div>
+
+        </div>
+
+      
+
+<hr/>
+{% endfor %}
+
+  {% endblock %}

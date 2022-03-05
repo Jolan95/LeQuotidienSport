@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Le Quotidien Sport{% endblock %}</title>
+        
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+        <link rel="stylesheet" href="{{ asset('css/style.css')}}">
+        <style>
+        {% block styles %}
+        {% endblock %}
+        ul {
+          list-style-type: none;
+        }
+        .row{
+          display : flex;
+          align-items : center;
+        }
+        .menu-item:hover, .menu-item:visited, .menu-item:link{
+         color : white;
+        }
+        .dropdown-item:hover, .dropdown-item:visited, .dropdown-item:link{
+         color : black;
+        }
+
+
+        </style>
+    </head>
+<body style="backgrond-color : #d3d3d3">
+
+  <div  style="background-color : rgb(18,22,64)">
+
+
+      <ul class="row align-items " style="width : 99vw">
+        <li class="col-3" >
+          <a href="{{ path("home")}}"><image style="height : 100px; border-radius : 20px; width : 100%; min-width : 100px;" src="{{ asset('image/LogoSport.png') }}"></image></a>
+        </li>
+        <li   style="color : white" class="col-1">
+          <a  class="menu-item" href="{{ path('home') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" fill="currentColor" class="bi bi-house-fill" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
+              <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
+            </svg>
+          </a>
+        </li>
+        <li class=" nav-item dropdown col-1">
+          <a class="menu-item nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Sports
+          </a>
+          <div style="color : black" class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{{path("app_sport", {sport : 'Football'})}}">Football</a>
+            <a class="dropdown-item" href="{{path("app_sport", {sport : "Basketball"})}}">Basketball</a>
+            <a class="dropdown-item" href="{{path("app_sport", {sport : "Rugby"})}}">Rugby</a>
+            <a class="dropdown-item" href="{{path("app_sport", {sport : "Tennis"})}}">Tennis</a>
+            <a class="dropdown-item" href="{{path("app_sport", {sport : "Cyclisme"})}}">Cyclisme</a>
+            <a class="dropdown-item" href="{{path("app_sport", {sport : "Autres"})}}">Autres</a>
+          </div>
+        </li>
+        <li class="col-4 col-md-5">
+        </li>
+
+        {% if app.user %}
+        {% if is_granted('ROLE_AUTHOR') %}
+        <li class="col">
+          <a  href="{{ path("author") }}">
+            <svg xmlns="http://www.w3.org/2000/svg" style="color : white" width="1.5rem" height="1.5rem" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+              <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+            </svg>
+          </a>
+        </li>
+        {% endif %}
+        <li class="col" style="display : flex; justify-self : end" style="color : white">
+          <a  href="{{path("app_profile")}}">
+            <svg xmlns="http://www.w3.org/2000/svg" style="color : white"  width="1.5rem" height="1.5rem" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+            </svg>
+          </a>
+        </li>
+          {% else %} 
+        <li class="col">
+          <a style="color : white"  href="{{ path("app_signin") }}">Sign In</i></a>
+        </li>
+        <li class="col">
+          <a style="color : white" href="{{ path("app_login") }}">Log in</i></a>
+        </li>
+          {% endif %}
+      </ul>
+    </div>
+  </div>
+
+
+
+{% block body %}
+{% endblock %}
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+{% block javascripts %}
+  {{ encore_entry_script_tags('app') }}
+{% endblock %}
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="{{ asset('js/script.js')}}"></script>
+  </body>
+</html>

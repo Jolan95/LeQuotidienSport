@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+  {% block stylesheets %}
+
+  {{ parent() }}
+  <link rel="stylesheet" href="{{ asset('css/profile.css')}}">
+  {% endblock %}
+
+
+{% block body %}
+
+<div class="wrapper-profile" style="color : black"> 
+<h2>{{ app.user.fullname }}</h2> 
+
+{% if is_granted("ROLE_ADMIN") %}
+
+<h3 style="color : grey">Admin</h3>
+
+{%  elseif is_granted("ROLE_AUTHOR") %} 
+
+<h3 style="color : grey">Auteur</h3>
+
+{% endif %}
+
+<p style="margin-top : 2rem; font-size : 1.4rem">{{app.user.email}}</p>
+
+{% if is_granted("ROLE_AUTHOR") %}
+
+<div>
+<p style=" font-size : 1.4rem">Articles publiés : {{numberArticles}}</p>
+</div>
+<div>
+<a  href="{{path('myarticles')}}"><button class="btn btn-success">Mes Articles</button></a>
+</div>
+
+
+{% if is_granted("ROLE_ADMIN") %}
+
+<div style="padding-top : 20px;">
+<a  href="{{path('app_admin', {role : "admin"})}}"><button class="btn btn-info">Administration</button></a>
+</div>
+
+{% endif %}
+{% endif %}
+
+<div style="padding-top : 20px;">
+<a  href="{{path('app_logout')}}"><button class="btn btn-danger">Déconnexion</button></a>
+</div>
+
+
+  {% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+        <link rel="stylesheet" href="{{ asset('css/creation.css')}}">
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+        {{ form_row(form.title, { 'label': 'Titre : ' }) }}
+        {{ form_row(form.category, { 'label': 'Sport : ' }) }}
+        <div style="max-width : 200px;">
+        {{ form_row(form.picture) }}
+        </div>
+        {{ form_row(form.description, { 'label': "Description : " }) }}
+        {{ form_row(form.content, { 'label': "Contenu de l'article : " }) }}
+    {{ form_end(form) }}
+    
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('js/creation.js')}}"></script>
+{% endblock %}
