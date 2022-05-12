@@ -1,0 +1,128 @@
+
+ <header>
+    {# Header Large #}
+    <div class="d-none d-md-flex justify-content-between container-flex" >
+        <div class="d-flex justify-content-around align-items-center">
+            <div >
+                <a href="{{ path("home")}}"><image class="logo-header-desktop " alt="home" src="{{ asset('image/LogoSport.png') }}"></image></a>
+            </div>
+            <div>
+                <a  class="menu-item px-5" href="{{ path('home') }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" fill="currentColor" class="bi bi-house-fill" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
+                        <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="dropdown">       
+                <button class="btn dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     Sports
+                </button>  
+                <div  class="dropdown-menu index-high" aria-labelledby="dropdownMenu2">
+                    <a class="dropdown-item" href="{{path("app_sport", {sport : 'Football'})}}">Football</a>
+                    <a class="dropdown-item" href="{{path("app_sport", {sport : "Basketball"})}}">Basketball</a>
+                    <a class="dropdown-item" href="{{path("app_sport", {sport : "Rugby"})}}">Rugby</a>
+                    <a class="dropdown-item" href="{{path("app_sport", {sport : "Tennis"})}}">Tennis</a>
+                    <a class="dropdown-item" href="{{path("app_sport", {sport : "Cyclisme"})}}">Cyclisme</a>
+                    <a class="dropdown-item" href="{{path("app_sport", {sport : "Autres"})}}">Autres</a>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex pr-4 align-items-center">
+            {% if app.user %}
+            {% if is_granted('ROLE_AUTHOR') %}
+            <div class="pr-5">
+                <a  href="{{ path("author") }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                        <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                    </svg>
+                </a>
+            </div>
+            {% endif %}
+            <div>
+                <a  href="{{path("app_profile")}}">
+                    <svg xmlns="http://www.w3.org/2000/svg"  width="1.5rem" height="1.5rem" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                    </svg>
+                </a>
+            </div>
+            {% else %}
+            <div class="pr-5">
+                <a href="{{ path("app_signin") }}">Inscription</i></a>
+            </div>
+            <div>
+                <a href="{{ path("app_login") }}">Connexion</i></a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {# Header small #}
+    <div class="container-fluid d-md-none ">
+        <nav class="navbar">
+            <div >
+                <img src="{{ asset('image/LogoSport.png') }}" class="logo-header-mobile" alt="logo">   
+            </div>
+            <button class="navbar-toggler p-1" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <img src="{{asset('image/menu-burger.png')}}" class="menu-burger" alt="icône menu mobile" >
+            </button>
+
+            <div class="collapse navbar-collapse zone_menu_mobile" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                
+                    <div class="dropdown ">
+                        <p data-toggle="dropdown">
+                           <a href="">Sports </a><span>
+                        </p>
+                        <div class="dropdown-menu pb-4 ">
+                           <ul>
+                               <li class="nav-item">
+                                   <a  href="{{path("app_sport", {sport : 'Football'})}}">Football</a>
+                               </li>
+                               <li class="nav-item">
+                                   <a  href="{{path("app_sport", {sport : 'Basketball'})}}">Basketball</a>
+                               </li>
+                               <li class="nav-item">
+                                   <a  href="{{path("app_sport", {sport : 'Rugby'})}}">Rugby</a>
+                               </li>
+                               <li class="nav-item">
+                                   <a  href="{{path("app_sport", {sport : 'Tennis'})}}">Tennis</a>
+                               </li>
+                               <li class="nav-item">
+                                   <a  href="{{path("app_sport", {sport : 'Cyclisme'})}}">Cyclisme</a>
+                               </li>
+                               <li class="nav-item">
+                                   <a  href="{{path("app_sport", {sport : 'Autres'})}}">Autres</a>
+                               </li>
+                           </ul>
+                       </div>
+                    </div>
+                    {% if app.user %}
+                    {% if is_granted('ROLE_AUTHOR') %}
+                    <div class="dropdown">
+                        <p>
+                        <a href="{{ path("author") }}">
+                            Articles
+                        </a>
+                        </p>
+                    </div> 
+                    {% endif %}
+                    <div class="dropdown">
+                        <p>                          
+                            <a href="{{ path("app_profile") }}">Profil</i></a>                   
+                        </p>                        
+                    </div>
+                    {% else %}
+                    <div class="dropdown">
+                        <p>  
+                            <a href="{{ path("app_signin") }}">Connexion</i></a> 
+                        </p>
+                    </div>
+                    {% endif %}
+
+                
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>

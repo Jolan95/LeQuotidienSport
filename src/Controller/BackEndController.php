@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 
-class HandleAdminController extends AbstractController
+class BackEndController extends AbstractController
 {
 
     #[Route('admin/delete/{post}', name: 'remove_post')]
@@ -66,18 +66,6 @@ class HandleAdminController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
             return $this->redirectToRoute("app_admin", ["role" => "author"]);
-
-    }
-    
-    #[Route('author/my-articles', name: 'myarticles')]
-    public function myArticles( PostRepository $repo){
-           
-        $posts = $repo->findBy([
-            "author" => $this->getUser()
-        ]);
-         return $this->render("articles/mesarticles.html.twig", [
-            "posts" => $posts
-        ]);
 
     }
 

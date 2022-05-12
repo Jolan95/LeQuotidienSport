@@ -1,8 +1,39 @@
+.my-articles h1{
+    font-size: 1.75rem;
+    padding : 15px 20px;
+   color : black
+}
+h2{
+    font-size : 1.25rem;
+}
 .wrapper-profile{
     background-color : white;
     border-radius : 10px;
     padding : 20px;
-    margin : 50px;
+    margin-left : 10px;
     height : 25rem;
-    width : 24rem;
+    width : 800%;
+    min-width: 300px;
+    max-width : 440px;
+    font-size : 1.4rem;
+    margin-top  : 70px
 }
+.text-grey{
+    color: grey;
+}
+.my-articles .link-article:hover, .link-article:visited, .link-article:link {
+    color : #272727;
+    font-size : 1.5rem;
+}
+ a.edit{
+    color : rgba(42, 66, 131, 0.795);
+ }
+ a.trash{
+    color : red
+ }
+@media screen and (min-width : 500px ){
+    .wrapper-profile{
+        margin-left: 60px;
+    }
+}
+

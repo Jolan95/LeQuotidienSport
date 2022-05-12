@@ -1,0 +1,58 @@
+
+body {
+  background-color: #d3d3d3;
+}
+
+header{
+background-color : rgb(18,22,64);
+}
+header a:hover, a:visited, a:link {
+  text-decoration: none;
+  color : white;
+}
+.logo-header-desktop{
+  height : 100px;
+  width : auto;
+}
+.logo-header-mobile{
+  width : 150px;
+  height : auto;
+}
+.menu-burger{
+  height : 40px;
+  width : auto;
+}
+.dropdown-menu{
+  background-color : rgb(18,22,64);
+  border : none
+}
+.dropdown-toggle, .dropdown-toggle:hover, .dropdown-toggle:focus {
+  color : white;
+  outline: none;
+}
+.menu-burger{
+  width: 40px;
+  height : 40px;
+  color : white
+}
+.index-high {
+  z-index: 1000;
+}
+.img100{
+  width : 100%
+}
+.border10{
+  border-radius : 10px;
+}
+.full-center{
+  display : flex;
+  justify-content: center;
+  align-items: center;
+}
+.justify-center{
+  display: flex;
+  justify-content: center;
+}
+
+
+

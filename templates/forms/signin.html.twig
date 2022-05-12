@@ -1,22 +1,27 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+<link rel="stylesheet" href="{{asset('css/forms.css')}}">
+{% endblock %}
 
 {% block body %}
-
-
-
-    <h1 class="h3 mb-3 font-weight-normal">Créez votre compte</h1>
+<div class="container-fluid">
+    <h1 class="my-3 pl-2">Créez votre compte</h1>
 
     {% for message in app.flashes('success') %}
-        <div class="alert alert-success" role="alert">
-            {{ message }}
-        </div>
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+    </div>
     {% endfor %}
+    <div class="form-signin ml-lg-4">
     {{ form_start(form) }}
+        
         {{ form_row(form.email, { 'label': 'Votre email' }) }}
 
         {{ form_row(form.password, { 'label': 'Votre mot de passe' }) }}
 
         {{ form_row(form.fullname, { 'label': 'Votre nom complet' }) }}
     {{ form_end(form) }}
+    </div>
+</div>    
 {% endblock %}

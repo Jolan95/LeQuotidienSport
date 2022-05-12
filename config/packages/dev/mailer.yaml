@@ -1,0 +1,4 @@
+framework:
+    mailer:
+        envelope:
+            recipients: ['jolan.aubry@hotmail.fr'] # A remplacer par votre e-mail

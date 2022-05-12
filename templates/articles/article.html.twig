@@ -1,56 +1,20 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{asset('css/index.css')}}"/>
+{% endblock %}
 
 {% block body %}
-<style>
-
-a, a:hover, a:visited, a:active
-{
-	color:white;
-	text-decoration:none;
-}
-    .example-wrapper { font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; display : flex; text-align : center }
-    .articles-wrapper {margin-left : 10vw; margin-right : 10vw; display: grid;  }
-    .article-wrapper {max-height :40vh ;border-top : 1px  solid black; border-radius : 10px; padding : 10px; width : 80vw; 
-    }
-.content{
 
 
-    display : flex;
-    text-align : center;
-    justify-content : center;
-    margin-bottom : 3vw
-}
-.image{
-border-radius : 3px;
-height : 50vh; 
-width : 70%;
-
-}
-</style>
-
-<div class="articles-wrapper">
-
-<h1 class="content" style="display:flex; justify-content : center; margin-top : 4vh;">{{article.title}}</h1>
-
-<div  class="row">
-<div class="col-2">
-</div>
-<div class="col-8">
-<image   class="image content" style="width : 100%"src="{{asset('Upload/'~article.picture)}}"></image>
-</div>
-<div class="col-2">
-</div>
-</div>
-<p style="color : grey; ">Ecrit par {{article.author.fullname}} le {{date}} </p>
-
-
-<h4 class="content">{{article.description}}</h4>
-<div >
-
-
-<p class="content" style="font-size : 1.3rem">{{article.content}}</p>
-</div>
+<div class="container ">
+    <h1 class="text-center py-4" >{{article.title}}</h1>
+    <div class="justify-center mb-5">
+        <img  class="image400 border10" src="{{asset('Upload/'~article.picture)}}"></img>
+    </div>  
+    <p class="px-lg-4">Ecrit par {{article.author.fullname}} le {{date}} </p>       
+    <h2 class="text-center h2-grey px-4 mb-4">{{article.description}}</h2>
+    <div class=" article-content p-lg-4">{{article.content | raw}}</div>
+    </div>
 </div>
 {% endblock %}
