@@ -64,7 +64,7 @@ class DefaultController extends AbstractController
     {       
         // $leagues = $api->getRanking($id);
         // $leagues = json_decode($leagues, true);
-        return $this->render('lives/foot.html.twig', [
+        return $this->render('lves/foot.html.twig', [
             "environement" => $_ENV["APi_KEY_SPORT"],
         ]);
 
