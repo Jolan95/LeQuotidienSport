@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div class="pb-5">
+    <h1 class="text-center pb-2 pt-3">
+    </h1>
+
+
+    <hr/>
+    <div class="wrapper-article container">
+        <a href="">
+            <div  class="row align-items-center ">
+                <div class="col-12 col-lg-4 img100 px-5 p-lg-0 pt-3 p-lg-0 full-center order-lg-2">
+                    <image class="img100 img-article border10" src="">
+                </div>
+                <div class="col-12 col-lg-8 pl-lg-5 p-4 p-lg-0 text-center text-lg-left order-lg-1">
+                    
+                </div>
+            </div>
+        </a>
+    </div>
+  
+    <div>
+    
+    {# <img class="logo-league" src="{{league.logo}}"/> #}
+
+    {% for teams in league.standings.0 %}
+    <div class="d-flex">
+        <div>{{teams.rank}}.</div>
+        <img class="logo-teams" src="{{teams.team.logo}}"></img>
+        <div>{{teams.team.name}}</div>
+        {# <div>{{teams.team.all.played}}</div> #}
+        {# <div>{{teams.team.points}}</div>
+        <div>{{teams.team.all.win}}</div>
+        <div>{{teams.team.all.draw}}</div>
+        <div>{{teams.team.all.lose}}</div>
+        <div>{{teams.team.all.goalsDiff}}</div> #}
+
+    </div>
+    {% endfor %}
+    {{ dump(league.standings.0) }}
+{% endblock %}

@@ -26,9 +26,6 @@ class Post
 
     #[ORM\Column(type: 'datetime_immutable')]
     private $created_At;
-
-    #[ORM\ManyToOne(inversedBy: 'posts', targetEntity: User::class)]
-    private $author;
     
     #[ORM\Column(type: 'string')]
     private $category;
@@ -38,6 +35,13 @@ class Post
 
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class, orphanRemoval: true)]
     private $comments;
+
+    #[ORM\Column(type: 'smallint', nullable: true)]
+    private $rate;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'posts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $user;
 
     public function __construct()
     {
@@ -119,17 +123,6 @@ class Post
         return $this;
     }
 
-    public function getAuthor(): ?user
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(?user $author): self
-    {
-        $this->author = $author;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Comment>
@@ -157,6 +150,30 @@ class Post
                 $comment->setPost(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRate(): ?int
+    {
+        return $this->rate;
+    }
+
+    public function setRate(?int $rate): self
+    {
+        $this->rate = $rate;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Common\Annotations\Annotation;
+use App\Service\CallApiService;
 use App\Entity\Post;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface; 
+
 use App\Form\AccountCreationType;
 use App\Form\PostType;
 use App\Form\UserType;
@@ -24,6 +26,9 @@ use App\Form\UserType;
 
 class DefaultController extends AbstractController
 {
+
+
+
     #[Route('/', name: 'home')]
     public function index(PostRepository $post ): Response
     {
@@ -47,19 +52,38 @@ class DefaultController extends AbstractController
             $post,
             fn ($post) => $post->getAuthor()->getId() === $user
         );
-    
         $numberArticles = count($postOfUser);
-        
- 
 
         return $this->render('profile.html.twig', [
         "numberArticles" => $numberArticles
         ]);
     }
-        /**
-     * @Route("/category/{sport}", name="app_sport")
-     */
 
+    #[Route('/live', name: 'app_live')]
+    public function live(CallApiService $api): Response
+    {       
+        // $leagues = $api->getRanking($id);
+        // $leagues = json_decode($leagues, true);
+        return $this->render('lives/foot.html.twig', [
+            "environement" => $_ENV["APi_KEY_SPORT"],
+        ]);
+
+    }
+
+    #[Route('/ranking/{id}', name: 'app_rank')]
+    public function rank(CallApiService $api,int $id): Response
+    {       
+        $leagues = $api->getRanking($id);
+        $leagues = json_decode($leagues, true);
+        return $this->render('ranking.html.twig', 
+        [
+            "league" => $leagues['response'][0]["league"],
+        ]);
+    }
+
+    /**
+    * @Route("/category/{sport}", name="app_sport")
+    */
     public function articles(string $sport, PostRepository $post){
         $articles =  $post->findBySport($sport);
      return $this->render('index.html.twig', [

@@ -1,0 +1,172 @@
+
+header{
+  background-color : rgb(18,22,64);
+  header a:hover, a:visited, a:link {
+	text-decoration: none;
+	color : white;
+  }
+  .logo-header-desktop{
+	height : 100px;
+	width : auto;
+  }
+  .logo-header-mobile{
+	width : 150px;
+	height : auto;
+  }
+  .menu-burger{
+	height : 40px;
+	width : auto;
+  }
+  .dropdown-menu{
+	background-color : rgb(18,22,64);
+	border : none
+  }
+  .dropdown-toggle, .dropdown-toggle:hover, .dropdown-toggle:focus {
+	color : white;
+	outline: none;
+  }
+  .menu-burger{
+	width: 40px;
+	height : 40px;
+	color : white
+  }
+  .index-high {
+	z-index: 1000;
+  }
+  .img100{
+	width : 100% 
+  }
+  .nav-link:hover{
+	background-color : rgb(210, 226, 199)
+  }
+}
+  .full-enter{
+	display : flex;
+	justify-content: center;
+	align-items: center;
+  }
+  .justify-center{
+	display: flex;
+	justify-content: center;
+  }
+  .logo-league{
+	height : 30px;
+	width : auto;
+  }
+
+	/***Article Form***/
+.form-article {
+  width : 75%;
+  min-width : 280px
+}
+.form-login a {
+  color : blue
+}
+.form-login a:hover {
+  color : purple
+}
+.small-input{
+  max-width : 250px;
+} 
+
+/***Sign-in Form***/
+.form-signin{
+  width  : 80%;
+  max-width : 360px
+}
+/***Login Form***/
+.form-login{
+  width : 80%;
+  max-width : 360px;
+}
+h1{
+	color :#313131
+}
+p{
+	color : rgb(49, 53, 49);
+	font-size : 1rem;
+}
+
+/***index***/
+h2{
+	color :#313131;
+	font-size : 1.75rem;
+}
+.img-article{
+	max-width : 500px;
+}
+/***article***/
+.image400{
+	width : 80%;
+	max-width : 600px;
+	height : auto;
+}
+.article-content{
+	font-size : 1.125rem;
+}
+h2.h2-grey{
+	color :#313131
+	
+}
+@media all and (min-width : 991px){
+	h2.h2-grey{
+		font-size : 1.25rem;
+	}
+}
+
+.my-articles h1{
+  font-size: 1.75rem;
+  padding : 15px 20px;
+ color : black
+}
+h2{
+  font-size : 1.25rem;
+}
+.wrapper-profile{
+  background-color : white;
+  border-radius : 10px;
+  padding : 20px;
+  margin-left : 10px;
+  height : 25rem;
+  width : 800%;
+  min-width: 300px;
+  max-width : 440px;
+  font-size : 1.4rem;
+  margin-top  : 70px
+}
+.text-grey{
+  color: grey;
+}
+.my-articles .link-article:hover, .link-article:visited, .link-article:link {
+  color : #272727;
+  font-size : 1.5rem;
+}
+a.edit{
+  color : rgba(42, 66, 131, 0.795);
+}
+a.trash{
+  color : red
+}
+@media screen and (min-width : 500px ){
+  .wrapper-profile{
+	  margin-left: 60px;
+  }
+}
+.logo-teams{
+	height : 28px;
+	width : auto;
+}
+
+.wg_no_data{
+	display: none;
+}
+#wg-baseball-data{
+	#wg-baseball-games{
+		.wg_header{	
+			height : 80px !important;
+		}
+	}
+}
+.wg_active{
+	background-color : blue !important;
+}

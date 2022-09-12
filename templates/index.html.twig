@@ -1,8 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{asset('css/index.css')}}"/>
-{% endblock %}
 {% block body %}
 <div class="pb-5">
     <h1 class="text-center pb-2 pt-3">
@@ -14,6 +11,7 @@
         Actualités
         {% endif %}
     </h1>
+
     {% for article in articles %}
     <hr/>
     <div class="wrapper-article container">
