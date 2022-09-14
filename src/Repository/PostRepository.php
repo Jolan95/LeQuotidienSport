@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @method Post|null find($id, $lockMode = null, $lockVersion = null)
@@ -39,6 +40,54 @@ class PostRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+        }
+
+        public function findOneByPrimary($sport = null)
+        {
+            if($sport == null){
+                return $this->createQueryBuilder('p')
+                ->where('p.important = true')
+                ->orderBy('p.created_At', 'DESC')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+            } else {
+                return $this->createQueryBuilder('p')
+                ->where('p.important = true')
+                ->andWhere('p.category = :val')
+                ->setParameter('val', $sport)
+                ->orderBy('p.created_At', 'DESC')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+
+            }
+        ;
+        }
+
+    public function findPostsExceptPrimary($id, $sport = null)
+    {
+        if($sport == null){
+            return $this->createQueryBuilder('p')
+            ->where('p.id NOT LIKE :id ')
+            ->setParameter('id', $id)
+            ->orderBy('p.created_At', 'DESC')
+            ->getQuery()
+            ->getResult();
+        } else{
+            return $this->createQueryBuilder('p')
+            ->where('p.id NOT LIKE :id ')
+            ->andWhere('p.category = :val')
+            ->setParameter('id', $id)
+            ->setParameter('val', $sport)
+            ->orderBy('p.created_At', 'DESC')
+            ->getQuery()
+            ->getResult();
+        }
     }
-    
 }
+
+
+
+    
+

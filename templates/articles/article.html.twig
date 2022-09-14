@@ -8,7 +8,7 @@
     <div class="justify-center mb-5">
         <img  class="image400 border10" src="{{asset('Upload/'~article.picture)}}"></img>
     </div>  
-    <p class="px-lg-4">Ecrit par {{article.author.fullname}} le {{date}} </p>       
+    <p class="px-lg-4">Ecrit par {{article.user.fullname}} le {{date}} </p>       
     <h2 class="text-center h2-grey px-4 mb-4">{{article.description}}</h2>
     <div class=" article-content p-lg-4">{{article.content | raw}}</div>
     </div>

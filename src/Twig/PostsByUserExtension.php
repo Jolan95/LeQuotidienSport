@@ -34,7 +34,7 @@ class PostsByUserExtension extends AbstractExtension
         $post = $post->findAll();
         $postOfUser = array_filter(
             $post,
-            fn ($post) => $post->getAuthor()->getId() === $value
+            fn ($post) => $post->getUser()->getId() === $value
         );
         $numberArticles = count($postOfUser);
         return $numberArticles;

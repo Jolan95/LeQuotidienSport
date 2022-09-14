@@ -13,20 +13,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-
+use Symfony\Component\HttpFoundation\Request;
 
 class BackEndController extends AbstractController
 {
 
     #[Route('admin/delete/{post}', name: 'remove_post')]
-    public function postRemove(Post $post, ManagerRegistry $doctrine ): Response
+    public function postRemove(Post $post, ManagerRegistry $doctrine )
     {
         $entityManager = $doctrine->getManager();
         $entityManager->remove($post);
         $entityManager->flush();
-
-            return $this->redirectToRoute('app_adminArticles');
-
+        $this->addFlash("Error", "Article supprimé.");
         
     }
     #[Route('admin/remove/{user}/{role}', name: 'remove_user')]
@@ -35,17 +33,20 @@ class BackEndController extends AbstractController
         $entityManager = $doctrine->getManager();
         $entityManager->remove($user);
         $entityManager->flush();
-            return $this->redirectToRoute("app_admin", ['role' => $role]);
+        $this->addFlash("success", $user->getFullname()." est maintant supprimé"); 
+        return $this->redirectToRoute("app_admin", ['role' => $role]);
 
     }
     #[Route('admin/makeAuthor/{user}', name: 'make_author')]
-    public function makeAuthor(User $user, ManagerRegistry $doctrine){
+    public function makeAuthor(User $user, ManagerRegistry $doctrine, Request $request){
             
         $user->setRoles(["ROLE_AUTHOR"]);
         $entityManager = $doctrine->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
-            return $this->redirectToRoute("app_admin", ["role" => "user"]);
+        $this->addFlash("success", $user->getFullname()." est maintenant un auteur");  
+        return $this->redirectToRoute("app_admin", ["role" => "user"]);
+ 
 
     }
     #[Route('admin/makeUser/{user}', name: 'make_user')]
@@ -72,7 +73,7 @@ class BackEndController extends AbstractController
     #[Route('author/delete/{post}', name: 'delete_myarticles')]
     public function deleteMyArticles(Post $post, ManagerRegistry $doctrine){
 
-        if($post->getAuthor() === $this->getUser()){
+        if($post->getUser() === $this->getUser()){
 
             
             $entityManager = $doctrine->getManager();

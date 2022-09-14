@@ -43,6 +43,9 @@ class Post
     #[ORM\JoinColumn(nullable: false)]
     private $user;
 
+    #[ORM\Column(type: 'boolean')]
+    private $important;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -174,6 +177,18 @@ class Post
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getImportant(): ?bool
+    {
+        return $this->important;
+    }
+
+    public function setImportant(bool $important): self
+    {
+        $this->important = $important;
 
         return $this;
     }

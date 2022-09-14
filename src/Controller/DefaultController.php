@@ -18,11 +18,11 @@ use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface; 
-
 use App\Form\AccountCreationType;
 use App\Form\PostType;
 use App\Form\UserType;
-
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 
 class DefaultController extends AbstractController
 {
@@ -30,17 +30,33 @@ class DefaultController extends AbstractController
 
 
     #[Route('/', name: 'home')]
-    public function index(PostRepository $post ): Response
+    public function index(PostRepository $post, EntityManagerInterface $em): Response
     {
-       $posts = $post->findArticlesByDate();
-        
+        $priority = $post->findOneByPrimary();
+        $priority= $priority[0];
+        $articles = $post->findPostsExceptPrimary($priority->getId());
+
+        // dump($posts);        
+        // dump($priority);        
         return $this->render('index.html.twig', [
-            'articles' => $posts,
+            'articles' => $articles,
+            'priority' => $priority
         ]);
-
     }
-
-
+    /**
+    * @Route("/category/{sport}", name="app_sport")
+    */
+    public function articles(string $sport, PostRepository $post){
+        $priority = $post->findOneByPrimary($sport);
+        $priority= $priority[0];
+        $articles = $post->findPostsExceptPrimary($priority->getId(), $sport);
+        return $this->render('index.html.twig', [
+        'priority' => $priority,
+        'articles' => $articles,
+        'sport' => $sport
+        ]);
+    }
+ 
     #[Route('/profile', name: 'app_profile')]
     public function profile(PostRepository $repository ): Response
     {
@@ -50,7 +66,7 @@ class DefaultController extends AbstractController
         $post = $repository->findAll();
         $postOfUser = array_filter(
             $post,
-            fn ($post) => $post->getAuthor()->getId() === $user
+            fn ($post) => $post->getUser()->getId() === $user
         );
         $numberArticles = count($postOfUser);
 
@@ -64,10 +80,9 @@ class DefaultController extends AbstractController
     {       
         // $leagues = $api->getRanking($id);
         // $leagues = json_decode($leagues, true);
-        return $this->render('lves/foot.html.twig', [
+        return $this->render('lives/foot.html.twig', [
             "environement" => $_ENV["APi_KEY_SPORT"],
         ]);
-
     }
 
     #[Route('/ranking/{id}', name: 'app_rank')]
@@ -81,17 +96,6 @@ class DefaultController extends AbstractController
         ]);
     }
 
-    /**
-    * @Route("/category/{sport}", name="app_sport")
-    */
-    public function articles(string $sport, PostRepository $post){
-        $articles =  $post->findBySport($sport);
-     return $this->render('index.html.twig', [
-         'articles' => $articles,
-         'sport' => $sport
-     ]);
-     }
- 
      /**
       * @Route("/article/{id}", name="app_article")
       */
@@ -122,8 +126,10 @@ class DefaultController extends AbstractController
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
+
             $post->setCreatedAt(new \DateTimeImmutable());
-            $post->setAuthor($user);
+            $post->setUser($user);
+            $post->setImportant($form->getData()->getImportant());
             $file = $post->getPicture();
                 $fileName = md5(uniqid()).'.'.$file->guessExtension();
                 $file->move($this->getParameter('upload_directory'), $fileName);
@@ -178,7 +184,7 @@ class DefaultController extends AbstractController
     public function myArticles( PostRepository $repo){
            
         $posts = $repo->findBy([
-            "author" => $this->getUser()
+            "user" => $this->getUser()
         ]);
          return $this->render("articles/mesarticles.html.twig", [
             "posts" => $posts
@@ -246,6 +252,25 @@ class DefaultController extends AbstractController
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
+
+    // /**
+    //  * @Route("/create-admin", name="app_create_admin")
+    //  */
+    // public function createadmin( ManagerRegistry $manager, UserPasswordHasherInterface $passwordHasher)
+    // {
+    //     $user = new User();
+    //     $user->setEmail("jolan.aubry@hotmail.fr");
+    //     $user->setFullname("Jolan Aubry");
+    //     $hashedPassword = $passwordHasher->hashPassword($user, "Admin");
+    //     $user->setPassword($hashedPassword);
+    //     $user->setRoles(["ROLE_ADMIN"]);
+
+    //     $entity = $manager->getManager();
+    //     $entity->persist($user);
+    //     $entity->flush();
+
+    //     return new Response("admin créé");
+    // }
 
     
 
