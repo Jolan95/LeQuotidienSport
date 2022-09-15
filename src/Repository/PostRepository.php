@@ -24,52 +24,61 @@ class PostRepository extends ServiceEntityRepository
     public function findArticlesByDate()
     {
         return $this->createQueryBuilder('p')
-            ->orderBy('p.created_At', 'DESC')
-            ->getQuery()
-            ->getResult()
-            ;
-        }
+        ->orderBy('p.created_At', 'DESC')
+        ->getQuery()
+        ->getResult();
+    }
        
         
-        public function findBySport($sport)
-        {
+    public function findBySport($sport)
+    {
+        return $this->createQueryBuilder('p')
+        ->andWhere('p.category = :val')
+        ->setParameter('val', $sport)
+        ->orderBy('p.created_At', 'DESC')
+        ->getQuery()
+        ->getResult();
+    }
+
+    public function findByFilter($search)
+    {
+        return $this->createQueryBuilder('p')
+        ->orderBy('p.created_At', 'DESC')
+        ->andWhere("p.description LIKE :search OR p.title LIKE :search")
+        ->setParameter('search', "%{$search}%")
+        ->getQuery()
+        ->getResult();
+    }
+
+    public function findOneByPrimary($sport = null)
+    {
+        if($sport == null){
             return $this->createQueryBuilder('p')
+            ->where('p.important = true')
+            ->andWhere("p.published = true")
+            ->orderBy('p.created_At', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
+        } else {
+            return $this->createQueryBuilder('p')
+            ->where('p.important = true')
             ->andWhere('p.category = :val')
+            ->andWhere("p.published = true")
             ->setParameter('val', $sport)
             ->orderBy('p.created_At', 'DESC')
+            ->setMaxResults(1)
             ->getQuery()
-            ->getResult()
-        ;
-        }
-
-        public function findOneByPrimary($sport = null)
-        {
-            if($sport == null){
-                return $this->createQueryBuilder('p')
-                ->where('p.important = true')
-                ->orderBy('p.created_At', 'DESC')
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getResult();
-            } else {
-                return $this->createQueryBuilder('p')
-                ->where('p.important = true')
-                ->andWhere('p.category = :val')
-                ->setParameter('val', $sport)
-                ->orderBy('p.created_At', 'DESC')
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getResult();
-
-            }
-        ;
-        }
+            ->getResult();
+        };
+    }
 
     public function findPostsExceptPrimary($id, $sport = null)
     {
         if($sport == null){
             return $this->createQueryBuilder('p')
             ->where('p.id NOT LIKE :id ')
+            ->andWhere("p.published = true")
             ->setParameter('id', $id)
             ->orderBy('p.created_At', 'DESC')
             ->getQuery()
@@ -78,6 +87,7 @@ class PostRepository extends ServiceEntityRepository
             return $this->createQueryBuilder('p')
             ->where('p.id NOT LIKE :id ')
             ->andWhere('p.category = :val')
+            ->andWhere("p.published = true")
             ->setParameter('id', $id)
             ->setParameter('val', $sport)
             ->orderBy('p.created_At', 'DESC')

@@ -39,9 +39,22 @@ class PostType extends AbstractType
                 ],
             ])
             ->add('important', CheckboxType::class,["required" => false])
-            ->add('Publier', SubmitType::class)
-
-        ;
+            ->add('brouillon', SubmitType::class, 
+                [
+                    "label" => "Ajouter aux brouillons",
+                    "attr" =>[
+                        "class" => "btn btn-danger"
+                    ]
+                ]
+            )
+            ->add('publier', SubmitType::class,
+                [
+                    "label" => "Publier l'article",
+                    "attr" => [
+                        "class"=>"btn btn-success"
+                    ]    
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void

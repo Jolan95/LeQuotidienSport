@@ -46,6 +46,9 @@ class Post
     #[ORM\Column(type: 'boolean')]
     private $important;
 
+    #[ORM\Column(type: 'boolean')]
+    private $published;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -189,6 +192,18 @@ class Post
     public function setImportant(bool $important): self
     {
         $this->important = $important;
+
+        return $this;
+    }
+
+    public function getPublished(): ?bool
+    {
+        return $this->published;
+    }
+
+    public function setPublished(bool $published): self
+    {
+        $this->published = $published;
 
         return $this;
     }

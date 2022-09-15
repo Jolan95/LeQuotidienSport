@@ -1,0 +1,33 @@
+    {% if priority is not null %}
+        <div class="wrapper-article container">
+        <a href="{{path("app_article", {id : priority.id})}}">
+            <div  class="row align-items-center ">
+                <div class="col-12 col-lg-4 img100 px-5 p-lg-0 pt-3 p-lg-0 full-center order-lg-2">
+                    <image class="img100 img-article border10" src="{{asset('Upload/'~priority.picture)}}">
+                </div>
+                <div class="col-12 col-lg-8 pl-lg-5 p-4 p-lg-0 text-center text-lg-left order-lg-1">
+                    <h2>{{priority.title}}</h2>    
+                    <p class='py-2'>{{priority.description}}</p>
+                    <p class="m-0">{{priority.user.fullname}}</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% endif %}
+    {% for article in articles %}
+    <hr/>
+    <div class="wrapper-article container">
+        <a href="{{path("app_article", {id : article.id})}}">
+            <div  class="row align-items-center ">
+                <div class="col-12 col-lg-4 img100 px-5 p-lg-0 pt-3 p-lg-0 full-center order-lg-2">
+                    <image class="img100 img-article border10" src="{{asset('Upload/'~article.picture)}}">
+                </div>
+                <div class="col-12 col-lg-8 pl-lg-5 p-4 p-lg-0 text-center text-lg-left order-lg-1">
+                    <h2>{{article.title}}</h2>    
+                    <p class='py-2'>{{article.description}}</p>
+                    <p class="m-0">{{article.user.fullname}}</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% endfor %} 

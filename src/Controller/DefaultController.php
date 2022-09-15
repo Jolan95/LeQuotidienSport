@@ -18,6 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface; 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Form\AccountCreationType;
 use App\Form\PostType;
 use App\Form\UserType;
@@ -30,14 +31,25 @@ class DefaultController extends AbstractController
 
 
     #[Route('/', name: 'home')]
-    public function index(PostRepository $post, EntityManagerInterface $em): Response
+    public function index(PostRepository $postRepo,Request $request): Response
     {
-        $priority = $post->findOneByPrimary();
+        $priority = $postRepo->findOneByPrimary();
         $priority= $priority[0];
-        $articles = $post->findPostsExceptPrimary($priority->getId());
-
-        // dump($posts);        
-        // dump($priority);        
+        $articles = $postRepo->findPostsExceptPrimary($priority->getId());
+        $ajax = $request->query->get("ajax");
+        if($ajax){
+            $search = $request->query->get("search");
+            $articles = $postRepo->findByFilter($search);
+            if($search != null){
+                $priority = null;
+            }
+            return new JsonResponse([
+                "content" => $this->renderView('content/articles.html.twig', [
+                    "articles" => $articles,
+                    "priority" => $priority
+                ])
+            ]);  
+        }      
         return $this->render('index.html.twig', [
             'articles' => $articles,
             'priority' => $priority
@@ -103,7 +115,6 @@ class DefaultController extends AbstractController
         $article =  $post->findOneBy([
             "id" => $id
         ]);
- 
         $date = $article->getCreatedAt();
         $dateTime = new \DateTime();
         $dateTime->setTimestamp($date->getTimestamp());
@@ -126,14 +137,19 @@ class DefaultController extends AbstractController
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-
+            $data = $form->getData();
             $post->setCreatedAt(new \DateTimeImmutable());
+            $post->setTitle($data->getTitle());
+            $post->setDescription($data->getDescription());
+            $post->setContent($data->getContent());
             $post->setUser($user);
-            $post->setImportant($form->getData()->getImportant());
+            $post->setImportant($data->getImportant());
+            // if button "publier" is clicked, the article is published 
+            $form->getClickedButton() === $form->get("publier")? $post->setPublished(true) : $post->setPublished(false);
             $file = $post->getPicture();
-                $fileName = md5(uniqid()).'.'.$file->guessExtension();
-                $file->move($this->getParameter('upload_directory'), $fileName);
-                $post->setPicture($fileName);
+            $fileName = md5(uniqid()).'.'.$file->guessExtension();
+            $file->move($this->getParameter('upload_directory'), $fileName);
+            $post->setPicture($fileName);
             $entity = $manager->getManager();
             $entity->persist($post);
             $entity->flush();
@@ -156,7 +172,7 @@ class DefaultController extends AbstractController
          $roles= '["ROLE_'.$role.'"]';
          $users = $userRepo->findByRoles($roles);
 
-         $route = "forms/admin/".$role.".html.twig";
+         $route = "admin/".$role.".html.twig";
 
         return $this->render($route, [
         'role' => $role,
@@ -183,13 +199,49 @@ class DefaultController extends AbstractController
     #[Route('author/my-articles', name: 'myarticles')]
     public function myArticles( PostRepository $repo){
            
-        $posts = $repo->findBy([
-            "user" => $this->getUser()
-        ]);
+        $posts = $repo->findBy(["user" => $this->getUser(), "published" => true]);
+
          return $this->render("articles/mesarticles.html.twig", [
             "posts" => $posts
         ]);
+    }
+    #[Route('author/my-brouillons', name: 'mybrouillons')]
+    public function myBrouillons( PostRepository $repo){
+           
+        $posts = $repo->findBy(["user" => $this->getUser(), "published" => false]);
 
+         return $this->render("articles/mesbrouillons.html.twig", [
+            "posts" => $posts
+        ]);
+    }
+    #[Route('author/edit-article/{id}', name: 'edit-article')]
+    public function edit_article($id, PostRepository $repo, Request $request,ManagerRegistry $manager){
+           
+        $post = $repo->findOneBy(["id" => $id]);
+        $form = $this->createForm(PostType::class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $data = $form->getData();
+            $post->setTitle($data->getTitle());
+            $post->setDescription($data->getDescription());
+            $post->setContent($data->getContent());
+            $post->setImportant($data->getImportant());
+            // if button "publier" is clicked, the article is published 
+            $form->getClickedButton() === $form->get("publier")? $post->setPublished(true) : $post->setPublished(false);
+            if($data->getPicture() != null ){
+                $file = $data->getPicture();
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                $file->move($this->getParameter('upload_directory'), $fileName);
+                $post->setPicture($fileName);
+            }
+            $entity = $manager->getManager();
+            $entity->persist($post);
+            $entity->flush();
+        }    
+         return $this->render("forms/edit-article.html.twig", [
+            "post" => $post,
+            'form' => $form->createView()
+        ]);
     }
         /**
      * @Route("/password-reset", name="forgetPassword")

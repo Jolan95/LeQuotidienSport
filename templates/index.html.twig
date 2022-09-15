@@ -1,47 +1,31 @@
 {% extends 'base.html.twig' %}
+{% block javascripts %}
+ {{ encore_entry_script_tags('search_article') }}
+{% endblock %}
 
 {% block body %}
 <div class="pb-5">
     <h1 class="text-center pb-2 pt-3">
-        {% if (sport is defined) and (sport != "Autres") %}
-        {{sport}}
-        {% elseif (sport is defined) and (sport == "Autres") %}
-        Autres
+        {% if (sport is defined) %}
+        {{sport|capitalize}}
         {% else %}
         Actualités
         {% endif %}
     </h1>
+    <div id="filter">
+        <div class="search-box">
+            <div class="btn-search full-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+            </svg>
+            </div>
+            <input type="text" id="search" name="search" class="input-search" placeholder="Rechercher">
+        </div>
+    </div>
+    
 
-    <div class="wrapper-article container">
-        <a href="{{path("app_article", {id : priority.id})}}">
-            <div  class="row align-items-center ">
-                <div class="col-12 col-lg-4 img100 px-5 p-lg-0 pt-3 p-lg-0 full-center order-lg-2">
-                    <image class="img100 img-article border10" src="{{asset('Upload/'~priority.picture)}}">
-                </div>
-                <div class="col-12 col-lg-8 pl-lg-5 p-4 p-lg-0 text-center text-lg-left order-lg-1">
-                    <h2>{{priority.title}}</h2>    
-                    <p class='py-2'>{{priority.description}}</p>
-                    <p class="m-0">{{priority.user.fullname}}</p>
-                </div>
-            </div>
-        </a>
+    <div id="content">    
+    {% include 'content/articles.html.twig' %}
     </div>
-    {% for article in articles %}
-    <hr/>
-    <div class="wrapper-article container">
-        <a href="{{path("app_article", {id : article.id})}}">
-            <div  class="row align-items-center ">
-                <div class="col-12 col-lg-4 img100 px-5 p-lg-0 pt-3 p-lg-0 full-center order-lg-2">
-                    <image class="img100 img-article border10" src="{{asset('Upload/'~article.picture)}}">
-                </div>
-                <div class="col-12 col-lg-8 pl-lg-5 p-4 p-lg-0 text-center text-lg-left order-lg-1">
-                    <h2>{{article.title}}</h2>    
-                    <p class='py-2'>{{article.description}}</p>
-                    <p class="m-0">{{article.user.fullname}}</p>
-                </div>
-            </div>
-        </a>
-    </div>
-    {% endfor %} 
 </div>
 {% endblock %}
