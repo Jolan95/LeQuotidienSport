@@ -30,6 +30,9 @@ class Comment
     #[ORM\Column(type: 'integer', nullable: true)]
     private $rate;
 
+    #[ORM\Column(type: 'datetime')]
+    private $date;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -91,6 +94,18 @@ class Comment
     public function setRate(?int $rate): self
     {
         $this->rate = $rate;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): self
+    {
+        $this->date = $date;
 
         return $this;
     }

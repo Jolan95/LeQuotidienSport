@@ -16,14 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Form\NewPasswordType;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface; 
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Form\AccountCreationType;
 use App\Form\PostType;
-use App\Form\UserType;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 
 class DefaultController extends AbstractController
 {
@@ -34,8 +28,12 @@ class DefaultController extends AbstractController
     public function index(PostRepository $postRepo,Request $request): Response
     {
         $priority = $postRepo->findOneByPrimary();
-        $priority= $priority[0];
-        $articles = $postRepo->findPostsExceptPrimary($priority->getId());
+        if($priority != null){
+            $priority= $priority[0];
+            $articles = $postRepo->findPostsExceptPrimary($priority->getId());
+        } else{
+            $articles = $postRepo->findAll();
+        }
         $ajax = $request->query->get("ajax");
         if($ajax){
             $search = $request->query->get("search");
@@ -49,19 +47,23 @@ class DefaultController extends AbstractController
                     "priority" => $priority
                 ])
             ]);  
-        }      
+        }    
+ 
         return $this->render('index.html.twig', [
             'articles' => $articles,
             'priority' => $priority
         ]);
     }
-    /**
-    * @Route("/category/{sport}", name="app_sport")
-    */
-    public function articles(string $sport, PostRepository $post){
-        $priority = $post->findOneByPrimary($sport);
-        $priority= $priority[0];
-        $articles = $post->findPostsExceptPrimary($priority->getId(), $sport);
+
+    #[Route('/category/{sport}', name: 'app_sport')]
+    public function articles(string $sport, PostRepository $postRepo){
+        $priority = $postRepo->findOneByPrimary($sport);
+        if($priority != null){
+            $priority= $priority[0];
+            $articles = $postRepo->findPostsExceptPrimary($priority->getId(), $sport);
+        } else {
+            $articles = $postRepo->findBySport($sport);
+        }
         return $this->render('index.html.twig', [
         'priority' => $priority,
         'articles' => $articles,
@@ -89,13 +91,20 @@ class DefaultController extends AbstractController
 
     #[Route('/live', name: 'app_live')]
     public function live(CallApiService $api): Response
-    {       
-        // $leagues = $api->getRanking($id);
-        // $leagues = json_decode($leagues, true);
-        return $this->render('lives/foot.html.twig', [
+    {      
+        $matchsPL =  $api->getLiveFoot(3161);
+        $matchsFrance =  $api->getLiveFoot(3188);
+        $matchsPL = json_decode(json_encode($matchsPL), true);
+        $matchsFrance = json_decode(json_encode($matchsFrance), true);
+        $matchsFrance["name"] = "Ligue 1";
+        $matchsPL["name"] = "Premier League";
+        return $this->render('live.html.twig', [
             "environement" => $_ENV["APi_KEY_SPORT"],
+            "footFrance" => $matchsFrance,
+            "footPL" => $matchsPL
         ]);
     }
+
 
     #[Route('/ranking/{id}', name: 'app_rank')]
     public function rank(CallApiService $api,int $id): Response
@@ -108,10 +117,9 @@ class DefaultController extends AbstractController
         ]);
     }
 
-     /**
-      * @Route("/article/{id}", name="app_article")
-      */
-     public function article(int $id, PostRepository $post){
+      
+    #[Route('/article/{id}', name: 'app_article')]  
+    public function article(int $id, PostRepository $post){
         $article =  $post->findOneBy([
             "id" => $id
         ]);
@@ -126,8 +134,7 @@ class DefaultController extends AbstractController
             "article" => $article,
             "date" => $dateTime
         ]);
-     }
-
+    }
 
     #[Route('/author', name:'author')]
     public function post(Request $request, ManagerRegistry $manager){     
@@ -144,8 +151,14 @@ class DefaultController extends AbstractController
             $post->setContent($data->getContent());
             $post->setUser($user);
             $post->setImportant($data->getImportant());
-            // if button "publier" is clicked, the article is published 
-            $form->getClickedButton() === $form->get("publier")? $post->setPublished(true) : $post->setPublished(false);
+            // if button "publier" is clicked, the article is published and handle the messag to display
+            if($form->getClickedButton() === $form->get("publier")){
+                $post->setPublished(true);
+                $message = 'Votre article a été publié avec succès !';
+            } else{
+                $post->setPublished(false);
+                $message = 'Votre article a été ajouté à vos brouillons avec succès !';
+            }
             $file = $post->getPicture();
             $fileName = md5(uniqid()).'.'.$file->guessExtension();
             $file->move($this->getParameter('upload_directory'), $fileName);
@@ -153,32 +166,31 @@ class DefaultController extends AbstractController
             $entity = $manager->getManager();
             $entity->persist($post);
             $entity->flush();
-        
+            $this->addFlash('success', $message);
+
+            //reset the form
+            $post = new Post();
+            $form = $this->createForm(PostType::class, $post);
         }
         return $this->render("forms/creation.html.twig", [
             'form' => $form->createView()
         ]);
     }
 
-   /**
-     * @Route("admin/{role}", name="app_admin")
-     * requirements={"user" : ["user", "author", "admin"]}
-     */
+    /**
+    * @Route("admin/{role}", name="app_admin")
+    * requirements={"user" : ["user", "author", "admin"]}
+    */
     public function admin(UserRepository $userRepo, $role, PostRepository $post): Response
     {
-
-
-         $roles = strtoupper($role);
-         $roles= '["ROLE_'.$role.'"]';
-         $users = $userRepo->findByRoles($roles);
-
-         $route = "admin/".$role.".html.twig";
-
+        $roles = strtoupper($role);
+        $roles= '["ROLE_'.$role.'"]';
+        $users = $userRepo->findByRoles($roles);
+        $route = "admin/".$role.".html.twig";
         return $this->render($route, [
         'role' => $role,
         'users' => $users,
         "posts" => $post
-
         ]);
     }
         
@@ -205,6 +217,7 @@ class DefaultController extends AbstractController
             "posts" => $posts
         ]);
     }
+
     #[Route('author/my-brouillons', name: 'mybrouillons')]
     public function myBrouillons( PostRepository $repo){
            
@@ -214,6 +227,7 @@ class DefaultController extends AbstractController
             "posts" => $posts
         ]);
     }
+
     #[Route('author/edit-article/{id}', name: 'edit-article')]
     public function edit_article($id, PostRepository $repo, Request $request,ManagerRegistry $manager){
            
@@ -225,6 +239,7 @@ class DefaultController extends AbstractController
             $post->setTitle($data->getTitle());
             $post->setDescription($data->getDescription());
             $post->setContent($data->getContent());
+            $post->setCategory($data->getCategory());
             $post->setImportant($data->getImportant());
             // if button "publier" is clicked, the article is published 
             $form->getClickedButton() === $form->get("publier")? $post->setPublished(true) : $post->setPublished(false);
@@ -237,16 +252,15 @@ class DefaultController extends AbstractController
             $entity = $manager->getManager();
             $entity->persist($post);
             $entity->flush();
+            $this->addflash("success", "Votre article a bien été modifié !");
         }    
          return $this->render("forms/edit-article.html.twig", [
             "post" => $post,
             'form' => $form->createView()
         ]);
     }
-        /**
-     * @Route("/password-reset", name="forgetPassword")
-     */
 
+    #[Route('/password-reset', name: 'forgetPassword')]
     public function ForgetPassword(){
         
         $form =  $this->createForm(NewPasswordType::class);
@@ -255,55 +269,7 @@ class DefaultController extends AbstractController
             "form" => $form->createView()
         ]);
     }
-        /**
-     * @Route("signin", name="app_signin")
-     */
-    public function signin(Request $request, ManagerRegistry $manager, UserPasswordHasherInterface $passwordHasher){
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $password = $form->getData()->getPassword();
-            $hashedPassword = $passwordHasher->hashPassword($user, $password);
-            $user->setPassword($hashedPassword);
-            $user->setRoles(["ROLE_USER"]);
-            $entityManager = $manager->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-            
 
-            $this->addFlash('success', 'Votre compte à bien été enregistré.');
-
-        }
-
-        return $this->render('forms/signin.html.twig', [
-            "form" => $form->createView()
-        ]);
-    }
-    /**
-     * @Route("/login", name="app_login")
-     */
-    public function login(AuthenticationUtils $authenticationUtils)
-    {
-         if ($this->getUser()) {
-             return $this->redirectToRoute('home');
-         }
-
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
-
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
-    }
-
-    /**
-     * @Route("/logout", name="app_logout")
-     */
-    public function logout(): void
-    {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
-    }
 
     // /**
     //  * @Route("/create-admin", name="app_create_admin")

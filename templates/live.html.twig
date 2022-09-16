@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+{% block javascripts %}
+ {{ encore_entry_script_tags('live') }}
+{% endblock %}
+
+{% block body %}
+<div class="py-5 container">
+    {% if (footPL.data is defined) or (footFrance.data is defined)%}
+        <h2 class="text-center ">Football</h2>
+        {% if footFrance.data is defined %}
+            <h3>{{footFrance.name }}</h3>
+            {% for data in footFrance.data %}
+                <div class="row pt-2">
+                {% if data.status_code == 3 %}
+                    Fini {{data.away_team.name}}{{data.stats.away_score}} -  {{data.stats.home_score}}{{data.home_team.name}}</div>
+                     <div class="col-3 col-md-2">Terminé</div>
+                    <div class="col-4 col-md-4 d-flex justify-content-end"><span class="d-none d-md-block">{{data.away_team.name}}</span><img  class="logo-teams " src="{{data.away_team.logo}}"></div>
+                    <div class="col-1 col-md-2 d-flex justify-content-center">{{data.stats.score}}</div> 
+                    <div class="col-4 col-md-4 d-flex justify-content-start"><img class="logo-teams " src="{{data.home_team.logo}}"><span class="d-none d-md-block">{{data.home_team.name}}</span></div> 
+                {% elseif data.status_code == 1 %}
+                    <div class="col-3 col-md-2"> {{data.match_start|date("d/m G:i") }}</div>
+                    <div class="col-4 col-md-4 d-flex justify-content-end"><span class="d-none d-md-block">{{data.away_team.name}}</span><img  class="logo-teams " src="{{data.away_team.logo}}"></div>
+                    <div class="col-1 col-md-2 d-flex justify-content-center"> - </div> 
+                    <div class="col-4 col-md-4 d-flex justify-content-start"><img class="logo-teams " src="{{data.home_team.logo}}"><span class="d-none d-md-block">{{data.home_team.name}}</span></div>
+                {% else %}
+                    <div class="col-3 col-md-2"> {{data.match_start|date("d/m G:i") }}</div>
+                    <div class="col-4 d-flex justify-content-end"><span class="d-none d-md-block">{{data.away_team.name}}</span><img  class="logo-teams " src="{{data.away_team.logo}}"></div>
+                    <div class="col-1 col-md-2 d-flex justify-content-center"> - </div> 
+                    <div class="col-4 d-flex justify-content-start"><img class="logo-teams " src="{{data.home_team.logo}}"><span class="d-none d-md-block">{{data.home_team.name}}</span></div>
+                {% endif %}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% if footPL.data is defined %}
+            <h3 class="mt-4">{{footPL.name }}</h3>
+            {% for data in footPL.data %}
+                <div class="row pt-2 ">
+                {% if data.status_code == 3 %}
+                    Fini {{data.away_team.name}}{{data.stats.away_score}} -  {{data.stats.home_score}}{{data.home_team.name}}</div>
+                     <div class="col-3 col-md-2">Terminé</div>
+                    <div class="col-4 col-md-4 d-flex justify-content-end"><span class="d-none d-md-block">{{data.away_team.name}}</span><img  class="logo-teams " src="{{data.away_team.logo}}"></div>
+                    <div class="col-1 col-md-2 d-flex justify-content-center">{{data.stats.score}}</div> 
+                    <div class="col-4 col-md-4 d-flex justify-content-start"><img class="logo-teams " src="{{data.home_team.logo}}"><span class="d-none d-md-block">{{data.home_team.name}}</span></div> 
+                {% elseif data.status_code == 1 %}
+                    <div class="col-3 col-md-2"> {{data.match_start|date("d/m G:i") }}</div>
+                    <div class="col-4 col-md-4 d-flex justify-content-end"><span class="d-none d-md-block">{{data.away_team.name}}</span><img  class="logo-teams " src="{{data.away_team.logo}}"></div>
+                    <div class="col-1 col-md-2 d-flex justify-content-center"> - </div> 
+                    <div class="col-4 col-md-4 d-flex justify-content-start"><img class="logo-teams " src="{{data.home_team.logo}}"><span class="d-none d-md-block">{{data.home_team.name}}</span></div>
+                {% else %}
+                    <div class="col-3 col-md-2"> {{data.match_start|date("d/m G:i") }}</div>
+                    <div class="col-4 d-flex justify-content-end"><span class="d-none d-md-block">{{data.away_team.name}}</span><img  class="logo-teams " src="{{data.away_team.logo}}"></div>
+                    <div class="col-1 col-md-2 d-flex justify-content-center"> - </div> 
+                    <div class="col-4 d-flex justify-content-start"><img class="logo-teams " src="{{data.home_team.logo}}"><span class="d-none d-md-block">{{data.home_team.name}}</span></div>
+                {% endif %}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+
+<h2 class="text-center mt-5 mb-3">Basketball</h2>
+ <div id="wg-api-basketball-games"
+     data-host="v1.basketball.api-sports.io"
+     data-key={{environement}}
+     data-date=""
+     data-league=""
+     data-season=""
+     data-theme=""
+     data-refresh=""
+     data-show-toolbar="false"
+     data-show-errors="false"
+     data-show-logos="true"
+     data-modal-game="true"
+     data-modal-standings="true"
+     data-modal-show-logos="true">
+</div> 
+<div id="basketball-error"></div>
+
+<h2 class="text-center mt-5 mb-3">Baseball</h2>
+<div id="wg-api-baseball-games"
+     data-host="v1.baseball.api-sports.io"
+     data-key={{environement}}
+     data-date=""
+     data-league=""
+     data-season=""
+     data-theme=""
+     data-refresh=""
+     data-show-toolbar="false"
+     data-show-errors="false"
+     data-show-logos="true"
+     data-modal-game="true"
+     data-modal-standings="true"
+     data-modal-show-logos="true">
+</div>
+<div id="baseball-error"></div>
+
+<h2 class="text-center mt-5 mb-3">Hockey</h2>
+<div id="wg-api-hockey-games"
+     data-host="v1.hockey.api-sports.io"
+     data-key={{environement}}
+     data-date=""
+     data-league=""
+     data-season=""
+     data-theme=""
+     data-refresh=""
+     data-show-toolbar="true"
+     data-show-errors="false"
+     data-show-logos="true"
+     data-modal-game="true"
+     data-modal-standings="true"
+     data-modal-show-logos="true">
+</div>
+
+<script
+    type="module"
+    src="https://widgets.api-sports.io/2.0.3/widgets.js">
+</script>
+
+<script
+    type="module"
+    src="https://widgets.api-sports.io/2.0.3/widgets.js">
+</script>
+{% endblock %}

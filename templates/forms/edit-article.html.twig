@@ -8,6 +8,11 @@
         <div class="pb-2">
             <h1>Rédiger un article</h1>
         </div>
+        {% for message in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
         {{ form_start(form) }}
             {{ form_row(form.title, { 'label': 'Titre : ', 'value' : post.title  }) }}
             <div class="small-input">

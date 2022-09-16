@@ -23,8 +23,8 @@ class PostType extends AbstractType
                 'label' => "Photo d'article",
                 'constraints' => [
                     new File([
-                    'mimeTypes' => ['image/jpeg', 'image/svg+xml', 'image/png'],
-                    'mimeTypesMessage' => 'Please upload a format valid (.JPG, JPEG, .SVG, .PNG)',
+                    'mimeTypes' => ['image/jpeg', 'image/svg+xml', 'image/png', "image/webp"],
+                    'mimeTypesMessage' => 'Please upload a format valid (.JPG, JPEG, .SVG, .PNG, .WEBP)',
                 ])
             ]])
             ->add('content')
