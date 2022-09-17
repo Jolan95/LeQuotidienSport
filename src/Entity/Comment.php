@@ -13,9 +13,6 @@ class Comment
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $title;
-
     #[ORM\Column(type: 'string', length: 400)]
     private $content;
 
@@ -38,17 +35,6 @@ class Comment
         return $this->id;
     }
 
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
 
     public function getContent(): ?string
     {

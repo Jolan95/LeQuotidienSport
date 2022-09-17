@@ -12,12 +12,16 @@ use Doctrine\Common\Annotations\Annotation;
 use App\Service\CallApiService;
 use App\Entity\Post;
 use App\Entity\User;
+use App\Entity\Comment;
+use App\Form\CommentType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\NewPasswordType;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Form\PostType;
+use App\Repository\CommentRepository;
+use Symfony\Component\Validator\Constraints\Date;
 
 class DefaultController extends AbstractController
 {
@@ -119,20 +123,39 @@ class DefaultController extends AbstractController
 
       
     #[Route('/article/{id}', name: 'app_article')]  
-    public function article(int $id, PostRepository $post){
-        $article =  $post->findOneBy([
-            "id" => $id
-        ]);
+    public function article(int $id, PostRepository $postRepo, Request $request, CommentRepository $commentRepo, CommentType $commentType, ManagerRegistry $manager){
+
+        $article =  $postRepo->findOneBy(["id" => $id]);
+        $comments= $commentRepo->findBy(["post" => $article]);
+        $form = $this->createForm(CommentType::class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $comment = new Comment();
+            $comment->setContent($form->getData()->getContent());
+            $comment->setAuthor($this->getUser());
+            $comment->setRate(0);
+            $comment->setPost($article);
+            $comment->setDate(new \DateTime());
+            $entity = $manager->getManager();
+            $entity->persist($comment);
+            $entity->flush();
+            $this->addFlash('success', "Votre commentaire a bien été publié !");
+            //Reset the form
+            $comment = new Comment();
+            $form = $this->createForm(CommentType::class, $comment);
+        
+        }    
         $date = $article->getCreatedAt();
         $dateTime = new \DateTime();
         $dateTime->setTimestamp($date->getTimestamp());
         $dateTime = $dateTime->format('d/m/Y H:i');
-       
      
         return $this->render("articles/article.html.twig",
         [
             "article" => $article,
-            "date" => $dateTime
+            "date" => $dateTime,
+            "comments" => $comments,
+            'form' => $form->createView()
         ]);
     }
 

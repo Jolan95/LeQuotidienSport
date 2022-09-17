@@ -1,16 +1,32 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div class="container">
+        <h1 class="text-center py-4" >{{article.title}}</h1>
+        <div class="justify-center mb-5">
+            <img  class="image400 border10" src="{{asset('Upload/'~article.picture)}}"></img>
+        </div>  
+        
+        <p class="px-lg-4">Ecrit par {{article.user.fullname}} le {{article.createdAt|date("d/m/Y") }} à {{article.createdAt|date("G:i") }} </p>       
+        <h2 class="text-center h2-grey px-4 mb-4">{{article.description}}</h2>
+        <div class=" article-content p-lg-4">{{article.content | raw}}</div>
 
-
-<div class="container ">
-    <h1 class="text-center py-4" >{{article.title}}</h1>
-    <div class="justify-center mb-5">
-        <img  class="image400 border10" src="{{asset('Upload/'~article.picture)}}"></img>
-    </div>  
-    <p class="px-lg-4">Ecrit par {{article.user.fullname}} le {{date}} </p>       
-    <h2 class="text-center h2-grey px-4 mb-4">{{article.description}}</h2>
-    <div class=" article-content p-lg-4">{{article.content | raw}}</div>
+        <div class="pb-5">
+        {% for message in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+        <h3 class="pt-5">Commentaires</h3>
+        {{ form(form) }}
+        {% for comment in comments %}
+        <div class="comment-box">
+            <div class="d-flex align-items-center">
+            <div class="bold">{{comment.author.fullname}}</div><div class="grey">~ {{comment.date|date("G:i d/m/Y ") }}</div> 
+            </div>
+            <p>{{comment.content}}</p>
+        </div>
+        {% endfor %}
+        </div>
     </div>
-</div>
 {% endblock %}

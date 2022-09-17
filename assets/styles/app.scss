@@ -11,6 +11,9 @@
 	display: flex;
 	justify-content: center;
 }
+.bold{
+	font-weight : bold;
+}
 .red{
 	color : red;
 }
@@ -180,17 +183,10 @@ a.trash{
 	width : auto;
 }
 
-//widget-api
-// .wg_no_data{
-// 	display: none;
-// }
-// #wg-baseball-data{
-// 	#wg-baseball-games{
-// 		.wg_header{	
-// 			height : 80px !important;
-// 		}
-// 	}
-// }
-.wg_active{
-	background-color : blue !important;
+  //comment
+.comment-box{
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+	padding : 12px;
+	margin-bottom : 10px;
+	border-radius : 12px;
 }
