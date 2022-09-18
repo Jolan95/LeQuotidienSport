@@ -36,9 +36,6 @@ class Post
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class, orphanRemoval: true)]
     private $comments;
 
-    #[ORM\Column(type: 'smallint', nullable: true)]
-    private $rate;
-
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'posts')]
     #[ORM\JoinColumn(nullable: false)]
     private $user;
@@ -49,9 +46,13 @@ class Post
     #[ORM\Column(type: 'boolean')]
     private $published;
 
+    #[ORM\OneToMany(mappedBy: 'Post', targetEntity: Rate::class, orphanRemoval: true)]
+    private $rates;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->rates = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -207,4 +208,35 @@ class Post
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Rate>
+     */
+    public function getRates(): Collection
+    {
+        return $this->rates;
+    }
+
+    public function addRate(Rate $rate): self
+    {
+        if (!$this->rates->contains($rate)) {
+            $this->rates[] = $rate;
+            $rate->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRate(Rate $rate): self
+    {
+        if ($this->rates->removeElement($rate)) {
+            // set the owning side to null (unless already changed)
+            if ($rate->getPost() === $this) {
+                $rate->setPost(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

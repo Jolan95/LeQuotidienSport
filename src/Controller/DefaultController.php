@@ -12,6 +12,7 @@ use Doctrine\Common\Annotations\Annotation;
 use App\Service\CallApiService;
 use App\Entity\Post;
 use App\Entity\User;
+use App\Entity\Rate;
 use App\Entity\Comment;
 use App\Form\CommentType;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +22,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Form\PostType;
 use App\Repository\CommentRepository;
+use App\Repository\RateRepository;
 use Symfony\Component\Validator\Constraints\Date;
 
 class DefaultController extends AbstractController
@@ -123,12 +125,24 @@ class DefaultController extends AbstractController
 
       
     #[Route('/article/{id}', name: 'app_article')]  
-    public function article(int $id, PostRepository $postRepo, Request $request, CommentRepository $commentRepo, CommentType $commentType, ManagerRegistry $manager){
+    public function article(int $id, RateRepository $rateRepo,PostRepository $postRepo, Request $request, CommentRepository $commentRepo, CommentType $commentType, ManagerRegistry $manager){
 
         $article =  $postRepo->findOneBy(["id" => $id]);
-        $comments= $commentRepo->findBy(["post" => $article]);
         $form = $this->createForm(CommentType::class);
         $form->handleRequest($request);
+        $entity = $manager->getManager();
+        $rate = $rateRepo->averageRating($article);
+        dd($rate);
+        if($this->getUser()){
+            $rate = $rateRepo->findOneBy(["user" => $this->getUser(), "post" => $article]);
+            if($rate){
+                $stars = false;
+            } else{
+                $stars = true;
+            }
+        } else{
+            $stars = false;
+        }
         if($form->isSubmitted() && $form->isValid()){
             $comment = new Comment();
             $comment->setContent($form->getData()->getContent());
@@ -136,7 +150,6 @@ class DefaultController extends AbstractController
             $comment->setRate(0);
             $comment->setPost($article);
             $comment->setDate(new \DateTime());
-            $entity = $manager->getManager();
             $entity->persist($comment);
             $entity->flush();
             $this->addFlash('success', "Votre commentaire a bien été publié !");
@@ -145,17 +158,14 @@ class DefaultController extends AbstractController
             $form = $this->createForm(CommentType::class, $comment);
         
         }    
-        $date = $article->getCreatedAt();
-        $dateTime = new \DateTime();
-        $dateTime->setTimestamp($date->getTimestamp());
-        $dateTime = $dateTime->format('d/m/Y H:i');
+        $comments= $commentRepo->findByArticle(["post" => $article]);
      
         return $this->render("articles/article.html.twig",
         [
             "article" => $article,
-            "date" => $dateTime,
             "comments" => $comments,
-            'form' => $form->createView()
+            "form" => $form->createView(),
+            "stars" => $stars
         ]);
     }
 
@@ -265,6 +275,7 @@ class DefaultController extends AbstractController
             $post->setCategory($data->getCategory());
             $post->setImportant($data->getImportant());
             // if button "publier" is clicked, the article is published 
+
             $form->getClickedButton() === $form->get("publier")? $post->setPublished(true) : $post->setPublished(false);
             if($data->getPicture() != null ){
                 $file = $data->getPicture();

@@ -17,6 +17,10 @@
             {{ message }}
         </div>
         {% endfor %}
+        {% if stars %}
+        <div id="data" data-post={{article.id}}></div>
+        <div id="my-rating"></div>
+        {% endif %}
         <h3 class="pt-5">Commentaires</h3>
         {{ form(form) }}
         {% for comment in comments %}
@@ -29,4 +33,6 @@
         {% endfor %}
         </div>
     </div>
+
+
 {% endblock %}
