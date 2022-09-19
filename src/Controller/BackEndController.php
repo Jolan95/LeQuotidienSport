@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class BackEndController extends AbstractController
 {
@@ -92,6 +93,20 @@ class BackEndController extends AbstractController
         $entityManager->flush();
         return new Response("Ajout");
     }
+
+    #[Route('order-article', name: 'order-article')]
+    public function orderArticle(PostRepository $postRepo,Request $request, RateRepository $rateRepo)
+    {
+        $value = $request->query->get("value");
+        $posts = $postRepo->findArticlesByOrder($value);
+            return new JsonResponse([
+                "content" => $this->renderView('content/my-articles.html.twig', [
+                "posts" => $posts
+                ])
+            ]);  
+        }    
+
+    
 
     #[Route('author/delete/{post}', name: 'delete_myarticles')]
     public function deleteMyArticles(Post $post, ManagerRegistry $doctrine){

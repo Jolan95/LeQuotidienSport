@@ -46,7 +46,7 @@ class Post
     #[ORM\Column(type: 'boolean')]
     private $published;
 
-    #[ORM\OneToMany(mappedBy: 'Post', targetEntity: Rate::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Rate::class, orphanRemoval: true)]
     private $rates;
 
     public function __construct()

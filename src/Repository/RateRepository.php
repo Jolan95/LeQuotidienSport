@@ -63,13 +63,25 @@ class RateRepository extends ServiceEntityRepository
     */
 
     
-    public function averageRating($post): ?Rate
+    public function findAverageRating($post):array
     {
-        return $this->createQueryBuilder('r.user')
+        return $this->createQueryBuilder('r')
+            ->select("AVG(r.value)")
             ->andWhere('r.post = :post')
             ->setParameter('post', $post)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getOneOrNullResult();
+        ;
+    }
+    
+    public function findAverageRatingbyPost($post):array
+    {
+        return $this->createQueryBuilder('r')
+            ->select("AVG(r.value)")
+            ->andWhere('r.post = :post')
+            ->setParameter('post', $post)
+            ->getQuery()
+            ->getOneOrNullResult();
         ;
     }
     

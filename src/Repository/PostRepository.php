@@ -21,6 +21,13 @@ class PostRepository extends ServiceEntityRepository
     }
 
 
+    public function findArticlesByOrder($value)
+    {
+        return $this->createQueryBuilder('p')
+        ->orderBy('p.'.$value, 'DESC')
+        ->getQuery()
+        ->getResult();
+    }
     public function findArticlesByDate()
     {
         return $this->createQueryBuilder('p')
@@ -39,6 +46,19 @@ class PostRepository extends ServiceEntityRepository
         ->getQuery()
         ->getResult();
     }
+    
+    public function findByUserDesc($user)
+    {
+        return $this->createQueryBuilder('p')
+        ->andWhere('p.user = :val')
+        ->andWhere("p.published = true")
+        ->setParameter('val', $user)
+        ->orderBy('p.created_At', 'DESC')
+        ->getQuery()
+        ->getResult();
+    }
+
+
 
     public function findByFilter($search)
     {

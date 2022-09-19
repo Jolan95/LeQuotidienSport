@@ -23,6 +23,9 @@
 .grey{
 	color: grey;
 }
+.gold {
+	color : gold;
+}
 a:link, a:hover, a:visited{
 	text-decoration: none;
 	color : white
@@ -164,8 +167,9 @@ h2.h2-grey{
 }
 
 .my-articles .link-article:hover, .link-article:visited, .link-article:link {
-  color : #272727;
-  font-size : 1.5rem;
+	color : black;
+  font-size : 1rem;
+  font-weight : bold;
 }
 a.edit{
   color : rgba(42, 66, 131, 0.795);

@@ -6,11 +6,7 @@
 {% block body %}
 <div class="pb-5">
     <h1 class="text-center pb-2 pt-3">
-        {% if (sport is defined) %}
-        {{sport|capitalize}}
-        {% else %}
-        Actualités
-        {% endif %}
+        {{ (sport is defined) ? sport|capitalize : "Actualités" }}
     </h1>
     <div id="filter">
         <div class="search-box">

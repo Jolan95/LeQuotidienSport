@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Form\PostType;
 use App\Repository\CommentRepository;
 use App\Repository\RateRepository;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints\Date;
 
 class DefaultController extends AbstractController
@@ -31,11 +32,12 @@ class DefaultController extends AbstractController
 
 
     #[Route('/', name: 'home')]
-    public function index(PostRepository $postRepo,Request $request): Response
+    public function index(PostRepository $postRepo,Request $request, RateRepository $rateRepo): Response
     {
         $priority = $postRepo->findOneByPrimary();
         if($priority != null){
             $priority= $priority[0];
+            /* Finding the average rating for a priority. */
             $articles = $postRepo->findPostsExceptPrimary($priority->getId());
         } else{
             $articles = $postRepo->findAll();
@@ -131,15 +133,10 @@ class DefaultController extends AbstractController
         $form = $this->createForm(CommentType::class);
         $form->handleRequest($request);
         $entity = $manager->getManager();
-        $rate = $rateRepo->averageRating($article);
-        dd($rate);
+        $average = $rateRepo->findAverageRating($article);
         if($this->getUser()){
             $rate = $rateRepo->findOneBy(["user" => $this->getUser(), "post" => $article]);
-            if($rate){
-                $stars = false;
-            } else{
-                $stars = true;
-            }
+            $rate? $stars = false : $stars= true; 
         } else{
             $stars = false;
         }
@@ -158,14 +155,15 @@ class DefaultController extends AbstractController
             $form = $this->createForm(CommentType::class, $comment);
         
         }    
-        $comments= $commentRepo->findByArticle(["post" => $article]);
+        $comments= $article->getComments();
      
         return $this->render("articles/article.html.twig",
         [
             "article" => $article,
             "comments" => $comments,
             "form" => $form->createView(),
-            "stars" => $stars
+            "stars" => $stars,
+            "average" => $average[1]
         ]);
     }
 
@@ -231,10 +229,10 @@ class DefaultController extends AbstractController
      * @Route("admin/listing/articles", name="app_adminArticles")
      * @isGranted("ROLE_ADMIN")
      */
-    public function adminArticles(PostRepository $post): Response
+    public function adminArticles(PostRepository $postRepo): Response
     {
 
-        $posts = $post->findArticlesByDate();
+        $posts = $postRepo->findBy(["isPublished" => true]);
 
 
         return $this->render("admin/articles.html.twig", [
@@ -242,19 +240,18 @@ class DefaultController extends AbstractController
         ]);
     }
     #[Route('author/my-articles', name: 'myarticles')]
-    public function myArticles( PostRepository $repo){
+    public function myArticles( PostRepository $postRepo){
            
-        $posts = $repo->findBy(["user" => $this->getUser(), "published" => true]);
-
+        $posts = $postRepo->findByUserDesc($this->getUser());
          return $this->render("articles/mesarticles.html.twig", [
             "posts" => $posts
         ]);
     }
 
     #[Route('author/my-brouillons', name: 'mybrouillons')]
-    public function myBrouillons( PostRepository $repo){
+    public function myBrouillons( PostRepository $postRepo){
            
-        $posts = $repo->findBy(["user" => $this->getUser(), "published" => false]);
+        $posts = $postRepo->findBy(["user" => $this->getUser(), "published" => false]);
 
          return $this->render("articles/mesbrouillons.html.twig", [
             "posts" => $posts
