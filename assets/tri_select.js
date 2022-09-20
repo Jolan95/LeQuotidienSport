@@ -6,7 +6,7 @@ $("document").ready(()=>{
 
             let data = selectInput.value
             let url = new URL(window.location.origin)
-            url = url + "order-article?value="+data;
+            url = url + "order-article?tri="+data;
             $.ajax({
                 type: "GET",
                 url: url,

@@ -64,7 +64,7 @@ class DefaultController extends AbstractController
     }
 
     #[Route('/category/{sport}', name: 'app_sport')]
-    public function articles(string $sport, PostRepository $postRepo){
+    public function articles(string $sport, PostRepository $postRepo, Request $request){
         $priority = $postRepo->findOneByPrimary($sport);
         if($priority != null){
             $priority= $priority[0];
@@ -72,6 +72,20 @@ class DefaultController extends AbstractController
         } else {
             $articles = $postRepo->findBySport($sport);
         }
+        $ajax = $request->query->get("ajax");
+        if($ajax){
+            $search = $request->query->get("search");
+            $articles = $postRepo->findByFilterandCategory($search, $sport);
+            if($search != null){
+                $priority = null;
+            }
+            return new JsonResponse([
+                "content" => $this->renderView('content/articles.html.twig', [
+                    "articles" => $articles,
+                    "priority" => $priority
+                ])
+            ]);  
+        }    
         return $this->render('index.html.twig', [
         'priority' => $priority,
         'articles' => $articles,
@@ -82,16 +96,8 @@ class DefaultController extends AbstractController
     #[Route('/profile', name: 'app_profile')]
     public function profile(PostRepository $repository ): Response
     {
-        $user = $this->getUser();
-        $user = $user->getId();
-
-        $post = $repository->findAll();
-        $postOfUser = array_filter(
-            $post,
-            fn ($post) => $post->getUser()->getId() === $user
-        );
-        $numberArticles = count($postOfUser);
-
+        $post = $repository->findBy(["published" => true, "user" => $this->getUser()]);
+        $numberArticles = count($post);
         return $this->render('profile.html.twig', [
         "numberArticles" => $numberArticles
         ]);
@@ -239,9 +245,9 @@ class DefaultController extends AbstractController
         'posts' => $posts
         ]);
     }
+
     #[Route('author/my-articles', name: 'myarticles')]
     public function myArticles( PostRepository $postRepo){
-           
         $posts = $postRepo->findByUserDesc($this->getUser());
          return $this->render("articles/mesarticles.html.twig", [
             "posts" => $posts
@@ -252,7 +258,7 @@ class DefaultController extends AbstractController
     public function myBrouillons( PostRepository $postRepo){
            
         $posts = $postRepo->findBy(["user" => $this->getUser(), "published" => false]);
-
+        
          return $this->render("articles/mesbrouillons.html.twig", [
             "posts" => $posts
         ]);

@@ -21,22 +21,28 @@ class PostRepository extends ServiceEntityRepository
     }
 
 
-    public function findArticlesByOrder($value)
+    public function findArticlesByOrder($value, $user, $order)
     {
         return $this->createQueryBuilder('p')
-        ->orderBy('p.'.$value, 'DESC')
+        ->orderBy('p.'.$value, $order)
+        ->andWhere('p.user = :val')
+        ->andWhere("p.published = true")
+        ->setParameter('val', $user)
         ->getQuery()
         ->getResult();
     }
-    public function findArticlesByDate()
+      
+    public function findByRateAverage($user, $order)
     {
         return $this->createQueryBuilder('p')
-        ->orderBy('p.created_At', 'DESC')
+        ->andWhere('p.user = :val')
+        ->andWhere("p.published = true")
+        ->setParameter('val', $user)
+        ->orderBy("AVG(p.rates.value)", $order)
         ->getQuery()
         ->getResult();
     }
-       
-        
+    
     public function findBySport($sport)
     {
         return $this->createQueryBuilder('p')
@@ -58,8 +64,6 @@ class PostRepository extends ServiceEntityRepository
         ->getResult();
     }
 
-
-
     public function findByFilter($search)
     {
         return $this->createQueryBuilder('p')
@@ -68,6 +72,19 @@ class PostRepository extends ServiceEntityRepository
         ->setParameter('search', "%{$search}%")
         ->getQuery()
         ->getResult();
+
+    }
+    public function findByFilterandCategory($search, $sport)
+    {
+        return $this->createQueryBuilder('p')
+        ->andWhere("p.category = :sport")
+            ->setParameter("sport", $sport)
+        ->orderBy('p.created_At', 'DESC')
+        ->andWhere("p.description LIKE :search OR p.title LIKE :search")
+        ->setParameter('search', "%{$search}%")
+        ->getQuery()
+        ->getResult();
+
     }
 
     public function findOneByPrimary($sport = null)
@@ -116,6 +133,11 @@ class PostRepository extends ServiceEntityRepository
         }
     }
 }
+
+
+
+    
+
 
 
 

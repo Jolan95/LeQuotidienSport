@@ -97,27 +97,29 @@ class BackEndController extends AbstractController
     #[Route('order-article', name: 'order-article')]
     public function orderArticle(PostRepository $postRepo,Request $request, RateRepository $rateRepo)
     {
-        $value = $request->query->get("value");
-        $posts = $postRepo->findArticlesByOrder($value);
+        $data = $request->query->get("tri");
+        $values = explode(',',$data);
+        $value = $values[0];
+        $order = $values[1];
+        if($value == "rate" ){
+            $posts = $postRepo->findByRateAverage($this->getUser(), $order);
+        } else{
+            $posts = $postRepo->findArticlesByOrder($value, $this->getUser(), $order);
+        }
             return new JsonResponse([
-                "content" => $this->renderView('content/my-articles.html.twig', [
+                "content" => $this->renderView('content/mesarticles.html.twig', [
                 "posts" => $posts
                 ])
             ]);  
         }    
 
-    
-
     #[Route('author/delete/{post}', name: 'delete_myarticles')]
     public function deleteMyArticles(Post $post, ManagerRegistry $doctrine){
 
-        if($post->getUser() === $this->getUser()){
-
-            
+        if($post->getUser() === $this->getUser()){ 
             $entityManager = $doctrine->getManager();
             $entityManager->remove($post);
             $entityManager->flush();
-            
             return $this->redirectToRoute("myarticles");
             ;
         } else{

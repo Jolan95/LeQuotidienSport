@@ -7,12 +7,14 @@
 
 <div class="my-articles container-fluid">
 	<h1>Mes articles </h1>
-	<form id="form-select">
-	<label>Trier par :</label>
+	<form id="form-select" >
+	<label>Trier :</label>
 	<select name="tri" id="tri-select" >
-	    <option value="created_At">Date</option>
-	    <option value="category">Sport</option>
-	    <option value="rate">Note</option>
+	    <option value="created_At,DESC">les plus récent</option>
+	    <option value="created_At,ASC">Les plus anciens </option>
+	    <option value="rate,DESC">Les mieux notés</option>
+	    <option value="rate,ASC">Les moins bien notés</option>
+	    <option value="category,DESC">Par Sport</option>
 	</select>
 	</form>
   	<ul class="nav nav-tabs mt-2 ml-2">
@@ -48,7 +50,7 @@
 	</div>
 	<hr/>    
     <div id="content">    
-    {% include 'content/my-articles.html.twig' %}
+    {% include 'content/mesarticles.html.twig' %}
     </div>
 </div>	
 {% endblock %}
