@@ -10,6 +10,9 @@
         	{{ convertDate(post.createdAt) }}
         </div>
         <div class="col-1 d-none d-lg-flex  full-center">
+        	{{ post.views }}
+        </div>
+        <div class="col-1 d-none d-lg-flex  full-center">
         {% if post.rates|length > 0 %}
             {% set total = 0 %}
             {% for rate in post.rates %}

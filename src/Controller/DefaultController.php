@@ -34,37 +34,17 @@ class DefaultController extends AbstractController
     #[Route('/', name: 'home')]
     public function index(PostRepository $postRepo,Request $request, RateRepository $rateRepo): Response
     {
-        $priority = $postRepo->findOneByPrimary();
-        if($priority != null){
-            $priority= $priority[0];
-            /* Finding the average rating for a priority. */
-            $articles = $postRepo->findPostsExceptPrimary($priority->getId());
-        } else{
-            $articles = $postRepo->findAll();
-        }
-        $ajax = $request->query->get("ajax");
-        if($ajax){
-            $search = $request->query->get("search");
-            $articles = $postRepo->findByFilter($search);
-            if($search != null){
-                $priority = null;
-            }
-            return new JsonResponse([
-                "content" => $this->renderView('content/articles.html.twig', [
-                    "articles" => $articles,
-                    "priority" => $priority
-                ])
-            ]);  
-        }    
- 
-        return $this->render('index.html.twig', [
-            'articles' => $articles,
-            'priority' => $priority
-        ]);
+        return $this->redirectToRoute('app_sport', ["sport" =>"actualité"]);
+
     }
 
-    #[Route('/category/{sport}', name: 'app_sport')]
+    #[Route('/journal/{sport}', name: 'app_sport')]
     public function articles(string $sport, PostRepository $postRepo, Request $request){
+        $pageSize = 10;
+		// $firstResult = ($page - 1) * $pageSize;
+        if($sport == "actualité"){
+            $sport = null;
+        }
         $priority = $postRepo->findOneByPrimary($sport);
         if($priority != null){
             $priority= $priority[0];
@@ -75,8 +55,14 @@ class DefaultController extends AbstractController
         $ajax = $request->query->get("ajax");
         if($ajax){
             $search = $request->query->get("search");
-            $articles = $postRepo->findByFilterandCategory($search, $sport);
-            if($search != null){
+            $offset = $request->query->get("offset");
+            if($search){
+                $articles = $postRepo->findByFilterandCategory($search, $sport);
+                if($search != ""){
+                    $priority = null;
+                }
+            } else{
+                $articles = $postRepo->findPostsExceptPrimary($priority->getId(), $sport, $offset);
                 $priority = null;
             }
             return new JsonResponse([
@@ -90,6 +76,47 @@ class DefaultController extends AbstractController
         'priority' => $priority,
         'articles' => $articles,
         'sport' => $sport
+        ]);
+    }
+
+
+                
+    #[Route('/article/{id}', name: 'app_article')]  
+    public function article(int $id, RateRepository $rateRepo,PostRepository $postRepo, Request $request, CommentRepository $commentRepo, CommentType $commentType, ManagerRegistry $manager){
+        $entity = $manager->getManager();
+        $article =  $postRepo->findOneBy(["id" => $id]);
+        $form = $this->createForm(CommentType::class);
+        $form->handleRequest($request);
+        $average = $rateRepo->findAverageRating($article);
+        if($this->getUser()){
+            $rate = $rateRepo->findOneBy(["user" => $this->getUser(), "post" => $article]);
+            $rate? $stars = false : $stars= true; 
+        } else{
+            $stars = false;
+        }
+        if($form->isSubmitted() && $form->isValid()){
+            $comment = new Comment();
+            $comment->setContent($form->getData()->getContent());
+            $comment->setAuthor($this->getUser());
+            $comment->setRate(0);
+            $comment->setPost($article);
+            $comment->setDate(new \DateTime());
+            $entity->persist($comment);
+            $entity->flush();
+            $this->addFlash('success', "Votre commentaire a bien été publié !");
+            //Reset the form
+            $comment = new Comment();
+            $form = $this->createForm(CommentType::class, $comment);
+        }    
+        $comments= $article->getComments();
+     
+        return $this->render("articles/article.html.twig",
+        [
+            "article" => $article,
+            "comments" => $comments,
+            "form" => $form->createView(),
+            "stars" => $stars,
+            "average" => $average[1]
         ]);
     }
  
@@ -131,47 +158,6 @@ class DefaultController extends AbstractController
         ]);
     }
 
-      
-    #[Route('/article/{id}', name: 'app_article')]  
-    public function article(int $id, RateRepository $rateRepo,PostRepository $postRepo, Request $request, CommentRepository $commentRepo, CommentType $commentType, ManagerRegistry $manager){
-
-        $article =  $postRepo->findOneBy(["id" => $id]);
-        $form = $this->createForm(CommentType::class);
-        $form->handleRequest($request);
-        $entity = $manager->getManager();
-        $average = $rateRepo->findAverageRating($article);
-        if($this->getUser()){
-            $rate = $rateRepo->findOneBy(["user" => $this->getUser(), "post" => $article]);
-            $rate? $stars = false : $stars= true; 
-        } else{
-            $stars = false;
-        }
-        if($form->isSubmitted() && $form->isValid()){
-            $comment = new Comment();
-            $comment->setContent($form->getData()->getContent());
-            $comment->setAuthor($this->getUser());
-            $comment->setRate(0);
-            $comment->setPost($article);
-            $comment->setDate(new \DateTime());
-            $entity->persist($comment);
-            $entity->flush();
-            $this->addFlash('success', "Votre commentaire a bien été publié !");
-            //Reset the form
-            $comment = new Comment();
-            $form = $this->createForm(CommentType::class, $comment);
-        
-        }    
-        $comments= $article->getComments();
-     
-        return $this->render("articles/article.html.twig",
-        [
-            "article" => $article,
-            "comments" => $comments,
-            "form" => $form->createView(),
-            "stars" => $stars,
-            "average" => $average[1]
-        ]);
-    }
 
     #[Route('/author', name:'author')]
     public function post(Request $request, ManagerRegistry $manager){     
@@ -186,6 +172,7 @@ class DefaultController extends AbstractController
             $post->setTitle($data->getTitle());
             $post->setDescription($data->getDescription());
             $post->setContent($data->getContent());
+            $post->setViews(0);
             $post->setUser($user);
             $post->setImportant($data->getImportant());
             // if button "publier" is clicked, the article is published and handle the messag to display
@@ -232,17 +219,18 @@ class DefaultController extends AbstractController
     }
         
     /**
-     * @Route("admin/listing/articles", name="app_adminArticles")
+     * @Route("admin/listing/articles", name="app_admin_articles")
      * @isGranted("ROLE_ADMIN")
      */
-    public function adminArticles(PostRepository $postRepo): Response
+    public function adminArticles(PostRepository $postRepo, UserRepository $userRepo, Request $request): Response
     {
-
-        $posts = $postRepo->findBy(["isPublished" => true]);
-
-
+        $authors = $userRepo->findByRoles('["ROLE_AUTHOR"]');
+        $admins = $userRepo->findByRoles('["ROLE_admin"]');
+        $posts = $postRepo->findByFilters();
         return $this->render("admin/articles.html.twig", [
-        'posts' => $posts
+        'posts' => $posts,
+        'authors' => $authors,
+        'admins' => $admins
         ]);
     }
 
@@ -264,6 +252,7 @@ class DefaultController extends AbstractController
         ]);
     }
 
+
     #[Route('author/edit-article/{id}', name: 'edit-article')]
     public function edit_article($id, PostRepository $repo, Request $request,ManagerRegistry $manager){
            
@@ -271,6 +260,10 @@ class DefaultController extends AbstractController
         $form = $this->createForm(PostType::class);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
+            // set new date if the user publishes a post drafted
+            if( $form->getClickedButton() === $form->get("publier") && $post->getPublished() == false){
+                $post->setCreatedAt(new \DateTimeImmutable());
+            }
             $data = $form->getData();
             $post->setTitle($data->getTitle());
             $post->setDescription($data->getDescription());
@@ -278,7 +271,6 @@ class DefaultController extends AbstractController
             $post->setCategory($data->getCategory());
             $post->setImportant($data->getImportant());
             // if button "publier" is clicked, the article is published 
-
             $form->getClickedButton() === $form->get("publier")? $post->setPublished(true) : $post->setPublished(false);
             if($data->getPicture() != null ){
                 $file = $data->getPicture();

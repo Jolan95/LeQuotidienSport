@@ -6,7 +6,7 @@ $("document").ready(()=>{
 
             let data = selectInput.value
             let url = new URL(window.location.origin)
-            url = url + "order-article?tri="+data;
+            url = url + "request-ajax-order-my-article?tri="+data;
             $.ajax({
                 type: "GET",
                 url: url,
@@ -16,7 +16,9 @@ $("document").ready(()=>{
                 },
             })
         })
+
         form.addEventListener("submit", (e)=>{
             e.preventDefault();
         })
+
     })

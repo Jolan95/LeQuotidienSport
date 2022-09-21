@@ -48,6 +48,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ;
     }
 
+    public function findAuthorAndAdmin()
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.roles = :admin')
+            ->orWhere(`u.roles = :auth`)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 
     
 

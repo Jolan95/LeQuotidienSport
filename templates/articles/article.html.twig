@@ -1,8 +1,11 @@
 {% extends 'base.html.twig' %}
-
+{% block javascripts %}
+ {{ encore_entry_script_tags('add_views') }}
+{% endblock %}
 
 {% block body %}
     <div class="container">
+        <div id='data-article' data-article="{{article.id}}">
         <h1 class="text-center py-4" >{{article.title}}</h1>
         <div class="justify-center mb-5">
             <img  class="image400 border10" src="{{asset('Upload/'~article.picture)}}"></img>

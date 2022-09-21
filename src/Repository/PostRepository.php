@@ -35,10 +35,11 @@ class PostRepository extends ServiceEntityRepository
     public function findByRateAverage($user, $order)
     {
         return $this->createQueryBuilder('p')
+        ->leftJoin('p.rates', 'rates')
         ->andWhere('p.user = :val')
         ->andWhere("p.published = true")
         ->setParameter('val', $user)
-        ->orderBy("AVG(p.rates.value)", $order)
+        ->orderBy("rates.value", $order)
         ->getQuery()
         ->getResult();
     }
@@ -64,73 +65,69 @@ class PostRepository extends ServiceEntityRepository
         ->getResult();
     }
 
-    public function findByFilter($search)
+    public function findByFilters($author = null, $value = "created_At" ,$order = "DESC")
     {
-        return $this->createQueryBuilder('p')
-        ->orderBy('p.created_At', 'DESC')
-        ->andWhere("p.description LIKE :search OR p.title LIKE :search")
-        ->setParameter('search', "%{$search}%")
-        ->getQuery()
-        ->getResult();
-
-    }
-    public function findByFilterandCategory($search, $sport)
-    {
-        return $this->createQueryBuilder('p')
-        ->andWhere("p.category = :sport")
-            ->setParameter("sport", $sport)
-        ->orderBy('p.created_At', 'DESC')
-        ->andWhere("p.description LIKE :search OR p.title LIKE :search")
-        ->setParameter('search', "%{$search}%")
-        ->getQuery()
-        ->getResult();
-
-    }
-
-    public function findOneByPrimary($sport = null)
-    {
-        if($sport == null){
-            return $this->createQueryBuilder('p')
-            ->where('p.important = true')
-            ->andWhere("p.published = true")
-            ->orderBy('p.created_At', 'DESC')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getResult();
-        } else {
-            return $this->createQueryBuilder('p')
-            ->where('p.important = true')
-            ->andWhere('p.category = :val')
-            ->andWhere("p.published = true")
-            ->setParameter('val', $sport)
-            ->orderBy('p.created_At', 'DESC')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getResult();
-        };
-    }
-
-    public function findPostsExceptPrimary($id, $sport = null)
-    {
-        if($sport == null){
-            return $this->createQueryBuilder('p')
-            ->where('p.id NOT LIKE :id ')
-            ->andWhere("p.published = true")
-            ->setParameter('id', $id)
-            ->orderBy('p.created_At', 'DESC')
-            ->getQuery()
-            ->getResult();
-        } else{
-            return $this->createQueryBuilder('p')
-            ->where('p.id NOT LIKE :id ')
-            ->andWhere('p.category = :val')
-            ->andWhere("p.published = true")
-            ->setParameter('id', $id)
-            ->setParameter('val', $sport)
-            ->orderBy('p.created_At', 'DESC')
-            ->getQuery()
-            ->getResult();
+        $qb =  $this->createQueryBuilder('p')
+        ->andWhere("p.published = true");
+        if($author){
+            $qb->andWhere('p.user = :val')
+            ->setParameter('val', $author);
         }
+        $qb->orderBy('p.'.$value, $order);
+
+        return $qb        
+        ->getQuery()
+        ->getResult();
+    }  
+    
+    public function findByFilterandCategory($search, $sport = null)
+    {
+        $qb = $this->createQueryBuilder('p')
+        ->orderBy('p.created_At', 'DESC')
+        ->andWhere("p.description LIKE :search OR p.title LIKE :search")
+        ->setParameter('search', "%{$search}%");
+        if ($sport){
+            $qb
+            ->andWhere("p.category = :sport")
+            ->setParameter("sport", $sport);
+        }
+        return $qb->getQuery()
+        ->getResult();
+    }
+
+    public function findOneByPrimary($sport)
+    {
+        $qb = $this->createQueryBuilder('p')
+        ->where('p.important = true')
+        ->andWhere("p.published = true");
+        if($sport != null){
+            $qb->andWhere('p.category = :val')
+            ->setParameter('val', $sport);
+        };
+        return $qb->orderBy('p.created_At', 'DESC')
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getResult();
+    }
+
+    public function findPostsExceptPrimary($id, $sport, $offset = 0)
+    {
+
+        $qb =  $this->createQueryBuilder('p')
+        ->where('p.id NOT LIKE :id ')
+        ->andWhere("p.published = true")
+        ->setParameter('id', $id)
+        ->orderBy('p.created_At', 'DESC');
+        if($sport != null){
+            $qb->andWhere('p.category = :val')
+            ->setParameter('val', $sport);
+        }
+        
+        return $qb->setFirstResult($offset)
+        ->setMaxResults(10)
+        ->getQuery()
+        ->getResult();
+
     }
 }
 

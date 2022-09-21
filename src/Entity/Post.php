@@ -49,6 +49,9 @@ class Post
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Rate::class, orphanRemoval: true)]
     private $rates;
 
+    #[ORM\Column(type: 'integer')]
+    private $views;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -235,6 +238,18 @@ class Post
                 $rate->setPost(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getViews(): ?int
+    {
+        return $this->views;
+    }
+
+    public function setViews(int $views): self
+    {
+        $this->views = $views;
 
         return $this;
     }

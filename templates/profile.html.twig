@@ -1,10 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{asset('css/profile.css')}}"/>
-{% endblock %}
-
-
 {% block body %}
 
 
@@ -30,6 +25,9 @@
 		<a href="{{path('myarticles')}}"><button class="btn btn-success">Mes Articles</button></a>
 	</div>
 	{% if is_granted("ROLE_ADMIN") %}
+	<div class="my-3">
+		<a  href="{{path('app_admin_articles')}}"><button class="btn btn-primary">Tous les Articles</button></a>
+	</div>
 	<div class="my-3">
 		<a  href="{{path('app_admin', {role : "admin"})}}"><button class="btn btn-info">Administration</button></a>
 	</div>

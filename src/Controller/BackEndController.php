@@ -72,6 +72,8 @@ class BackEndController extends AbstractController
             return $this->redirectToRoute("app_admin", ["role" => "author"]);
     }
 
+
+
     #[Route('rating-article', name: 'rating-article')]
     public function RateArticle( ManagerRegistry $doctrine, Request $request, UserRepository $userRepo, PostRepository $postRepo, RateRepository $rateRepo){
         $value= $request->query->get("rate");
@@ -94,7 +96,30 @@ class BackEndController extends AbstractController
         return new Response("Ajout");
     }
 
-    #[Route('order-article', name: 'order-article')]
+    #[Route('request-ajax-list-all-articles', name: 'tri_all_articles')]
+    public function triAllArticles(UserRepository $userRepo, PostRepository $postRepo,Request $request){
+        $author = $request->query->get("author");
+        $order = $request->query->get("order");
+        if($order){
+            $values = explode(',',$order);
+            $value = $values[0];
+            $order = $values[1];
+        } else {
+            $value = null;
+        }
+        if($value == "rate" ){
+            $posts = $postRepo->findByRateAverage($this->getUser(), $order);
+        } else{
+            $posts = $postRepo->findByFilters($author, $value ,$order);
+        }
+        return new JsonResponse([
+            "content" => $this->renderView('content/mesarticles.html.twig', [
+            "posts" => $posts,
+            ])
+        ]);  
+    }
+
+    #[Route('request-ajax-order-my-article', name: 'order-article')]
     public function orderArticle(PostRepository $postRepo,Request $request, RateRepository $rateRepo)
     {
         $data = $request->query->get("tri");
@@ -112,6 +137,17 @@ class BackEndController extends AbstractController
                 ])
             ]);  
         }    
+
+    #[Route('article/add-view', name: 'add_view_article')]
+    public function AddView(PostRepository $postRepo, ManagerRegistry $doctrine, Request $request){
+        $article_id = $request->query->get("article");
+        $article = $postRepo->findOneById($article_id);
+        $article->setViews($article->getViews() + 1);
+        $entityManager = $doctrine->getManager();
+        $entityManager->persist($article);
+        $entityManager->flush();  
+        return new Response("ok");         
+    }
 
     #[Route('author/delete/{post}', name: 'delete_myarticles')]
     public function deleteMyArticles(Post $post, ManagerRegistry $doctrine){
