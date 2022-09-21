@@ -1,7 +1,8 @@
 $("document").ready(()=>{
     
-form = document.getElementById("filter")
-input = document.getElementById("search")
+    let offset = 0;
+    let form = document.getElementById("filter")
+    let input = document.getElementById("search")
 
     input.addEventListener("keyup", ()=>{
         let data = input.value
@@ -16,6 +17,7 @@ input = document.getElementById("search")
                 success: function(data){
                     const content = document.querySelector("#content");
                     content.innerHTML = data.content
+                    offset  =0
                 },
             })
         }
@@ -24,24 +26,30 @@ input = document.getElementById("search")
         e.preventDefault();
     })
 
-    let offset = 0;
+
     fetchMore = function(){
         if ($(window).scrollTop() > ($(document).height() - 200 )- $(window).height()){
-            $(window).unbind('scroll', fetchMore);
-            offset = offset + 10;
-            let url = new URL(window.location.href)
-            url = url.pathname + "?offset="+offset+"&ajax=1";
-            console.log(url)
-            $.ajax({
-                type: "GET",
-                url: url,
-                success: function(data){
-                    $(data.content).insertAfter($('#content'));
-                },
-            })
-            setTimeout(()=> {
- $(window).bind('scroll',fetchMore);
-            }, 3000)
+            if(input.value.length < 2){
+                $(window).unbind('scroll', fetchMore);
+                offset = offset + 10;
+                let url = new URL(window.location.href)
+                url = url.pathname + "?offset="+offset+"&ajax=1";
+                console.log(url)
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    success: function(data){
+                        // $(data.content).insertAfter($('#content'));
+                        var div = document.createElement('div');
+                        div.innerHTML = data.content.trim();
+                        let endPage = document.getElementById("content");
+                        endPage.append(div)
+                    },
+                })
+                setTimeout(()=> {
+                    $(window).bind('scroll',fetchMore);
+                }, 3000)
+            }    
         }
     } 
     $(window).bind('scroll',fetchMore);
