@@ -40,8 +40,6 @@ class DefaultController extends AbstractController
 
     #[Route('/journal/{sport}', name: 'app_sport')]
     public function articles(string $sport, PostRepository $postRepo, Request $request){
-        $pageSize = 10;
-		// $firstResult = ($page - 1) * $pageSize;
         if($sport == "actualité"){
             $sport = null;
         }
@@ -53,15 +51,14 @@ class DefaultController extends AbstractController
             $articles = $postRepo->findBySport($sport);
         }
         $ajax = $request->query->get("ajax");
+        $search = $request->query->get("search");
+        $offset = $request->query->get("offset");
         if($ajax){
-            $search = $request->query->get("search");
-            $offset = $request->query->get("offset");
-            if($search){
-                $articles = $postRepo->findByFilterandCategory($search, $sport);
-                if($search != ""){
+            if($ajax == 1 && strlen($search) > 2){
+                    $articles = $postRepo->findByFilterandCategory($search, $sport);
                     $priority = null;
-                }
-            } else{
+            }
+            if($ajax == 2){
                 $articles = $postRepo->findPostsExceptPrimary($priority->getId(), $sport, $offset);
                 $priority = null;
             }
@@ -249,6 +246,18 @@ class DefaultController extends AbstractController
         
          return $this->render("articles/mesbrouillons.html.twig", [
             "posts" => $posts
+        ]);
+    }
+        
+    /**
+     * @isGranted("ROLE_ADMIN")
+     */
+    #[Route('admin/comments/{id}', name: 'adminComments')]
+    public function adminComments($id, PostRepository $postRepo){
+           
+        $post = $postRepo->findById($id);
+         return $this->render("admin/comments.html.twig", [
+            "post" => $post[0]
         ]);
     }
 

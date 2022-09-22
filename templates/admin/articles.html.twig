@@ -21,15 +21,15 @@
 	    <option value="{{author.id}}">{{author.id}}. {{author.fullname}}</option>
         {% endfor %}
 	</select>
-  <label>Trier :</label>
+  <label>Trier par :</label>
 	<select name="order" id="tri-select" >
 	    <option value="created_At,DESC">les plus récent</option>
-	    <option value="created_At,ASC">Les plus anciens </option>
-	    <option value="rate,DESC">Les mieux notés</option>
-	    <option value="rate,ASC">Les moins bien notés</option>
-      <option value="views,DESC">Les plus lus</option>
-	    <option value="views,ASC">Les moins lus</option>
-	    <option value="category,DESC">Par sport</option>
+	    <option value="created_At,ASC">les plus anciens </option>
+	    <option value="rate,DESC">les mieux notés</option>
+	    <option value="rate,ASC">les moins bien notés</option>
+      <option value="views,DESC">les plus lus</option>
+	    <option value="views,ASC">les moins lus</option>
+	    <option value="category,DESC">sport</option>
 	</select>
 	</form>
 
@@ -42,7 +42,7 @@
           Catégorie
         </div>
 
-        <div class="col-lg-2 d-none d-lg-block offset-lg-1 text-center">
+        <div class="col-lg-2 d-none d-lg-block  text-center">
           Date
         </div>
         <div class="col-lg-1 d-none d-lg-block  text-center">
@@ -53,6 +53,9 @@
         </div>
         <div class="col-lg-1 d-none d-lg-block  text-center">
           Note
+        </div>
+        <div class="col-lg-1 d-none d-lg-block  text-center">
+          Commentaires
         </div>
         <div class="col-lg-2 col-3  text-center">
           Editer

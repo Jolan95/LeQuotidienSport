@@ -6,7 +6,7 @@
         <div class="col-1 offset-1 d-none d-lg-flex full-center">
 		 	{{ post.category }}
         </div>
-        <div class="col-2 d-none d-lg-flex offset-1 full-center">
+        <div class="col-2 d-none d-lg-flex  full-center">
         	{{ convertDate(post.createdAt) }}
         </div>
         <div class="col-1 d-none d-lg-flex  full-center">
@@ -22,6 +22,15 @@
 			{% else %}
 			<div class="bold">-</div>
 		{% endif %}	
+        </div>
+        <div class="col-1 d-none d-lg-flex  full-center">
+        {% if post.comments|length > 0 %}
+            <a href="{{path("adminComments", {id : post.id})}}" class="link-default">
+        	{{ post.comments|length }}
+            </a>
+        {% else %}    
+        	{{ post.comments|length }}
+        {% endif %}    
         </div>
         <div class="col-3 col-lg-2  full-center">
 			<a   href="{{path("edit-article", {id : post.id})}}" class="edit">

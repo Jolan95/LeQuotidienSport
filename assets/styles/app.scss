@@ -28,7 +28,11 @@
 }
 a:link, a:hover, a:visited{
 	text-decoration: none;
-	color : white
+	color : black
+}
+.link-default:hover, .link-default:link, .link-default:visited{
+	text-decoration: underline;
+	color: blue;
 }
 
 //Header

@@ -32,15 +32,17 @@ class PostRepository extends ServiceEntityRepository
         ->getResult();
     }
       
-    public function findByRateAverage($user, $order)
+    public function findByRateAverage( $order, $user = null)
     {
-        return $this->createQueryBuilder('p')
-        ->leftJoin('p.rates', 'rates')
-        ->andWhere('p.user = :val')
-        ->andWhere("p.published = true")
-        ->setParameter('val', $user)
-        ->orderBy("rates.value", $order)
-        ->getQuery()
+        $qb =  $this->createQueryBuilder('p')
+        ->leftJoin('p.rates', 'rates') ;     
+        if($user){
+            $qb->andWhere('p.user = :val')
+            ->setParameter('val', $user);
+        }
+        $qb->andWhere("p.published = true")
+        ->orderBy("rates.value", $order);
+        return $qb->getQuery()
         ->getResult();
     }
     

@@ -6,7 +6,7 @@ $("document").ready(()=>{
 
     input.addEventListener("keyup", ()=>{
         let data = input.value
-        if(data.length > 2 || data.length == 1){
+        if(data.length > 2 || data.length <= 0){
             //url
             let url = new URL(window.location.href)
             url = url.pathname + "?search="+data+"&ajax=1";
@@ -29,11 +29,11 @@ $("document").ready(()=>{
 
     fetchMore = function(){
         if ($(window).scrollTop() > ($(document).height() - 200 )- $(window).height()){
-            if(input.value.length < 2){
+            if(input.value.length < 3){
                 $(window).unbind('scroll', fetchMore);
                 offset = offset + 10;
                 let url = new URL(window.location.href)
-                url = url.pathname + "?offset="+offset+"&ajax=1";
+                url = url.pathname + "?offset="+offset+"&ajax=2";
                 console.log(url)
                 $.ajax({
                     type: "GET",

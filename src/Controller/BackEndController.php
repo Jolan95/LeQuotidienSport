@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use App\Entity\Rate;
+use App\Repository\CommentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -108,8 +109,8 @@ class BackEndController extends AbstractController
             $value = null;
         }
         if($value == "rate" ){
-            $posts = $postRepo->findByRateAverage($this->getUser(), $order);
-        } else{
+            $posts = $postRepo->findByRateAverage( $order, $author);
+        }else{
             $posts = $postRepo->findByFilters($author, $value ,$order);
         }
         return new JsonResponse([
@@ -127,7 +128,7 @@ class BackEndController extends AbstractController
         $value = $values[0];
         $order = $values[1];
         if($value == "rate" ){
-            $posts = $postRepo->findByRateAverage($this->getUser(), $order);
+            $posts = $postRepo->findByRateAverage( $order, $this->getUser());
         } else{
             $posts = $postRepo->findArticlesByOrder($value, $this->getUser(), $order);
         }
@@ -160,6 +161,22 @@ class BackEndController extends AbstractController
             ;
         } else{
             return new Response("<h4>Vous ne pouvez pas supprimer ce poste</h4>");
+        }
+
+    }
+
+    #[Route('comment/remove/{id}', name: 'delete_comment')]
+    public function deleteComment($id, CommentRepository $commentRepo ,ManagerRegistry $doctrine){
+        $comment = $commentRepo->findOneById($id);
+        if($this->getUser() == $comment->getAuthor() || $this->isGranted('ROLE_ADMIN')){
+            $post_id = $comment->getPost()->getId();
+            $entityManager = $doctrine->getManager();
+            $entityManager->remove($comment);
+            $entityManager->flush();
+            $this->addFlash("danger", "Le commentaire à été supprimé définitivement.");
+            return $this->redirectToRoute("adminComments", ["id" => $post_id]);
+        }else{
+            throw new Exception("Vous ne pouvez pas accéder à cette requête.");
         }
 
     }
