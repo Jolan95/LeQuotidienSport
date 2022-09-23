@@ -152,37 +152,76 @@ class BackEndController extends AbstractController
         return new Response("Ajout");
     }
 
-    #[Route('request-ajax-list-all-articles', name: 'tri_all_articles')]
-    public function triAllArticles(UserRepository $userRepo, PostRepository $postRepo,Request $request){
+    // #[Route('request-ajax-list-all-articles', name: 'tri_all_articles')]
+    // public function triAllArticles(UserRepository $userRepo, PostRepository $postRepo,Request $request){
+    //     $author = $request->query->get("author");
+    //     $order = $request->query->get("order");
+    //     $search = $request->query->get("search");
+    //     $page = $request->query->get("page");
+    //     $offset = null;
+    //     if($order){
+    //         $values = explode(',',$order);
+    //         $value = $values[0];
+    //         $order = $values[1];
+    //     } else {
+    //         $value = null;
+    //     }
+    //     if($search || $author){
+    //         $numberPages = 0;
+    //     } else{
+    //         $offset = ($page - 1) * 20;
+    //         $numberPages = ceil($postRepo->findNumberPage() / 20);
+    //     }
+    //     if($value == "rate" ){
+    //         $posts = $postRepo->findByRateAverage( $order, $author, $search, $offset);
+    //     }else{
+    //         $posts = $postRepo->findByFilters($author, $value ,$order, $search, $offset);
+    //     }
+    //     return new JsonResponse([
+    //         "content" => $this->renderView('content/mesarticles.html.twig', [
+    //         "posts" => $posts,
+    //         "numberPages" => $numberPages,
+    //         "page" => $page
+    //         ])
+    //     ]);  
+    // }
+
+    #[Route('request-ajax-listing-all-articles', name: 'tri_every_articles')]
+    public function triEveryArticles(UserRepository $userRepo, PostRepository $postRepo,Request $request){
         $author = $request->query->get("author");
         $order = $request->query->get("order");
         $search = $request->query->get("search");
         $page = $request->query->get("page");
-        $offset = null;
-        if($order){
-            $values = explode(',',$order);
-            $value = $values[0];
-            $order = $values[1];
-        } else {
-            $value = null;
+        if($page == null){
+            $page = 1;
         }
-        if($search || $author){
-            $numberPages = 0;
-        } else{
-            $offset = ($page - 1) * 20;
-            $numberPages = ceil($postRepo->findNumberPage() / 20);
+        $authors = $userRepo->findByRoles('["ROLE_AUTHOR"]',null);
+        $admins = $userRepo->findByRoles('["ROLE_admin"]', null);
+        $values = explode(',',$order);
+        $value = $values[0];
+        $order = $values[1];
+        if($author != "" || $search != ""){
+            $page = 1;
         }
+        $offset = ($page - 1) * 20;
         if($value == "rate" ){
             $posts = $postRepo->findByRateAverage( $order, $author, $search, $offset);
+            $numberPages = $postRepo->findNumberPagesRateAverage( $order, $author, $search);
+            $numberPages = ceil($numberPages[0][1]/20);
         }else{
             $posts = $postRepo->findByFilters($author, $value ,$order, $search, $offset);
+            $numberPages = $postRepo->findNumberPagesByFilters($author, $value ,$order, $search);
+            $numberPages = ceil($numberPages[0][1]/20);
+
         }
         return new JsonResponse([
-            "content" => $this->renderView('content/mesarticles.html.twig', [
+            "content" => [$this->renderView('content/all-articles.html.twig', [
             "posts" => $posts,
             "numberPages" => $numberPages,
-            "page" => $page
-            ])
+            "page" => $page,
+            "admins" => $admins,
+            "authors" =>$authors
+            ]), "page" => $numberPages]
         ]);  
     }
 

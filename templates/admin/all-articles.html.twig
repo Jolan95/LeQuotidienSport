@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+{% block javascripts %}
+ {{ encore_entry_script_tags('filter_all_articles') }}
+{% endblock %}
+
+{% block body %}
+
+<div class="my-articles container-fluid">
+	<h1>Les Articles </h1>
+	<form id="form-select" >
+        <div>
+        	<label>Auteur :</label>
+        	<select name="author" id="filter-users">
+              <option value ="">Tous</option>
+              <option disabled >ADMINISTRATEURS</option>
+              {% for admin in admins %}
+        	    <option value="{{admin.id}}">{{admin.id}}. {{admin.fullname}}</option>
+              {% endfor %}
+              <option disabled >AUTEURS</option>
+              {% for author in authors %}
+        	    <option value="{{author.id}}">{{author.id}}. {{author.fullname}}</option>
+              {% endfor %}
+        	</select>
+        </div>
+        <div>
+            <label>Trier par :</label>
+	        <select name="order" id="tri-select" >
+	            <option value="created_At,DESC">les plus récent</option>
+	            <option value="created_At,ASC">les plus anciens </option>
+	            <option value="rate,DESC">les mieux notés</option>
+	            <option value="rate,ASC">les moins bien notés</option>
+                <option value="views,DESC">les plus lus</option>
+	            <option value="views,ASC">les moins lus</option>
+	            <option value="category,DESC">sport</option>
+	        </select>
+        </div>
+        <label>Rechercher : </label>
+        <input id="search" name="search" type="text"></input>
+        {% if numberPages is defined and numberPages > 1 %}
+    	<select name="page" id="page">
+    		{% for i in 1.. numberPages %}
+    			{% if i == page %}
+      			<option  selected >{{i}}</option>
+    			{% else %}
+      			<option value={{i}}>{{i}}</option>
+    			{% endif %}
+    		{% endfor %}
+    	</select>
+	{% endif %}
+	</form>
+        <div id="content">    
+        {% include 'content/all-articles.html.twig' %}
+        </div>
+    </div>	
+</div>	
+{% endblock %}

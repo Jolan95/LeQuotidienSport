@@ -50,6 +50,24 @@ class PostRepository extends ServiceEntityRepository
         return $qb->getQuery()
         ->getResult();
     }
+    public function findNumberPagesRateAverage( $order, $user = null, $offset = null )
+    {
+        $qb =  $this->createQueryBuilder('p')
+        ->select("COUNT(p)")
+        ->leftJoin('p.rates', 'rates') ;     
+        if($user){
+            $qb->andWhere('p.user = :val')
+            ->setParameter('val', $user);
+        }
+        if($offset !== null){
+            $qb->setFirstResult($offset)
+            ->setMaxResults(20);
+        }
+        $qb->andWhere("p.published = true")
+        ->orderBy("rates.value", $order);
+        return $qb->getQuery()
+        ->getResult();
+    }
     
     public function findBySport($sport)
     {
@@ -97,6 +115,25 @@ class PostRepository extends ServiceEntityRepository
             $qb->setFirstResult($offset)
             ->setMaxResults(20);
         }
+        return $qb        
+        ->getQuery()
+        ->getResult();
+    }  
+    public function findNumberPagesByFilters($author = null, $value = "created_At" ,$order = "DESC", $search = null)
+    {
+        $qb =  $this->createQueryBuilder('p')
+        ->select("COUNT(p)")
+        ->andWhere("p.published = true");
+        if($author){
+            $qb->andWhere('p.user = :val')
+            ->setParameter('val', $author);
+        }
+        if($search){
+            $qb->andWhere("p.title LIKE :search")
+            ->setParameter('search', "%{$search}%");
+        }
+        $qb->orderBy('p.'.$value, $order);
+
         return $qb        
         ->getQuery()
         ->getResult();

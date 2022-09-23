@@ -261,6 +261,24 @@ class DefaultController extends AbstractController
         "page" => $page
         ]);
     }
+    /**
+     * @Route("admin/listing/allarticles", name="app_admin_allarticles")
+     * @isGranted("ROLE_ADMIN")
+     */
+    public function adminallArticles(PostRepository $postRepo, UserRepository $userRepo, Request $request): Response
+    {
+        $authors = $userRepo->findByRoles('["ROLE_AUTHOR"]',null);
+        $admins = $userRepo->findByRoles('["ROLE_admin"]', null);
+        $numberPages = ceil($postRepo->findNumberPage() / 20);
+        $posts = $postRepo->findByFilters(null, "created_At", "DESC", null, 0);
+        return $this->render("admin/all-articles.html.twig", [
+        'posts' => $posts,
+        'authors' => $authors,
+        'admins' => $admins,
+        'numberPages' => $numberPages,
+        "page" => 1
+        ]);
+    }
 
     #[Route('author/my-articles', name: 'myarticles')]
     public function myArticles( PostRepository $postRepo){
