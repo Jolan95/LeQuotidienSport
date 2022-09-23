@@ -9,6 +9,7 @@
 	<h1>Les Articles </h1>
 
 	<form id="form-select" >
+  <div>
 	<label>Auteur :</label>
 	<select name="author" id="filter-users">
         <option value ="">Tous</option>
@@ -21,6 +22,8 @@
 	    <option value="{{author.id}}">{{author.id}}. {{author.fullname}}</option>
         {% endfor %}
 	</select>
+  </div>
+  <div>
   <label>Trier par :</label>
 	<select name="order" id="tri-select" >
 	    <option value="created_At,DESC">les plus récent</option>
@@ -31,6 +34,12 @@
 	    <option value="views,ASC">les moins lus</option>
 	    <option value="category,DESC">sport</option>
 	</select>
+  </div>
+  <div>
+  <label>Rechercher : </label>
+  <input id="search" name="search" type="text"></input>
+  <input id="page" name="page" hidden value={{page}} type="text"></input>
+  </div>
 	</form>
 
 

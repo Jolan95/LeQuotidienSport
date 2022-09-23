@@ -20,7 +20,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Form\AccountCreationType;
 use App\Form\PostType;
 use App\Form\UserType;
-
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class SecurityController extends AbstractController
 {
@@ -29,7 +30,7 @@ class SecurityController extends AbstractController
     * @Route("signin", name="app_signin")
     */
     
-    public function signin(Request $request, ManagerRegistry $manager, UserPasswordHasherInterface $passwordHasher){
+    public function signin(Request $request,MailerInterface $mailer , ManagerRegistry $manager, UserPasswordHasherInterface $passwordHasher){
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -41,6 +42,22 @@ class SecurityController extends AbstractController
             $entityManager = $manager->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
+            $email = (new Email())
+            ->from('jolanaubry10@gmail.com')
+            ->to($user->getEmail())
+            //->cc('cc@example.com')
+            //->bcc('bcc@example.com')
+            //->replyTo('fabien@example.com')
+            //->priority(Email::PRIORITY_HIGH)
+            ->subject('Le Quotidien Sport vous Souhaite la bienvenue ! ❤')
+            ->text('Sending emails is fun again!')
+            ->html("<h1>Bienvenue au Quotidien Sport</h1>
+            <p>Bonjour ".$user->getFullname()."</p>
+            <p>Vous êtes désormais membre du Quotidien Sport, vous pouvez désormais profiter pleinement de notre site
+            internet et ainsi ne louper aucune actualité! </p>
+            <p>L'Equipe du Quotidien Sport</p>
+            ");
+            $mailer->send($email);
             $this->addFlash('success', 'Votre compte à bien été enregistré.');
         }
         return $this->render('forms/signin.html.twig', [

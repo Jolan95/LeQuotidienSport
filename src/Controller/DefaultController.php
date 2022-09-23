@@ -198,36 +198,67 @@ class DefaultController extends AbstractController
         ]);
     }
 
+    // /**
+    // * @Route("admin-utilisateurs/{role}/{page}", name="app_admin", defaults={"page"=0})
+    // * requirements={"user" : ["user", "author", "admin"]}
+    // */
+    // public function admin($page ,UserRepository $userRepo, $role, PostRepository $post): Response
+    // {
+    //     $roles = strtoupper($role);
+    //     $roles= '["ROLE_'.$role.'"]';
+    //     $offset = null;
+    //     if($page){
+    //         $offset = 20 * ($page - 1);
+    //     }
+    //     $users = $userRepo->findByRoles($roles, $offset);
+    //     $route = "admin/".$role.".html.twig";
+    //     return $this->render($route, [
+    //     'role' => $role,
+    //     'users' => $users,
+    //     "posts" => $post
+    //     ]);
+    // }
+    
     /**
-    * @Route("admin/{role}", name="app_admin")
+    * @Route("admin-utilisateurs/{role}/{page}", name="app_admin", defaults={"page"=0})
     * requirements={"user" : ["user", "author", "admin"]}
     */
-    public function admin(UserRepository $userRepo, $role, PostRepository $post): Response
+    public function admin($page ,UserRepository $userRepo, $role, PostRepository $post): Response
     {
         $roles = strtoupper($role);
         $roles= '["ROLE_'.$role.'"]';
-        $users = $userRepo->findByRoles($roles);
-        $route = "admin/".$role.".html.twig";
-        return $this->render($route, [
+        $offset = null;
+        if($page){
+            $offset = 10 * ($page - 1);
+        }
+        $number_page = ceil($userRepo->findNumberPage($roles) / 10);
+        $users = $userRepo->findByRoles($roles, $offset);
+        return $this->render("admin/utilisateurs.html.twig", [
         'role' => $role,
         'users' => $users,
-        "posts" => $post
+        "posts" => $post,
+        "numberPage" => $number_page,
+        "page" => $page
         ]);
     }
         
     /**
-     * @Route("admin/listing/articles", name="app_admin_articles")
+     * @Route("admin/listing/articles/{page}", name="app_admin_articles")
      * @isGranted("ROLE_ADMIN")
      */
-    public function adminArticles(PostRepository $postRepo, UserRepository $userRepo, Request $request): Response
+    public function adminArticles($page ,PostRepository $postRepo, UserRepository $userRepo, Request $request): Response
     {
-        $authors = $userRepo->findByRoles('["ROLE_AUTHOR"]');
-        $admins = $userRepo->findByRoles('["ROLE_admin"]');
-        $posts = $postRepo->findByFilters();
+        $authors = $userRepo->findByRoles('["ROLE_AUTHOR"]',null);
+        $admins = $userRepo->findByRoles('["ROLE_admin"]', null);
+        $numberPages = ceil($postRepo->findNumberPage() / 20);
+        $offset = ($page - 1) * 20;
+        $posts = $postRepo->findByFilters(null, "created_At", "DESC", null, $offset);
         return $this->render("admin/articles.html.twig", [
         'posts' => $posts,
         'authors' => $authors,
-        'admins' => $admins
+        'admins' => $admins,
+        'numberPages' => $numberPages,
+        "page" => $page
         ]);
     }
 

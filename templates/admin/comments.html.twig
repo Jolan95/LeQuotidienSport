@@ -8,7 +8,11 @@
 <div class="admin-comments container mt-3">
         <h1 class="text-center">Gestion Commentaires </h1>
         <div class="text-center mb-4">(Titre  : {{post.title}})</div>
-
+            {% for message in app.flashes('danger') %}
+        <div class="alert alert-danger mb-3" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
         {% if post.comments|length > 0 %}
         {% for comment in post.comments %}
             <div class="comment-box px-3">

@@ -28,6 +28,11 @@
             {{ message }}
         </div>
         {% endfor %}
+        {% for message in app.flashes('danger') %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
         {% if stars %}
         <div id="data" data-post={{article.id}}></div>
         <div id="my-rating"></div>

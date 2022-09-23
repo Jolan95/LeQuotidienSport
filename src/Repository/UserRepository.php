@@ -37,15 +37,31 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
 
-    public function findByRoles($value)
+    public function findByRoles($value, $offset)
     {
-        return $this->createQueryBuilder('u')
+        $qb =  $this->createQueryBuilder('u')
             ->andWhere('u.roles = :val')
             ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;
+            ->orderBy('u.id', 'ASC');
+            if($offset){
+                $qb->setFirstResult($offset)
+                ->setMaxResults(20);
+            }
+        return $qb
+        ->getQuery()
+        ->getResult();
+    }
+
+    public function findNumberPage($value)
+    {
+        $qb =  $this->createQueryBuilder('u')
+            ->select('count(u)')
+            ->andWhere('u.roles = :val')
+            ->setParameter('val', $value)
+            ->orderBy('u.id', 'ASC');
+        return $qb
+        ->getQuery()
+        ->getSingleScalarResult();
     }
 
     public function findAuthorAndAdmin()

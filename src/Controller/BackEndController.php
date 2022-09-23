@@ -18,6 +18,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mime\Email;
 
 class BackEndController extends AbstractController
 {
@@ -42,35 +45,87 @@ class BackEndController extends AbstractController
 
     }
     #[Route('admin/makeAuthor/{user}', name: 'make_author')]
-    public function makeAuthor(User $user, ManagerRegistry $doctrine, Request $request){
+    public function makeAuthor(User $user, ManagerRegistry $doctrine, Request $request, MailerInterface $mailer){
             
         $user->setRoles(["ROLE_AUTHOR"]);
         $entityManager = $doctrine->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
+        $email = (new TemplatedEmail())
+        ->from("jolanaubry10@gmail.comm")
+        ->to($user->getEmail())
+        ->subject('Changement de vos accès')
+        ->htmlTemplate('mails/change-role.html.twig')
+        ->context([
+            'role' => "Auteur",
+            "user" => $user->getFullname(),
+        ]);
+        $mailer->send($email);
         $this->addFlash("success", $user->getFullname()." est maintenant un auteur");  
         return $this->redirectToRoute("app_admin", ["role" => "user"]);
  
 
     }
     #[Route('admin/makeUser/{user}', name: 'make_user')]
-    public function makeUser(User $user, ManagerRegistry $doctrine){
+    public function makeUser(User $user, ManagerRegistry $doctrine, MailerInterface $mailer){
             
         $user->setRoles(["ROLE_USER"]);
         $entityManager = $doctrine->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
+        $email = (new TemplatedEmail())
+        ->from("jolanaubry10@gmail.comm")
+        ->to($user->getEmail())
+        ->subject('Changement de vos accès')
+        ->htmlTemplate('mails/change-role.html.twig')
+        ->context([
+            'role' => "Utilisateur",
+            "user" => $user->getFullname(),
+        ]);
+        $mailer->send($email);
             return $this->redirectToRoute("app_admin", ["role" => "author"]);
 
     }
     #[Route('admin/makeAdmin/{user}', name: 'make_admin')]
-    public function makeAdmin(User $user, ManagerRegistry $doctrine){
+    public function makeAdmin(User $user, ManagerRegistry $doctrine, MailerInterface $mailer){
             
         $user->setRoles(["ROLE_ADMIN"]);
         $entityManager = $doctrine->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
+        $email = (new TemplatedEmail())
+        ->from("jolanaubry10@gmail.comm")
+        ->to($user->getEmail())
+        ->subject('Changement de vos accès')
+        ->htmlTemplate('mails/change-role.html.twig')
+        ->context([
+            'role' => "Administrateur",
+            "user" => $user->getFullname(),
+        ]);
+
+    $mailer->send($email);
+
             return $this->redirectToRoute("app_admin", ["role" => "author"]);
+    }
+
+
+    #[Route('email', name: 'email')]
+    public function email( MailerInterface $mailer){
+
+            $email = (new Email())
+                ->from('jolanaubry10@gmail.com')
+                ->to('jolan.aubry@hotmail.fr')
+                //->cc('cc@example.com')
+                //->bcc('bcc@example.com')
+                //->replyTo('fabien@example.com')
+                //->priority(Email::PRIORITY_HIGH)
+                ->subject('Time for Symfony Mailer!')
+                ->text('Sending emails is fun again!')
+                ->html('<p>See Twig integration for better HTML integration!</p>');
+    
+            $mailer->send($email);
+
+            return new Response ("Good");
     }
 
 
@@ -101,6 +156,9 @@ class BackEndController extends AbstractController
     public function triAllArticles(UserRepository $userRepo, PostRepository $postRepo,Request $request){
         $author = $request->query->get("author");
         $order = $request->query->get("order");
+        $search = $request->query->get("search");
+        $page = $request->query->get("page");
+        $offset = null;
         if($order){
             $values = explode(',',$order);
             $value = $values[0];
@@ -108,14 +166,22 @@ class BackEndController extends AbstractController
         } else {
             $value = null;
         }
+        if($search || $author){
+            $numberPages = 0;
+        } else{
+            $offset = ($page - 1) * 20;
+            $numberPages = ceil($postRepo->findNumberPage() / 20);
+        }
         if($value == "rate" ){
-            $posts = $postRepo->findByRateAverage( $order, $author);
+            $posts = $postRepo->findByRateAverage( $order, $author, $search, $offset);
         }else{
-            $posts = $postRepo->findByFilters($author, $value ,$order);
+            $posts = $postRepo->findByFilters($author, $value ,$order, $search, $offset);
         }
         return new JsonResponse([
             "content" => $this->renderView('content/mesarticles.html.twig', [
             "posts" => $posts,
+            "numberPages" => $numberPages,
+            "page" => $page
             ])
         ]);  
     }
@@ -162,7 +228,6 @@ class BackEndController extends AbstractController
         } else{
             return new Response("<h4>Vous ne pouvez pas supprimer ce poste</h4>");
         }
-
     }
 
     #[Route('comment/remove/{id}', name: 'delete_comment')]

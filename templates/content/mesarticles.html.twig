@@ -49,3 +49,12 @@
 	</div>
     <hr/>
 {% endfor %}
+    {% if numberPages is defined and numberPages > 1 %}
+		{% for i in 1.. numberPages %}
+			{% if i == page %}
+    			<a class="pl-3" disabled >{{i}}</a>
+			{% else %}
+    			<a class="pl-3" href="{{path('app_admin_articles', {role : 'user', page : i})}}" >{{i}}</a>
+			{% endif %}
+		{% endfor %}
+	{% endif %}

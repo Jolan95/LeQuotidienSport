@@ -32,13 +32,18 @@ class PostRepository extends ServiceEntityRepository
         ->getResult();
     }
       
-    public function findByRateAverage( $order, $user = null)
+
+    public function findByRateAverage( $order, $user = null, $offset = null )
     {
         $qb =  $this->createQueryBuilder('p')
         ->leftJoin('p.rates', 'rates') ;     
         if($user){
             $qb->andWhere('p.user = :val')
             ->setParameter('val', $user);
+        }
+        if($offset !== null){
+            $qb->setFirstResult($offset)
+            ->setMaxResults(20);
         }
         $qb->andWhere("p.published = true")
         ->orderBy("rates.value", $order);
@@ -67,7 +72,15 @@ class PostRepository extends ServiceEntityRepository
         ->getResult();
     }
 
-    public function findByFilters($author = null, $value = "created_At" ,$order = "DESC")
+    public function findNumberPage()
+    {
+        return  $this->createQueryBuilder('p')
+            ->select('count(p)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function findByFilters($author = null, $value = "created_At" ,$order = "DESC", $search = null, $offset = null)
     {
         $qb =  $this->createQueryBuilder('p')
         ->andWhere("p.published = true");
@@ -75,8 +88,15 @@ class PostRepository extends ServiceEntityRepository
             $qb->andWhere('p.user = :val')
             ->setParameter('val', $author);
         }
+        if($search){
+            $qb->andWhere("p.title LIKE :search")
+            ->setParameter('search', "%{$search}%");
+        }
         $qb->orderBy('p.'.$value, $order);
-
+        if($offset !== null){
+            $qb->setFirstResult($offset)
+            ->setMaxResults(20);
+        }
         return $qb        
         ->getQuery()
         ->getResult();
@@ -124,7 +144,6 @@ class PostRepository extends ServiceEntityRepository
             $qb->andWhere('p.category = :val')
             ->setParameter('val', $sport);
         }
-        
         return $qb->setFirstResult($offset)
         ->setMaxResults(10)
         ->getQuery()
