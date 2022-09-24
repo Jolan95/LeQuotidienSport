@@ -225,7 +225,7 @@ class DefaultController extends AbstractController
      * @Route("admin/listing/articles", name="app_admin_articles")
      * @isGranted("ROLE_ADMIN")
      */
-    public function adminallArticles(PostRepository $postRepo, UserRepository $userRepo, Request $request): Response
+    public function adminallArticles(PostRepository $postRepo, UserRepository $userRepo): Response
     {
         $authors = $userRepo->findByRoles('["ROLE_AUTHOR"]',null);
         $admins = $userRepo->findByRoles('["ROLE_admin"]', null);
