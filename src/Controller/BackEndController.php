@@ -44,6 +44,16 @@ class BackEndController extends AbstractController
         return $this->redirectToRoute("app_admin", ['role' => $role]);
 
     }
+    #[Route('upload/', name: 'remove_user')]
+    public function Upload(User $user, $role, ManagerRegistry $doctrine){
+            
+        $entityManager = $doctrine->getManager();
+        $entityManager->remove($user);
+        $entityManager->flush();
+        $this->addFlash("success", $user->getFullname()." est maintant supprimé"); 
+        return $this->redirectToRoute("app_admin", ['role' => $role]);
+
+    }
     #[Route('admin/makeAuthor/{user}', name: 'make_author')]
     public function makeAuthor(User $user, ManagerRegistry $doctrine, MailerInterface $mailer){
             
