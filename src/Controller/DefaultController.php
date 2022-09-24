@@ -34,7 +34,7 @@ class DefaultController extends AbstractController
     #[Route('/', name: 'home')]
     public function index(): Response
     {
-        return $this->redirectToRoute('app_sport', ["sport" =>"actualité"]);
+        return new Response("HELLO");
 
     }
 
