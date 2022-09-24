@@ -52,7 +52,7 @@ class BackEndController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
         $email = (new TemplatedEmail())
-        ->from("jolanaubry10@gmail.comm")
+        ->from("lequotidiensport@hotmail.com")
         ->to($user->getEmail())
         ->subject('Changement de vos accès')
         ->htmlTemplate('mails/change-role.html.twig')
@@ -74,7 +74,7 @@ class BackEndController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
         $email = (new TemplatedEmail())
-        ->from("jolanaubry10@gmail.comm")
+        ->from("lequotidiensport@hotmail.com")
         ->to($user->getEmail())
         ->subject('Changement de vos accès')
         ->htmlTemplate('mails/change-role.html.twig')
@@ -94,7 +94,7 @@ class BackEndController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
         $email = (new TemplatedEmail())
-        ->from("jolanaubry10@gmail.comm")
+        ->from("lequotidiensport@hotmail.com")
         ->to($user->getEmail())
         ->subject('Changement de vos accès')
         ->htmlTemplate('mails/change-role.html.twig')

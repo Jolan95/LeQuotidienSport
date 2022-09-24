@@ -43,7 +43,7 @@ class SecurityController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
             $email = (new Email())
-            ->from('jolanaubry10@gmail.com')
+            ->from('lequotidiensport@hotmail.com')
             ->to($user->getEmail())
             //->cc('cc@example.com')
             //->bcc('bcc@example.com')
