@@ -79,7 +79,7 @@ class DefaultController extends AbstractController
 
                 
     #[Route('/article/{id}', name: 'app_article')]  
-    public function article(int $id, RateRepository $rateRepo,PostRepository $postRepo, Request $request, CommentRepository $commentRepo, CommentType $commentType, ManagerRegistry $manager){
+    public function article(int $id, RateRepository $rateRepo,PostRepository $postRepo, Request $request,  ManagerRegistry $manager){
         $entity = $manager->getManager();
         $article =  $postRepo->findOneBy(["id" => $id]);
         $form = $this->createForm(CommentType::class);
