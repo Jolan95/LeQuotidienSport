@@ -32,7 +32,7 @@ class DefaultController extends AbstractController
 
 
     #[Route('/', name: 'home')]
-    public function index(PostRepository $postRepo,Request $request, RateRepository $rateRepo): Response
+    public function index(): Response
     {
         return $this->redirectToRoute('app_sport', ["sport" =>"actualité"]);
 
