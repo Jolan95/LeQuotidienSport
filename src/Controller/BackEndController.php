@@ -45,7 +45,7 @@ class BackEndController extends AbstractController
 
     }
     #[Route('admin/makeAuthor/{user}', name: 'make_author')]
-    public function makeAuthor(User $user, ManagerRegistry $doctrine, Request $request, MailerInterface $mailer){
+    public function makeAuthor(User $user, ManagerRegistry $doctrine, MailerInterface $mailer){
             
         $user->setRoles(["ROLE_AUTHOR"]);
         $entityManager = $doctrine->getManager();
