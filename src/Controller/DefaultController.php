@@ -24,7 +24,6 @@ use App\Form\PostType;
 use App\Repository\CommentRepository;
 use App\Repository\RateRepository;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Constraints\Date;
 
 class DefaultController extends AbstractController
@@ -33,20 +32,9 @@ class DefaultController extends AbstractController
 
 
     #[Route('/', name: 'home')]
-    public function index(UserRepository $userRepository, ManagerRegistry $manager, UserPasswordHasherInterface $passwordHasher): Response
+    public function index(): Response
     {
-        $user = new User();
-        $user->setEmail("jolan.aubry@hotmail.fr");
-        $user->setFullname("Jolan Aubry");
-        $hashedPassword = $passwordHasher->hashPassword($user, "Admin");
-        $user->setPassword($hashedPassword);
-        $user->setRoles(["ROLE_ADMIN"]);
-
-        $entity = $manager->getManager();
-        $entity->persist($user);
-        $entity->flush();
-
-        return new Response("admin créé");
+        return $this->redirectToRoute('app_sport', ["sport" =>"actualité"]);
 
     }
 
