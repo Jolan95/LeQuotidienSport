@@ -1,6 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+{% for message in app.flashes('success') %}
+<div class="alert alert-success" role="alert">
+    {{ message }}
+</div>
+{% endfor %}
 <div>
     <ul class="nav nav-tabs my-4 ml-2" >
      	<li class="nav-item">
@@ -13,7 +18,7 @@
      	  	<a class="nav-link {{ (role == "admin") ? 'active' : '' }}" href="{{path("app_admin", {role : "admin", page : 1})}}">Administrateurs</a>
      	</li>
     </ul >
-
+	{% if users|length > 0 %}
 	<div class="container-fluid mt-3">
 	{% if role == "user" %}
       	<div class="row" >
@@ -139,5 +144,9 @@
 		{% endfor %}
 	{% endif %}
 	</div>
+	{% else  %}
+	<div class="bold text-center mt-5">Aucun article trouvé</div>
+	{% endif %}
 </div>
+
 {% endblock %}

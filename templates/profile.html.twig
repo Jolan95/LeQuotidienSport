@@ -26,7 +26,7 @@
 	</div>
 	{% if is_granted("ROLE_ADMIN") %}
 	<div class="my-3">
-		<a  href="{{path('app_admin_articles', {page : 1})}}"><button class="btn btn-primary">Tous les Articles</button></a>
+		<a  href="{{path('app_admin_articles')}}"><button class="btn btn-primary">Tous les Articles</button></a>
 	</div>
 	<div class="my-3">
 		<a  href="{{path('app_admin', {role : "admin"})}}"><button class="btn btn-info">Administration</button></a>

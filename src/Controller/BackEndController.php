@@ -113,7 +113,7 @@ class BackEndController extends AbstractController
     public function email( MailerInterface $mailer){
 
             $email = (new Email())
-                ->from('jolanaubry10@gmail.com')
+                ->from('lequotidiensport@hotmail.com')
                 ->to('jolan.aubry@hotmail.fr')
                 //->cc('cc@example.com')
                 //->bcc('bcc@example.com')
@@ -151,40 +151,6 @@ class BackEndController extends AbstractController
         $entityManager->flush();
         return new Response("Ajout");
     }
-
-    // #[Route('request-ajax-list-all-articles', name: 'tri_all_articles')]
-    // public function triAllArticles(UserRepository $userRepo, PostRepository $postRepo,Request $request){
-    //     $author = $request->query->get("author");
-    //     $order = $request->query->get("order");
-    //     $search = $request->query->get("search");
-    //     $page = $request->query->get("page");
-    //     $offset = null;
-    //     if($order){
-    //         $values = explode(',',$order);
-    //         $value = $values[0];
-    //         $order = $values[1];
-    //     } else {
-    //         $value = null;
-    //     }
-    //     if($search || $author){
-    //         $numberPages = 0;
-    //     } else{
-    //         $offset = ($page - 1) * 20;
-    //         $numberPages = ceil($postRepo->findNumberPage() / 20);
-    //     }
-    //     if($value == "rate" ){
-    //         $posts = $postRepo->findByRateAverage( $order, $author, $search, $offset);
-    //     }else{
-    //         $posts = $postRepo->findByFilters($author, $value ,$order, $search, $offset);
-    //     }
-    //     return new JsonResponse([
-    //         "content" => $this->renderView('content/mesarticles.html.twig', [
-    //         "posts" => $posts,
-    //         "numberPages" => $numberPages,
-    //         "page" => $page
-    //         ])
-    //     ]);  
-    // }
 
     #[Route('request-ajax-listing-all-articles', name: 'tri_every_articles')]
     public function triEveryArticles(UserRepository $userRepo, PostRepository $postRepo,Request $request){
@@ -238,7 +204,7 @@ class BackEndController extends AbstractController
             $posts = $postRepo->findArticlesByOrder($value, $this->getUser(), $order);
         }
             return new JsonResponse([
-                "content" => $this->renderView('content/mesarticles.html.twig', [
+                "content" => $this->renderView('content/mes-articles.html.twig', [
                 "posts" => $posts
                 ])
             ]);  

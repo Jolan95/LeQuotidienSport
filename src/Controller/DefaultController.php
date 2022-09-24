@@ -197,27 +197,6 @@ class DefaultController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-
-    // /**
-    // * @Route("admin-utilisateurs/{role}/{page}", name="app_admin", defaults={"page"=0})
-    // * requirements={"user" : ["user", "author", "admin"]}
-    // */
-    // public function admin($page ,UserRepository $userRepo, $role, PostRepository $post): Response
-    // {
-    //     $roles = strtoupper($role);
-    //     $roles= '["ROLE_'.$role.'"]';
-    //     $offset = null;
-    //     if($page){
-    //         $offset = 20 * ($page - 1);
-    //     }
-    //     $users = $userRepo->findByRoles($roles, $offset);
-    //     $route = "admin/".$role.".html.twig";
-    //     return $this->render($route, [
-    //     'role' => $role,
-    //     'users' => $users,
-    //     "posts" => $post
-    //     ]);
-    // }
     
     /**
     * @Route("admin-utilisateurs/{role}/{page}", name="app_admin", defaults={"page"=0})
@@ -241,28 +220,9 @@ class DefaultController extends AbstractController
         "page" => $page
         ]);
     }
-        
+
     /**
-     * @Route("admin/listing/articles/{page}", name="app_admin_articles")
-     * @isGranted("ROLE_ADMIN")
-     */
-    public function adminArticles($page ,PostRepository $postRepo, UserRepository $userRepo, Request $request): Response
-    {
-        $authors = $userRepo->findByRoles('["ROLE_AUTHOR"]',null);
-        $admins = $userRepo->findByRoles('["ROLE_admin"]', null);
-        $numberPages = ceil($postRepo->findNumberPage() / 20);
-        $offset = ($page - 1) * 20;
-        $posts = $postRepo->findByFilters(null, "created_At", "DESC", null, $offset);
-        return $this->render("admin/articles.html.twig", [
-        'posts' => $posts,
-        'authors' => $authors,
-        'admins' => $admins,
-        'numberPages' => $numberPages,
-        "page" => $page
-        ]);
-    }
-    /**
-     * @Route("admin/listing/allarticles", name="app_admin_allarticles")
+     * @Route("admin/listing/articles", name="app_admin_articles")
      * @isGranted("ROLE_ADMIN")
      */
     public function adminallArticles(PostRepository $postRepo, UserRepository $userRepo, Request $request): Response
