@@ -48,6 +48,10 @@ class BackEndController extends AbstractController
     public function Upload(User $user, $role, ManagerRegistry $doctrine){
             
         $entityManager = $doctrine->getManager();
+        $bucket = getenv('S3_BUCKET')?: die('No "S3_BUCKET" config var in found in env!');
+        if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['userfile']) && $_FILES['userfile']['error'] == UPLOAD_ERR_OK && is_uploaded_file($_FILES['userfile']['tmp_name'])) {
+         return new Response("Good");   
+        }
         $entityManager->remove($user);
         $entityManager->flush();
         $this->addFlash("success", $user->getFullname()." est maintant supprimé"); 
