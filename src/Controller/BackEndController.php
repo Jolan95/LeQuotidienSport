@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use App\Entity\Rate;
+use App\Service\File;
 use App\Repository\CommentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-
+use App\Service\Fetch;
 
 class BackEndController extends AbstractController
 {
@@ -34,6 +35,19 @@ class BackEndController extends AbstractController
         $this->addFlash("Error", "Article supprimé.");
         
     }
+    #[Route('fetch', name: 'fetch')]
+    public function fetch()
+    {
+        $file = new Fetch();
+        $pic = $file->getFile("0eaf85ebd55e0dd08752a585ff198402.jpg");   
+        dd($pic); 
+        return $this->render("s3.html.twig", [
+            'pic' => $pic
+        ]);   
+    }
+    
+
+
     #[Route('admin/remove/{user}/{role}', name: 'remove_user')]
     public function userRemove(User $user, $role, ManagerRegistry $doctrine){
             
@@ -42,22 +56,9 @@ class BackEndController extends AbstractController
         $entityManager->flush();
         $this->addFlash("success", $user->getFullname()." est maintant supprimé"); 
         return $this->redirectToRoute("app_admin", ['role' => $role]);
-
     }
-    #[Route('upload/', name: 'remove_user')]
-    public function Upload(User $user, $role, ManagerRegistry $doctrine){
-            
-        $entityManager = $doctrine->getManager();
-        $bucket = getenv('S3_BUCKET')?: die('No "S3_BUCKET" config var in found in env!');
-        if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['userfile']) && $_FILES['userfile']['error'] == UPLOAD_ERR_OK && is_uploaded_file($_FILES['userfile']['tmp_name'])) {
-         return new Response("Good");   
-        }
-        $entityManager->remove($user);
-        $entityManager->flush();
-        $this->addFlash("success", $user->getFullname()." est maintant supprimé"); 
-        return $this->redirectToRoute("app_admin", ['role' => $role]);
 
-    }
+
     #[Route('admin/makeAuthor/{user}', name: 'make_author')]
     public function makeAuthor(User $user, ManagerRegistry $doctrine, MailerInterface $mailer){
             
@@ -117,31 +118,10 @@ class BackEndController extends AbstractController
             "user" => $user->getFullname(),
         ]);
 
-    $mailer->send($email);
-
-            return $this->redirectToRoute("app_admin", ["role" => "author"]);
+        $mailer->send($email);
+            
+        return $this->redirectToRoute("app_admin", ["role" => "author"]);
     }
-
-
-    // #[Route('email', name: 'email')]
-    // public function email( MailerInterface $mailer){
-
-    //         $email = (new Email())
-    //             ->from('lequotidiensport@hotmail.com')
-    //             ->to('jolan.aubry@hotmail.fr')
-    //             //->cc('cc@example.com')
-    //             //->bcc('bcc@example.com')
-    //             //->replyTo('fabien@example.com')
-    //             //->priority(Email::PRIORITY_HIGH)
-    //             ->subject('Time for Symfony Mailer!')
-    //             ->text('Sending emails is fun again!')
-    //             ->html('<p>See Twig integration for better HTML integration!</p>');
-    
-    //         $mailer->send($email);
-
-    //         return new Response ("Good");
-    // }
-
 
 
     #[Route('rating-article', name: 'rating-article')]

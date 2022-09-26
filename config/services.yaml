@@ -6,6 +6,8 @@
 parameters:
     upload_directory : '%kernel.project_dir%/public/Upload'
 
+
+
 services:
     # default configuration for services in *this* file
     _defaults:

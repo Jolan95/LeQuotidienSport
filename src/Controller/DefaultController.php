@@ -161,9 +161,11 @@ class DefaultController extends AbstractController
         $post = new Post();
         $user = $this->getUser();
         
+        
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
+            
             $data = $form->getData();
             $post->setCreatedAt(new \DateTimeImmutable());
             $post->setTitle($data->getTitle());
@@ -180,10 +182,11 @@ class DefaultController extends AbstractController
                 $post->setPublished(false);
                 $message = 'Votre article a été ajouté à vos brouillons avec succès !';
             }
-            $file = $post->getPicture();
-            $fileName = md5(uniqid()).'.'.$file->guessExtension();
-            $file->move($this->getParameter('upload_directory'), $fileName);
-            $post->setPicture($fileName);
+            $post->setPicture($data->getPicture());
+            // $file = $post->getPicture();
+            // $fileName = md5(uniqid()).'.'.$file->guessExtension();
+            // $file->move($this->getParameter('upload_directory'), $fileName);
+            // $post->setPicture($fileName);
             $entity = $manager->getManager();
             $entity->persist($post);
             $entity->flush();
@@ -291,10 +294,11 @@ class DefaultController extends AbstractController
             // if button "publier" is clicked, the article is published 
             $form->getClickedButton() === $form->get("publier")? $post->setPublished(true) : $post->setPublished(false);
             if($data->getPicture() != null ){
-                $file = $data->getPicture();
-                $fileName = md5(uniqid()).'.'.$file->guessExtension();
-                $file->move($this->getParameter('upload_directory'), $fileName);
-                $post->setPicture($fileName);
+                $post->setPicture($data->getPicture());
+                // $file = $data->getPicture();
+                // $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                // $file->move($this->getParameter('upload_directory'), $fileName);
+                // $post->setPicture($fileName);
             }
             $entity = $manager->getManager();
             $entity->persist($post);

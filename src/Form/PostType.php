@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\File;
 
 class PostType extends AbstractType
@@ -19,14 +20,17 @@ class PostType extends AbstractType
         $builder
             ->add('title')
             ->add('description')
-            ->add('picture', FileType::class, [
-                'label' => "Photo d'article",
-                'constraints' => [
-                    new File([
-                    'mimeTypes' => ['image/jpeg', 'image/svg+xml', 'image/png', "image/webp"],
-                    'mimeTypesMessage' => 'Please upload a format valid (.JPG, JPEG, .SVG, .PNG, .WEBP)',
-                ])
-            ]])
+            ->add("picture", TextType::class , [
+                "label" => "URL image"
+            ])
+            // ->add('picture', FileType::class, [
+            //     'label' => "Photo d'article",
+            //     'constraints' => [
+            //         new File([
+            //         'mimeTypes' => ['image/jpeg', 'image/svg+xml', 'image/png', "image/webp"],
+            //         'mimeTypesMessage' => 'Please upload a format valid (.JPG, JPEG, .SVG, .PNG, .WEBP)',
+            //     ])
+            // ]])
             ->add('content')
             ->add('category', ChoiceType::class, [
                 'choices' => [
