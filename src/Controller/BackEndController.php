@@ -218,7 +218,7 @@ class BackEndController extends AbstractController
     #[Route('author/delete/{post}', name: 'delete_myarticles')]
     public function deleteMyArticles(Post $post, ManagerRegistry $doctrine){
 
-        if($post->getUser() === $this->getUser()){ 
+        if($post->getUser() === $this->getUser() || $this->isGranted('ROLE_ADMIN')){ 
             $entityManager = $doctrine->getManager();
             $entityManager->remove($post);
             $entityManager->flush();

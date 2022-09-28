@@ -11,6 +11,10 @@
 	display: flex;
 	justify-content: center;
 }
+.align-center{
+	display : flex;
+	align-items: center;
+}
 .bold{
 	font-weight : bold;
 }
@@ -33,6 +37,18 @@ a:link, a:hover, a:visited{
 .link-default:hover, .link-default:link, .link-default:visited{
 	text-decoration: underline;
 	color: blue;
+}
+.img-full-100{
+	height : 100%; 
+	width : 90%;
+	border-radius: 8px;
+}
+.priority{
+	background-color : rgb(228, 246, 242);
+}
+.wrapper-article{
+	padding : 12px; 
+	border-radius : 8px;
 }
 
 //Header
@@ -65,7 +81,8 @@ header{
   	.menu-burger{
 		width: 40px;
 		height : 40px;
-		color : white
+		filter : invert(100%);
+
   	}
   	.index-high {
 		z-index: 1000;
@@ -76,17 +93,36 @@ header{
   	.nav-link:hover{
 		background-color : rgb(210, 226, 199)
   	}
+	.navbar-toggler{
+		outline-width: 0;
+	}
 }
 .sub-header{
+	font-size : 1.25rem;
 	width : 100%;
 	background-color : grey;
 	margin : 0;
-	padding : 5px 30px;
 	font-size : 1rem;
 	display : flex;
 	justify-content : space-between;
-	a:hover{
+	a:hover, a:link, a:visited{
 		color :rgb(231, 225, 225)
+	}
+}
+
+
+//home page
+.bi-search{
+	border : 0 0 1px 0 solid black;
+}
+.search-box{
+	border : none;
+	border-bottom : 1px solid black;
+	.input-search:focus-visible{
+		outline-width: 0;
+	}
+	.input-search{
+		border : none;
 	}
 }
 
@@ -103,6 +139,13 @@ header{
 .small-input{
 	max-width : 250px;
 } 
+.btn-read{
+	padding : 10px;
+	background-color : rgb(183, 45, 45);
+	border-radius : 10px;
+	border : none;
+	color : white;
+}
 
 /***Sign-in Form***/
 .form-signin{
@@ -129,9 +172,9 @@ h2{
 	color :#313131;
 
 }
-.img-article{
-	max-width : 500px;
-}
+// .img-article{
+// 	max-width : 500px;
+// }
 /***article***/
 .image400{
 	width : 80%;
@@ -170,10 +213,10 @@ h2.h2-grey{
   margin-top  : 70px
 }
 
-.my-articles .link-article:hover, .link-article:visited, .link-article:link {
+.link-article:hover, .link-article:visited, .link-article:link {
 	color : black;
   font-size : 1rem;
-  font-weight : bold;
+  font-weight : 500;
 }
 a.edit{
   color : rgba(42, 66, 131, 0.795);
@@ -234,3 +277,12 @@ a.trash{
 	-webkit-filter: drop-shadow( -2px -2px 2px #888 );
 	filter: drop-shadow( -2px -2px 2px #888 );
   }
+
+  //page all articles
+  
+  #form-select {
+
+	  	input, select{
+		  height : 30Px
+		}
+	}

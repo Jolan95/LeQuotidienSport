@@ -8,7 +8,8 @@
         <div id='data-article' data-article="{{article.id}}">
         <h1 class="text-center py-4" >{{article.title}}</h1>
         <div class="justify-center mb-5">
-            <img  class="image400 border10" src="{{asset('Upload/'~article.picture)}}"></img>
+            {# <img  class="image400 border10" src="{{asset('Upload/'~article.picture)}}"></img> #}
+            <img  class="image400 border10" src="{{asset(article.picture)}}"></img>
         </div>  
         <div class="px-lg-4">Ecrit par {{article.user.fullname}} le {{article.createdAt|date("d/m/Y") }} à {{article.createdAt|date("G:i") }} </div>  
         {% if average %}

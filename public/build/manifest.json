@@ -1,11 +1,11 @@
 {
-  "build/app.css": "/build/app.c3078ada.css",
-  "build/app.js": "/build/app.c76ed751.js",
-  "build/search_article.js": "/build/search_article.8cb32c64.js",
-  "build/tri_select.js": "/build/tri_select.68cf3615.js",
-  "build/filter_all_articles.js": "/build/filter_all_articles.2d7c97b3.js",
-  "build/add_views.js": "/build/add_views.1951e1de.js",
-  "build/runtime.js": "/build/runtime.61b1725c.js",
-  "build/577.9e56e102.js": "/build/577.9e56e102.js",
-  "build/397.67261d60.js": "/build/397.67261d60.js"
+  "build/app.css": "/build/app.css",
+  "build/app.js": "/build/app.js",
+  "build/search_article.js": "/build/search_article.js",
+  "build/tri_select.js": "/build/tri_select.js",
+  "build/filter_all_articles.js": "/build/filter_all_articles.js",
+  "build/add_views.js": "/build/add_views.js",
+  "build/runtime.js": "/build/runtime.js",
+  "build/vendors-node_modules_core-js_modules_es_object_to-string_js-node_modules_core-js_modules_web_-613cbf.js": "/build/vendors-node_modules_core-js_modules_es_object_to-string_js-node_modules_core-js_modules_web_-613cbf.js",
+  "build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_bootstrap_dist_js_boo-901ebf.js": "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_bootstrap_dist_js_boo-901ebf.js"
 }

@@ -1,68 +1,73 @@
     {% if (priority.id is defined) %}
-        <div class="wrapper-article container">
-        <a href="{{path("app_article", {id : priority.id})}}">
-            <div  class="row align-items-center ">
-                <div class="col-12 col-lg-4 img100 px-5 p-lg-0 pt-3 p-lg-0 full-center order-lg-2">
-                    {# <image class="img100 img-article border10" src="{{asset('Upload/'~priority.picture)}}"> #}
-                    <image class="img100 img-article border10" src="{{asset(priority.picture)}}">
-                </div>
-                <div class="col-12 col-lg-8 pl-lg-5 p-4 p-lg-0 text-center text-lg-left order-lg-1">
-                    <h2>{{priority.title}}</h2>    
-                    <p class='py-2'>{{priority.description}}</p>
-                    {% if priority.rates|length > 0 %}
-                    <div class="d-flex justify-content-between">
-                    <p>{{priority.user.fullname}}</p>
-                        {% set total = 0 %}
-                        {% for rate in priority.rates %}
-                        {% set total = total + rate.value %}
-                        {% endfor %}
-                        <div class="d-flex align-items-center">
-                            <p>{{(total / priority.rates|length)|round(2, "ceil")}}<p>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1.2rem" height="1.2rem" fill="currentColor" class="bi gold bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                            </svg>
-                        </div>
-                    </div>    
-                    {% else %}  
-                    <div>{{priority.user.fullname}}</div>
-                    {% endif %}    
-                </div>
+    <div class="wrapper-article priority container">
+ 
+        <div class="row ">
+            <div class="col-12 col-lg-6 p-2 px-2 full-center order-lg-2">
+                {# <image class="img100 img-article border10" src="{{asset('Upload/'~priority.picture)}}"> #}
+                <image class="img-full-100 img-article" src="{{asset(priority.picture)}}">
             </div>
-        </a>
+            <div class="col-12 col-lg-6 pl-lg-3 text-center d-flex flex-column justify-content-around text-lg-left order-lg-1">
+                <div class="grey d-lg-none text-left">Ecrit par {{priority.user.fullname}} le {{priority.createdAt|date("d/m/Y") }} à {{priority.createdAt|date("G:i") }}</div>
+                <h2>{{priority.title}}</h2>  
+                <div>  
+                    <div class='pb-1'>{{priority.description}}</div>
+                    <div class="grey d-none d-lg-block">Ecrit par {{priority.user.fullname}} le {{priority.createdAt|date("d/m/Y") }} à {{priority.createdAt|date("G:i") }}</div>
+                </div>  
+                {% if priority.rates|length > 0 %}
+                <div class="d-flex justify-content-between">
+                    {% set total = 0 %}
+                    {% for rate in priority.rates %}
+                    {% set total = total + rate.value %}
+                    {% endfor %}
+                    <div class="d-flex align-items-center order-md-2">
+                        <p>{{(total / priority.rates|length)|round(2, "ceil")}}<p>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1.2rem" height="1.2rem" fill="currentColor" class="bi gold bi-star-fill" viewBox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                    </div>
+                    <a class="order-md-1" href="{{path("app_article", {id : priority.id})}}"><button class="btn-read">Lire l'article ></button></a>
+                </div>    
+                {% else %}  
+                <a href="{{path("app_article", {id : priority.id})}}"><button class="btn-read">Lire l'article ></button></a>
+                {% endif %}  
+            </div>
+        </div>
     </div>
     {% endif %}
     
     {% for article in articles %}
-    <hr/>
-    <div class="wrapper-article container">
-        <a href="{{path("app_article", {id : article.id})}}">
-            <div  class="row align-items-center ">
-                <div class="col-12 col-lg-4 img100 px-5 p-lg-0 pt-3 p-lg-0 full-center order-lg-2">
-                    {# <image class="img100 img-article border10" src="{{asset('Upload/'~article.picture)}}"> #}
-                    <image class="img100 img-article border10" src="{{asset(article.picture)}}">
-                </div>
-                <div class="col-12 col-lg-8 pl-lg-5 p-4 p-lg-0 text-center text-lg-left order-lg-1">
-                    <h2>{{article.title}}</h2>    
-                    <p class='py-2'>{{article.description}}</p>
-                    {% if article.rates|length > 0 %}
-                    <div class="d-flex justify-content-between">
-                    <p>{{article.user.fullname}}</p>
-                        {% set total = 0 %}
-                        {% for rate in article.rates %}
-                        {% set total = total + rate.value %}
-                        {% endfor %}
-                        <div class="d-flex align-items-center">
-                            <p>{{(total / article.rates|length)|round(2, "ceil")}}<p>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1.2rem" height="1.2rem" fill="currentColor" class="bi gold bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                            </svg>
-                        </div>
-                    </div>    
-                    {% else %}  
-                    <div>{{article.user.fullname}}</div>
-                    {% endif %} 
-                </div>
+    <div class="wrapper-article bg-light mt-3 container">
+        <div  class="row">
+            <div class="col-12 col-lg-6 p-2 px-2 full-center order-lg-2">
+                {# <image class="img100 img-article border10" src="{{asset('Upload/'~article.picture)}}"> #}
+                <image class="img-full-100 img-article" src="{{asset(article.picture)}}">
             </div>
-        </a>
+            
+            <div class="col-12 col-lg-6 px-lg-4 text-center d-flex flex-column justify-content-around text-lg-left order-lg-{{ (loop.index is even) ? "1" : "2"  }}">
+                <div class="grey d-lg-none">Ecrit par {{article.user.fullname}} le {{article.createdAt|date("d/m/Y") }} à {{article.createdAt|date("G:i") }}</div>
+                <h2>{{article.title}}</h2> 
+                <div  class='pb-1'>   
+                    <div>{{article.description}}</div>
+                    <div class="grey d-none d-lg-block">Ecrit par {{article.user.fullname}} le {{article.createdAt|date("d/m/Y") }} à {{article.createdAt|date("G:i") }}</div>
+                </div>   
+                {% if article.rates|length > 0 %}
+                <div class="d-flex justify-content-between">
+                    {% set total = 0 %}
+                    {% for rate in article.rates %}
+                    {% set total = total + rate.value %}
+                    {% endfor %}
+                    <div class="d-flex align-items-center order-md-2">
+                        <p>{{(total / article.rates|length)|round(2, "ceil")}}<p>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1.2rem" height="1.2rem" fill="currentColor" class="bi gold bi-star-fill" viewBox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                    </div>
+                    <a class="order-md-1" href="{{path("app_article", {id : article.id})}}"><button class="btn-read">Lire l'article ></button></a>
+                </div>    
+                {% else %}  
+                <a href="{{path("app_article", {id : article.id})}}"><button class="btn-read">Lire l'article ></button></a>
+                {% endif %} 
+            </div>
+        </div>
     </div>
     {% endfor %} 

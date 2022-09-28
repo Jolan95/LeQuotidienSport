@@ -6,9 +6,9 @@
 {% block body %}
 
 <div class="my-articles container-fluid">
-	<h1>Les Articles </h1>
-	<form id="form-select">
-        <div>
+	<h1 class="text-center py-3">Tous les articles </h1>
+	<form id="form-select" class="row d-flex align-items-center bg-warning pt-3 pb-3">
+        <div class="col-xl-3 col-12">
         	<label>Auteur :</label>
         	<select name="author" id="filter-users">
               <option value ="">Tous</option>
@@ -22,7 +22,7 @@
               {% endfor %}
         	</select>
         </div>
-        <div>
+        <div class="col-xl-3 col-12">
             <label>Trier par :</label>
 	        <select name="order" id="tri-select" >
 	            <option value="created_At,DESC">les plus récent</option>
@@ -34,19 +34,26 @@
 	            <option value="category,DESC">sport</option>
 	        </select>
         </div>
-        <label>Rechercher : </label>
-        <input id="search" name="search" type="text"></input>
-        {% if numberPages is defined and numberPages > 1 %}
-    	<select name="page" id="page">
-    		{% for i in 1.. numberPages %}
-    			{% if i == page %}
-      			<option  selected >{{i}}</option>
-    			{% else %}
-      			<option value={{i}}>{{i}}</option>
-    			{% endif %}
-    		{% endfor %}
-    	</select>
-	{% endif %}
+		<div class="col-xl-4 col-12">
+        	<label>Rechercher : </label>
+        	<input id="search" name="search" type="text"></input>
+		</div>
+		<div class="col-xl-2 col-12">
+        	{% if numberPages is defined and numberPages > 1 %}
+			<div id="form-page">
+				<label>Page : </label>
+				<select name="page" id="page">
+					{% for i in 1.. numberPages %}
+						{% if i == page %}
+						<option  selected >{{i}}</option>
+						{% else %}
+						<option value={{i}}>{{i}}</option>
+						{% endif %}
+					{% endfor %}
+				</select>
+			</div>
+			{% endif %}
+		</div>
 	</form>
         <div id="content">    
         {% include 'content/all-articles.html.twig' %}

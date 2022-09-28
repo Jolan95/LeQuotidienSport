@@ -5,6 +5,7 @@ $("document").ready(()=>{
     let selectInputs = document.querySelectorAll("#form-select select");
     let searchInput = document.getElementById("search");
     let pageInput = document.getElementById("page");
+    let formPage = document.getElementById("form-page");
     console.log(pageInput);
 
     
@@ -26,10 +27,10 @@ $("document").ready(()=>{
                 content.innerHTML = data.content[0];
                 let page  = data.content["page"]
                 if(page > 1){
-                    pageInput.hidden = false;
+                    formPage.hidden = false;
                 } else{
                     pageInput.selectedIndex = 0;
-                    pageInput.hidden = true;
+                    formPage.hidden = true;
                 }
                 
             },

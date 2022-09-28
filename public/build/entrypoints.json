@@ -2,41 +2,41 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/build/runtime.61b1725c.js",
-        "/build/577.9e56e102.js",
-        "/build/397.67261d60.js",
-        "/build/app.c76ed751.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_core-js_modules_es_object_to-string_js-node_modules_core-js_modules_web_-613cbf.js",
+        "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_bootstrap_dist_js_boo-901ebf.js",
+        "/build/app.js"
       ],
       "css": [
-        "/build/app.c3078ada.css"
+        "/build/app.css"
       ]
     },
     "search_article": {
       "js": [
-        "/build/runtime.61b1725c.js",
-        "/build/577.9e56e102.js",
-        "/build/search_article.8cb32c64.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_core-js_modules_es_object_to-string_js-node_modules_core-js_modules_web_-613cbf.js",
+        "/build/search_article.js"
       ]
     },
     "tri_select": {
       "js": [
-        "/build/runtime.61b1725c.js",
-        "/build/577.9e56e102.js",
-        "/build/tri_select.68cf3615.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_core-js_modules_es_object_to-string_js-node_modules_core-js_modules_web_-613cbf.js",
+        "/build/tri_select.js"
       ]
     },
     "filter_all_articles": {
       "js": [
-        "/build/runtime.61b1725c.js",
-        "/build/577.9e56e102.js",
-        "/build/filter_all_articles.2d7c97b3.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_core-js_modules_es_object_to-string_js-node_modules_core-js_modules_web_-613cbf.js",
+        "/build/filter_all_articles.js"
       ]
     },
     "add_views": {
       "js": [
-        "/build/runtime.61b1725c.js",
-        "/build/577.9e56e102.js",
-        "/build/add_views.1951e1de.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_core-js_modules_es_object_to-string_js-node_modules_core-js_modules_web_-613cbf.js",
+        "/build/add_views.js"
       ]
     }
   }

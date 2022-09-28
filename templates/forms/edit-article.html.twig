@@ -23,9 +23,7 @@
             {{ form_row(form.content, { 'label': "Contenu de l'article : " , 'value' : post.content }) }}
             {{ form_row(form.important, { 'label': "Prioritaire : " , 'checked' : post.important }) }}
         {{ form_end(form) }}    
-        {% for comment in post.comments %}  
-        {{ comment.id  }}
-        {% endfor %}
+
     </div>
     
 {% endblock %}
