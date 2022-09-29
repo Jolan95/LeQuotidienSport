@@ -2,27 +2,29 @@
 
 
 {% block body %}
-    <div class="form-article m-5 ">           
+    <div class="form-article container">           
         <div class="pb-2">
-            <h1>Rédiger un article</h1>
+            <h1 class="text-center mt-3">Rédiger un article</h1>
         </div>
         {% for message in app.flashes('success') %}
         <div class="alert alert-success" role="alert">
             {{ message }}
         </div>
         {% endfor %}
+
         {{ form_start(form) }}
+
             {{ form_row(form.title, { 'label': 'Titre : ', 'value' : post.title  }) }}
             <div class="small-input">
             {{ form_row(form.category, { 'label': 'Sport : ' , 'value' : post.category }) }}
             </div>
-            <div class="small-input">
             {{ form_row(form.picture,  {'value' : post.picture, 'required': false} ) }}
-            </div>
+
             {{ form_row(form.description, { 'label': "Description : ", 'value' : post.description  }) }}
             {{ form_row(form.content, { 'label': "Contenu de l'article : " , 'value' : post.content }) }}
             {{ form_row(form.important, { 'label': "Prioritaire : " , 'checked' : post.important }) }}
         {{ form_end(form) }}    
+
 
     </div>
     

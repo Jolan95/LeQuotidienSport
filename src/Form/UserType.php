@@ -24,7 +24,7 @@ class UserType extends AbstractType
             'second_options' => array('label' => 'Confirmation du mot de passe'),
         ))
         ->add('fullname', TextType::class)
-        ->add('submit', SubmitType::class, ['label'=>'Envoyer'])
+        ->add('submit', SubmitType::class, ['label'=>'Soumettre'])
 ;
     }
 

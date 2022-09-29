@@ -18,3 +18,16 @@ $("#my-rating").starRating({
         })
     }
 });
+
+
+$('#comment_content').bind('keyup', function(e){
+
+    $("#count-chars").text($(this).val().length);
+    if($(this).val().length > 389){
+        console.log("less")
+        $("#count-chars").addClass( "red" );
+    }else{
+        console.log("more")
+        $("#count-chars").removeClass("red");
+    }    
+});

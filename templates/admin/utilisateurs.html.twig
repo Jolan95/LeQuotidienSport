@@ -21,7 +21,7 @@
 	{% if users|length > 0 %}
 	<div class="container-fluid mt-3">
 	{% if role == "user" %}
-      	<div class="row" >
+      	<div class="row bold" >
       	  	<div class="col-lg-3 col-4  justify-center" > 
       	  	  Nom
       	  	</div>
@@ -36,7 +36,7 @@
     
 		{% for user in users %}
 		<div class="row" >
-	        <div class="col-4 col-lg-3 justify-center" > 
+	        <div class="col-4 col-lg-3 justify-center bold" > 
 	          	<p>{{user.fullname}}</p>
 	        </div>
 	        <div class="col-4 d-none d-lg-flex justify-center">
@@ -59,7 +59,7 @@
 
 	{% if role == "author" %}
 	  		<div class="row">
-  			<div class="col-3 justify-center"> 
+  			<div class="col-3 justify-center bold"> 
   			  Nom
   			</div>
   			<div class="col-3 d-none d-lg-flex justify-center">
@@ -104,7 +104,7 @@
 		{% endfor %}
 	{% endif %}
 	{% if role == "admin" %}
-	    	<div class="row" >
+	    	<div class="row bold" >
     	  	<div class="col-9 col-sm-4 justify-center" > 
     	  	  Nom
     	  	</div>

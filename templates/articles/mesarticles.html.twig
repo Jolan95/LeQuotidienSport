@@ -6,29 +6,29 @@
 {% block body %}
 
 <div class="my-articles container-fluid">
-	<h1>Mes articles </h1>
-	<form id="form-select">
-	<label>Trier par :</label>
-	<select name="tri" id="tri-select" >
-	    <option value="created_At,DESC">les plus récent</option>
-	    <option value="created_At,ASC">les plus anciens </option>
-	    <option value="rate,DESC">les mieux notés</option>
-	    <option value="rate,ASC">les moins bien notés</option>
-	    <option value="views,DESC">les plus lus</option>
-	    <option value="views,ASC">les moins lus</option>
-	    <option value="category,DESC">sport</option>
-	</select>
-	</form>
+	<h1 class="text-center">Mes articles </h1>
   	<ul class="nav nav-tabs mt-2 ml-2">
 	  	<li class="nav-item">
-	  	  	<a class="nav-link active"disabled aria-current="page">Publiés</a>
+	  	  	<a class="nav-link active bg-warning" disabled aria-current="page">Publiés</a>
 	  	</li>
 	  	<li class="nav-item mx-2">
 	  	  	<a class="nav-link" href="{{path("mybrouillons")}}" >Brouillons</a>
 	  	</li>
 	</ul>
+	<form id="form-select" class="row d-flex align-items-center bg-warning p-3">
+	<label class="pr-1">Trier par : </label>
+		<select name="tri" id="tri-select" >
+		    <option value="created_At,DESC">les plus récent</option>
+		    <option value="created_At,ASC">les plus anciens </option>
+		    <option value="rate,DESC">les mieux notés</option>
+		    <option value="rate,ASC">les moins bien notés</option>
+		    <option value="views,DESC">les plus lus</option>
+		    <option value="views,ASC">les moins lus</option>
+		    <option value="category,DESC">sport</option>
+		</select>
+	</form>
 
-	<div class="row pt-3 pb-2" >
+	<div class="row pt-3 pb-2 bold">
         <div class="col-lg-2 col-6 text-center" > 
           Titre
         </div>

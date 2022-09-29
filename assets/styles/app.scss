@@ -43,12 +43,20 @@ a:link, a:hover, a:visited{
 	width : 90%;
 	border-radius: 8px;
 }
+.img-100{
+	width : 100%;
+	height : auto; 
+	border-radius: 2px;
+}
 .priority{
 	background-color : rgb(228, 246, 242);
 }
 .wrapper-article{
 	padding : 12px; 
 	border-radius : 8px;
+}
+h1{
+	font-size : 1.7rem;
 }
 
 //Header
@@ -97,6 +105,9 @@ header{
 		outline-width: 0;
 	}
 }
+
+
+//sub-header
 .sub-header{
 	font-size : 1.25rem;
 	width : 100%;
@@ -105,7 +116,10 @@ header{
 	font-size : 1rem;
 	display : flex;
 	justify-content : space-between;
-	a:hover, a:link, a:visited{
+	 a:link, a:visited{
+		 color : white; 
+	}
+	a:hover{
 		color :rgb(231, 225, 225)
 	}
 }
@@ -133,8 +147,12 @@ header{
   
 /***Article Form***/
 .form-article {
-  width : 75%;
-  min-width : 280px
+	input:not([type="checkbox"]){
+		border-radius : 10px;
+	}
+	textarea{
+		min-height : 400px;
+	}
 }
 .small-input{
 	max-width : 250px;
@@ -149,13 +167,41 @@ header{
 
 /***Sign-in Form***/
 .form-signin{
-	width  : 80%;
-	max-width : 360px;
 	a {
 	  color : blue
 	}
 	a:hover {
 	  color : purple
+	}
+}
+//sign-in
+.page-100{
+    height : 100%;
+    width: 100%;
+    min-height : calc(100vh - 66px);
+    background-size : cover;
+    background-position: center;
+    .wrapper-form{
+        background: rgba(255, 255, 255, 0.45);
+        border-radius : 16px;
+        width : 90%;
+        max-width : 500px;
+		input{
+			width :  100%;
+			opacity: 0.8;
+		}
+		label{
+			font-weight : 500;
+			font-size : 1rem;
+		}
+		button{
+			width: 100%;
+		}
+    }
+}
+@media all and (min-width : 576px){
+	.page-100{
+		min-height : calc(100vh - 132px);
 	}
 }
 
@@ -167,30 +213,23 @@ p{
 	font-size : 1rem;
 }
 
-/***index***/
-h2{
-	color :#313131;
 
-}
-// .img-article{
-// 	max-width : 500px;
-// }
 /***article***/
-.image400{
-	width : 80%;
-	max-width : 600px;
-	height : auto;
-}
-.article-content{
-	font-size : 1.125rem;
-}
-h2.h2-grey{
-	color :#313131
-	
-}
-@media all and (min-width : 991px){
-	h2.h2-grey{
-		font-size : 1.25rem;
+.article{
+	.image400{
+		width : 80%;
+		max-width : 600px;
+		height : auto;
+	}
+	.article-content{
+		font-size : 1.07rem;
+	}
+	h2{
+		color :#313131;
+		font-size : 1.32rem;
+	}
+	.counter{
+		margin-top : -10px;
 	}
 }
 
@@ -229,6 +268,7 @@ a.trash{
 	  margin-left: 60px;
   }
 }
+
 .logo-teams{
 	height : 28px;
 	width : auto;
@@ -242,6 +282,8 @@ a.trash{
 	border-radius : 12px;
 }
 
+
+//stars
 .jq-stars {
 	display: inline-block;
   }
@@ -266,23 +308,27 @@ a.trash{
 	width: 100%;
 	height: 100% ;
   }
-   
-  .jq-star-svg path {
-	/* stroke: #000; */
+.jq-star-svg path {
 	stroke-linejoin: round;
-  }
-  
-  /* un-used */
-  .jq-shadow {
-	-webkit-filter: drop-shadow( -2px -2px 2px #888 );
+}
+
+.jq-shadow {
+ 	-webkit-filter: drop-shadow( -2px -2px 2px #888 );
 	filter: drop-shadow( -2px -2px 2px #888 );
-  }
+}
 
-  //page all articles
+//live
+.banner{
+	background-color :#e9ecef;
+	padding : 6px;
+	margin-bottom : 8px;
+}
   
-  #form-select {
-
-	  	input, select{
-		  height : 30Px
-		}
+//page all articles  
+#form-select {
+  	input, select{
+	    height : 30Px
 	}
+}
+
+

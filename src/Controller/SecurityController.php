@@ -45,10 +45,6 @@ class SecurityController extends AbstractController
             $email = (new Email())
             ->from('lequotidiensport@hotmail.com')
             ->to($user->getEmail())
-            //->cc('cc@example.com')
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
-            //->priority(Email::PRIORITY_HIGH)
             ->subject('Le Quotidien Sport vous Souhaite la bienvenue ! ❤')
             ->text('Sending emails is fun again!')
             ->html("<h1>Bienvenue au Quotidien Sport</h1>

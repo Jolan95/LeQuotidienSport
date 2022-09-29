@@ -20,14 +20,8 @@ class CommentType extends AbstractType
                 "attr" => [
                     "placeholder" => "Rédigez votre commentaire...",
                     "class" => "input-comment",
-                    "max-length" => 400
+                    "maxlength" => 400
                 ]
-            ])
-            ->add("submit", SubmitType::class, [
-                "attr" => [
-                    "class"=>"btn btn-success"
-                ],
-                "label" => "Valider"
             ])
         ;
     }

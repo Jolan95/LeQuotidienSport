@@ -7,6 +7,7 @@
                 <image class="img-full-100 img-article" src="{{asset(priority.picture)}}">
             </div>
             <div class="col-12 col-lg-6 pl-lg-3 text-center d-flex flex-column justify-content-around text-lg-left order-lg-1">
+            
                 <div class="grey d-lg-none text-left">Ecrit par {{priority.user.fullname}} le {{priority.createdAt|date("d/m/Y") }} à {{priority.createdAt|date("G:i") }}</div>
                 <h2>{{priority.title}}</h2>  
                 <div>  
@@ -44,11 +45,19 @@
             </div>
             
             <div class="col-12 col-lg-6 px-lg-4 text-center d-flex flex-column justify-content-around text-lg-left order-lg-{{ (loop.index is even) ? "1" : "2"  }}">
+                {% if article.user  is not null %}
                 <div class="grey d-lg-none">Ecrit par {{article.user.fullname}} le {{article.createdAt|date("d/m/Y") }} à {{article.createdAt|date("G:i") }}</div>
+                {% else %}
+                <div class="grey d-lg-none">Ecrit le {{article.createdAt|date("d/m/Y") }} à {{article.createdAt|date("G:i") }}</div>
+                {% endif %}
                 <h2>{{article.title}}</h2> 
                 <div  class='pb-1'>   
                     <div>{{article.description}}</div>
-                    <div class="grey d-none d-lg-block">Ecrit par {{article.user.fullname}} le {{article.createdAt|date("d/m/Y") }} à {{article.createdAt|date("G:i") }}</div>
+                    {% if article.user is not null %}
+                        <div class="grey d-none d-lg-block">Ecrit par {{article.user.fullname}} le {{article.createdAt|date("d/m/Y") }} à {{article.createdAt|date("G:i") }}</div>
+                    {% else %}
+                        <div class="grey d-lg-none">Ecrit le {{article.createdAt|date("d/m/Y") }} à {{article.createdAt|date("G:i") }}</div>
+                    {% endif %}
                 </div>   
                 {% if article.rates|length > 0 %}
                 <div class="d-flex justify-content-between">

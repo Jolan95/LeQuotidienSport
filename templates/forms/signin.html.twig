@@ -1,23 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="container-fluid">
-    <h1 class="my-3 pl-2">Créez votre compte</h1>
-
-    {% for message in app.flashes('success') %}
-    <div class="alert alert-success" role="alert">
-        {{ message }}
-    </div>
-    {% endfor %}
-    <div class="form-signin ml-lg-4">
-    {{ form_start(form) }}
-        
-        {{ form_row(form.email, { 'label': 'Votre email' }) }}
-
-        {{ form_row(form.password, { 'label': 'Votre mot de passe' }) }}
-
-        {{ form_row(form.fullname, { 'label': 'Votre nom complet' }) }}
-    {{ form_end(form) }}
+<div class="page-100 full-center py-4" style="background-image : url('{{asset("image/background-race.jpg")}}')">
+    <div class="wrapper-form p-1 p-lg-5">
+        <h1 class=" text-center">Créez votre compte</h1>
+        {% for message in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+        <div class="form-signin px-2 px-lg-4">
+        {{ form_start(form) }}
+            {{ form_row(form.email, { 'label': 'Votre email' }) }}
+            {{ form_row(form.password, { 'label': 'Votre mot de passe' }) }}
+            {{ form_row(form.fullname, { 'label': 'Votre nom complet' }) }}
+        {{ form_end(form) }}
+        Vous avez déja un compte? <a href="{{path("app_login")}}">Connexion ici</a>
+        </div>
     </div>
 </div>    
 {% endblock %}

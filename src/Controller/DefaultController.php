@@ -95,7 +95,6 @@ class DefaultController extends AbstractController
             $comment = new Comment();
             $comment->setContent($form->getData()->getContent());
             $comment->setAuthor($this->getUser());
-            $comment->setRate(0);
             $comment->setPost($article);
             $comment->setDate(new \DateTime());
             $entity->persist($comment);

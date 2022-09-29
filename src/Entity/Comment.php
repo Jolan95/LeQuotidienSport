@@ -24,9 +24,6 @@ class Comment
     #[ORM\JoinColumn(nullable: false)]
     private $post;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private $rate;
-
     #[ORM\Column(type: 'datetime')]
     private $date;
 
@@ -72,17 +69,6 @@ class Comment
         return $this;
     }
 
-    public function getRate(): ?int
-    {
-        return $this->rate;
-    }
-
-    public function setRate(?int $rate): self
-    {
-        $this->rate = $rate;
-
-        return $this;
-    }
 
     public function getDate(): ?\DateTimeInterface
     {

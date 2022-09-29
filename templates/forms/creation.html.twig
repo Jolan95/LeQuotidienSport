@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="form-article m-5 ">           
+    <div class="form-article ">           
         <div class="pb-2">
-            <h1>Rédiger un article</h1>
+            <h1 class="text-center mt-3">Rédiger un article</h1>
         </div>
         {% for message in app.flashes('success') %}
         <div class="alert alert-success" role="alert">

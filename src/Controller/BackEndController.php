@@ -35,16 +35,6 @@ class BackEndController extends AbstractController
         $this->addFlash("Error", "Article supprimé.");
         
     }
-    #[Route('fetch', name: 'fetch')]
-    public function fetch()
-    {
-        $file = new Fetch();
-        $pic = $file->getFile("0eaf85ebd55e0dd08752a585ff198402.jpg");   
-        dd($pic); 
-        return $this->render("s3.html.twig", [
-            'pic' => $pic
-        ]);   
-    }
     
 
 
@@ -230,7 +220,7 @@ class BackEndController extends AbstractController
     }
 
     #[Route('comment/remove/{id}', name: 'delete_comment')]
-    public function deleteComment($id, CommentRepository $commentRepo ,ManagerRegistry $doctrine){
+    public function deleteComment($id, CommentRepository $commentRepo ,ManagerRegistry $doctrine, Request $request){
         $comment = $commentRepo->findOneById($id);
         if($this->getUser() == $comment->getAuthor() || $this->isGranted('ROLE_ADMIN')){
             $post_id = $comment->getPost()->getId();
@@ -238,7 +228,8 @@ class BackEndController extends AbstractController
             $entityManager->remove($comment);
             $entityManager->flush();
             $this->addFlash("danger", "Le commentaire à été supprimé définitivement.");
-            return $this->redirectToRoute("adminComments", ["id" => $post_id]);
+            $route = $request->headers->get('referer');
+            return $this->redirect($route);
         }else{
             throw new Exception("Vous ne pouvez pas accéder à cette requête.");
         }
