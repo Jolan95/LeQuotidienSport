@@ -185,7 +185,7 @@ header{
         background: rgba(255, 255, 255, 0.45);
         border-radius : 16px;
         width : 90%;
-        max-width : 500px;
+        max-width : 370px;
 		input{
 			width :  100%;
 			opacity: 0.8;
@@ -198,6 +198,9 @@ header{
 			width: 100%;
 		}
     }
+	.wrapper-form-xl{
+		max-width : 440px;
+	}
 }
 @media all and (min-width : 576px){
 	.page-100{

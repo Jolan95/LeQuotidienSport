@@ -1,7 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<main class="ml-5 form-signin">
+<div class="page-100 full-center py-4" style="background-image : url('{{asset("image/background-race.jpg")}}')">
+<main class="px-4 py-3 wrapper-form">
     <form method="post">
         {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -12,14 +13,13 @@
              {{ app.user.fullname }}, <a href="{{ path('app_logout') }}">Logout</a>
         </div>
         {% endif %}
-
         <h1 class="my-4">Authentification</h1>
         <label for="inputEmail">Email</label>
         <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
         <label class="mt-2" for="inputPassword">Password</label>
         <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
         <div class=" my-3">
-            <a class="link-password" href="{{path("app_forgot_password_request")}}">Mot de passe oublié ?</a>
+            Mot de passe oublié ?<a class="link-default" href="{{path("app_forgot_password_request")}}">Réinitialiser ici</a>
         </div>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
         <button  class="btn btn-lg btn-primary" type="submit">
