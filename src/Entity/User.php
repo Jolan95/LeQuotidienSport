@@ -36,6 +36,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Post::class, orphanRemoval: true)]
     private $posts;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Rate::class, orphanRemoval: true)]
+    private $rates;
+
 
     
     public function __construct()

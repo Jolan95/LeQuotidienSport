@@ -13,7 +13,7 @@ class Rate
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'rates')]
     #[ORM\JoinColumn(nullable: false)]
     private $user;
 
