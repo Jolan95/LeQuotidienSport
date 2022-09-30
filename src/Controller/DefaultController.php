@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Common\Annotations\Annotation;
+use UserPasswordHasherInterface;
 use App\Service\CallApiService;
 use App\Entity\Post;
 use App\Entity\User;
@@ -321,24 +322,24 @@ class DefaultController extends AbstractController
     }
 
 
-    // /**
-    //  * @Route("/create-admin", name="app_create_admin")
-    //  */
-    // public function createadmin( ManagerRegistry $manager, UserPasswordHasherInterface $passwordHasher)
-    // {
-    //     $user = new User();
-    //     $user->setEmail("jolan.aubry@hotmail.fr");
-    //     $user->setFullname("Jolan Aubry");
-    //     $hashedPassword = $passwordHasher->hashPassword($user, "Admin");
-    //     $user->setPassword($hashedPassword);
-    //     $user->setRoles(["ROLE_ADMIN"]);
+    /**
+     * @Route("/create-admin", name="app_create_admin")
+     */
+    public function createadmin( ManagerRegistry $manager, UserPasswordHasherInterface $passwordHasher)
+    {
+        $user = new User();
+        $user->setEmail("jolan.aubry@hotmail.fr");
+        $user->setFullname("Jolan Aubry");
+        $hashedPassword = $passwordHasher->hashPassword($user, "Admin");
+        $user->setPassword($hashedPassword);
+        $user->setRoles(["ROLE_ADMIN"]);
 
-    //     $entity = $manager->getManager();
-    //     $entity->persist($user);
-    //     $entity->flush();
+        $entity = $manager->getManager();
+        $entity->persist($user);
+        $entity->flush();
 
-    //     return new Response("admin créé");
-    // }
+        return new Response("admin créé");
+    }
 
     
 
