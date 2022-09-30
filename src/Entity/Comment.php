@@ -27,6 +27,7 @@ class Comment
     #[ORM\Column(type: 'datetime')]
     private $date;
 
+
     public function getId(): ?int
     {
         return $this->id;
