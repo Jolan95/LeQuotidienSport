@@ -4,7 +4,7 @@
     <div class="d-none d-sm-flex justify-content-between container-flex" >
         <div class="d-flex justify-content-around align-items-center">
             <div >
-                <a href="{{ path("home")}}"><image class="logo-header-desktop " alt="home" src="{{ asset('image/LogoSport.png') }}"></image></a>
+                <a href="{{ path("app_sport", {sport : "actualité"})}}"><image class="logo-header-desktop " alt="home" src="{{ asset('image/LogoSport.png') }}"></image></a>
             </div>
             <div class="ml-lg-5">
                 <a  class="menu-item ps-5" href="{{ path('app_live') }}">
