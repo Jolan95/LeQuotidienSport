@@ -56,7 +56,7 @@ class SecurityController extends AbstractController
             $mailer->send($email);
             $this->addFlash('success', 'Votre compte à bien été enregistré.');
         }
-        return $this->render('forms/signin.html.twig', [
+        return $this->render('security/signin.html.twig', [
             "form" => $form->createView()
         ]);
     }

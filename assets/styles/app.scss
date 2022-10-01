@@ -188,7 +188,7 @@ header{
         max-width : 370px;
 		input{
 			width :  100%;
-			opacity: 0.8;
+			opacity: 0.9;
 		}
 		label{
 			font-weight : 500;
@@ -259,6 +259,12 @@ p{
 	color : black;
   font-size : 1rem;
   font-weight : 500;
+}
+.nav-link:active{
+	color : black !important;
+}
+.nav-link, .nav-link:active{
+	border-bottom : none !important;
 }
 a.edit{
   color : rgba(42, 66, 131, 0.795);
@@ -331,6 +337,21 @@ a.trash{
 #form-select {
   	input, select{
 	    height : 30Px
+	}
+}
+//popover
+.popover-header{
+	background-color: rgb(245, 245, 245);
+}
+.popover-body{
+	padding : 0 !important;
+
+	.content-popover div{
+		height : 40px;
+		width : 100%;
+		&:hover{
+			filter: brightness(74%);;
+		}
 	}
 }
 
