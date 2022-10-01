@@ -22,8 +22,6 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('search_article', './assets/search_article.js')
-    .addEntry('tri_select', './assets/tri_select.js')
-    .addEntry('filter_all_articles', './assets/filter_all_articles.js')
     .addEntry('add_views', './assets/add_views.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)

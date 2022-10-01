@@ -206,14 +206,14 @@ class BackEndController extends AbstractController
     }
 
     #[Route('author/delete/{post}', name: 'delete_myarticles')]
-    public function deleteMyArticles(Post $post, ManagerRegistry $doctrine){
+    public function deleteMyArticles(Post $post, ManagerRegistry $doctrine, Request $request){
 
         if($post->getUser() === $this->getUser() || $this->isGranted('ROLE_ADMIN')){ 
             $entityManager = $doctrine->getManager();
             $entityManager->remove($post);
-            $entityManager->flush();
-            return $this->redirectToRoute("myarticles");
-            ;
+            $entityManager->flush();            
+            $route = $request->headers->get('referer');
+            return $this->redirect($route);
         } else{
             return new Response("<h4>Vous ne pouvez pas supprimer ce poste</h4>");
         }

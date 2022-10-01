@@ -25,13 +25,6 @@
         "/build/tri_select.js"
       ]
     },
-    "filter_all_articles": {
-      "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_core-js_modules_es_object_to-string_js-node_modules_core-js_modules_web_-613cbf.js",
-        "/build/filter_all_articles.js"
-      ]
-    },
     "add_views": {
       "js": [
         "/build/runtime.js",

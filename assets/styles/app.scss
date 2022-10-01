@@ -354,5 +354,11 @@ a.trash{
 		}
 	}
 }
-
+.button-delete{
+	background-color : transparent;
+	border : none;
+	&:focus{
+		outline : none;
+	}
+}
 
