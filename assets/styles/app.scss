@@ -153,6 +153,9 @@ header{
 	textarea{
 		min-height : 400px;
 	}
+	label{
+		color : white
+	}
 }
 .small-input{
 	max-width : 250px;
@@ -354,11 +357,15 @@ a.trash{
 		}
 	}
 }
+// Pages Administration
 .button-delete{
 	background-color : transparent;
 	border : none;
 	&:focus{
 		outline : none;
 	}
+}
+.badge-danger{
+	display : none;
 }
 

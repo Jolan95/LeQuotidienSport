@@ -11,6 +11,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserType extends AbstractType
 {
@@ -18,11 +20,19 @@ class UserType extends AbstractType
     {
         $builder
         ->add('email', EmailType::class)
-        ->add('password', RepeatedType::class, array(
+        ->add('password', RepeatedType::class, [
             'type' => PasswordType::class,
-            'first_options' => array('label' => 'Mot de passe'),
+            'first_options' => [
+                "constraints" => [
+                    new Length([
+                        'min' => 8,
+                        'minMessage' => 'Votre mot de passe doit comporter au moins 8 caractères',
+                    ]),
+                ],
+                'label' => 'Mot de passe'],
             'second_options' => array('label' => 'Confirmation du mot de passe'),
-        ))
+            'invalid_message' => 'Les deux mot de passes doivent être identiques.',
+            ])
         ->add('fullname', TextType::class)
         ->add('submit', SubmitType::class, ['label'=>'Soumettre'])
 ;
