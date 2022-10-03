@@ -50,7 +50,7 @@ class SecurityController extends AbstractController
             ->html("<h1>Bienvenue au Quotidien Sport</h1>
             <p>Bonjour ".$user->getFullname()."</p>
             <p>Vous êtes désormais membre du Quotidien Sport, vous pouvez désormais profiter pleinement de notre site
-            internet et ainsi ne louper aucune actualité! </p>
+            internet et ainsi ne louper aucune actualité ! </p>
             <p>L'Equipe du Quotidien Sport</p>
             ");
             $mailer->send($email);

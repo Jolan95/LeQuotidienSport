@@ -26,30 +26,21 @@ use App\Service\Fetch;
 class BackEndController extends AbstractController
 {
 
-    #[Route('admin/delete/{post}', name: 'remove_post')]
-    public function postRemove(Post $post, ManagerRegistry $doctrine )
-    {
-        $entityManager = $doctrine->getManager();
-        $entityManager->remove($post);
-        $entityManager->flush();
-        $this->addFlash("Error", "Article supprimé.");
-        
-    }
-    
-
-
     #[Route('admin/remove/{user}/{role}', name: 'remove_user')]
-    public function userRemove(User $user, $role, ManagerRegistry $doctrine){
+    #[isGranted('ROLE_ADMIN')]
+    public function userRemove(User $user, $role, ManagerRegistry $doctrine, Request $request){
             
         $entityManager = $doctrine->getManager();
         $entityManager->remove($user);
         $entityManager->flush();
         $this->addFlash("success", $user->getFullname()." est maintant supprimé"); 
-        return $this->redirectToRoute("app_admin", ['role' => $role]);
+        $route = $request->headers->get('referer');
+        return $this->redirect($route);
     }
 
 
     #[Route('admin/makeAuthor/{user}', name: 'make_author')]
+    #[isGranted('ROLE_ADMIN')]
     public function makeAuthor(User $user, ManagerRegistry $doctrine, MailerInterface $mailer){
             
         $user->setRoles(["ROLE_AUTHOR"]);
@@ -72,6 +63,7 @@ class BackEndController extends AbstractController
 
     }
     #[Route('admin/makeUser/{user}', name: 'make_user')]
+    #[isGranted('ROLE_ADMIN')]
     public function makeUser(User $user, ManagerRegistry $doctrine, MailerInterface $mailer){
             
         $user->setRoles(["ROLE_USER"]);
@@ -92,6 +84,7 @@ class BackEndController extends AbstractController
 
     }
     #[Route('admin/makeAdmin/{user}', name: 'make_admin')]
+    #[isGranted('ROLE_ADMIN')]
     public function makeAdmin(User $user, ManagerRegistry $doctrine, MailerInterface $mailer){
             
         $user->setRoles(["ROLE_ADMIN"]);
@@ -137,6 +130,7 @@ class BackEndController extends AbstractController
     }
 
     #[Route('request-ajax-listing-all-articles', name: 'tri_every_articles')]
+    #[isGranted('ROLE_ADMIN')]
     public function triEveryArticles(UserRepository $userRepo, PostRepository $postRepo,Request $request){
         $author = $request->query->get("author");
         $order = $request->query->get("order");
@@ -205,7 +199,8 @@ class BackEndController extends AbstractController
         return new Response("ok");         
     }
 
-    #[Route('author/delete/{post}', name: 'delete_myarticles')]
+    #[Route('author/delete/{post}', name: 'delete_my_articles')]
+    #[isGranted('ROLE_AUTHOR')]
     public function deleteMyArticles(Post $post, ManagerRegistry $doctrine, Request $request){
 
         if($post->getUser() === $this->getUser() || $this->isGranted('ROLE_ADMIN')){ 
@@ -215,9 +210,10 @@ class BackEndController extends AbstractController
             $route = $request->headers->get('referer');
             return $this->redirect($route);
         } else{
-            return new Response("<h4>Vous ne pouvez pas supprimer ce poste</h4>");
+            return new Response("<h4>Vous ne pouvez pas supprimer ce poste</h4>", 403);
         }
     }
+
 
     #[Route('comment/remove/{id}', name: 'delete_comment')]
     public function deleteComment($id, CommentRepository $commentRepo ,ManagerRegistry $doctrine, Request $request){
@@ -231,7 +227,7 @@ class BackEndController extends AbstractController
             $route = $request->headers->get('referer');
             return $this->redirect($route);
         }else{
-            throw new Exception("Vous ne pouvez pas accéder à cette requête.");
+            throw new Exception("Vous ne pouvez pas accéder à cette requête.", 403);
         }
 
     }

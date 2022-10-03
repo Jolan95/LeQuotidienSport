@@ -1,3 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="pb-5 container">
+    <h1 class="text-center d-sm-none pb-2 pt-3">
+    {{ (sport is not null) ? sport|capitalize : "A la une" }}
+    </h1>
+    <div class="d-flex justify-content-between align-items-end my-2">
+        <h1 class="text-center d-none d-sm-flex pt-3 mb-0">
+            {{ (sport is not null) ? sport|capitalize : "A la une" }}
+        </h1>
+        <a  class="menu-item d-sm-none " href="{{ path('app_live') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-circle-fill red" viewBox="0 0 16 16">
+                <circle cx="8" cy="8" r="8"/>
+            </svg>
+            <span class="fs-2 bold">Direct</span>
+        </a>
+        <div id="filter" class="align-center">
+            <div class="search-box d-flex">
+                <input type="text" id="search" name="search" class="input-search" placeholder="Rechercher">
+                <div class="d-none d-sm-flex btn-search full-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="content">    
+    {% include 'content/articles.html.twig' %}
+    </div>
+
+</div>
+{% endblock %}
+{% block javascripts %}
+<script>
 $("document").ready(()=>{
     
     let offset = 0;
@@ -54,3 +90,5 @@ $("document").ready(()=>{
     } 
     $(window).bind('scroll',fetchMore);
 })
+</script>
+{% endblock %}

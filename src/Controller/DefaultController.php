@@ -8,24 +8,17 @@ use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Common\Annotations\Annotation;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Service\CallApiService;
 use App\Entity\Post;
-use App\Entity\User;
-use App\Entity\Rate;
 use App\Entity\Comment;
 use App\Form\CommentType;
 use Symfony\Component\HttpFoundation\Request;
-use App\Form\NewPasswordType;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Form\PostType;
-use App\Repository\CommentRepository;
 use App\Repository\RateRepository;
-use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Validator\Constraints\Date;
+
 
 class DefaultController extends AbstractController
 {
@@ -69,7 +62,7 @@ class DefaultController extends AbstractController
                 ])
             ]);  
         }    
-        return $this->render('index.html.twig', [
+        return $this->render('pages/index.html.twig', [
         'priority' => $priority,
         'articles' => $articles,
         'sport' => $sport
@@ -106,23 +99,13 @@ class DefaultController extends AbstractController
         }    
         $comments= $article->getComments();
      
-        return $this->render("articles/article.html.twig",
+        return $this->render("pages/article.html.twig",
         [
             "article" => $article,
             "comments" => $comments,
             "form" => $form->createView(),
             "stars" => $stars,
             "average" => $average[1]
-        ]);
-    }
- 
-    #[Route('/profile', name: 'app_profile')]
-    public function profile(PostRepository $repository ): Response
-    {
-        $post = $repository->findBy(["published" => true, "user" => $this->getUser()]);
-        $numberArticles = count($post);
-        return $this->render('profile.html.twig', [
-        "numberArticles" => $numberArticles
         ]);
     }
 
@@ -135,27 +118,15 @@ class DefaultController extends AbstractController
         $matchsFrance = json_decode(json_encode($matchsFrance), true);
         $matchsFrance["name"] = "Ligue 1";
         $matchsPL["name"] = "Premier League";
-        return $this->render('live.html.twig', [
+        return $this->render('pages/live.html.twig', [
             "environement" => $_ENV["APi_KEY_SPORT"],
             "footFrance" => $matchsFrance,
             "footPL" => $matchsPL
         ]);
     }
 
-
-    #[Route('/ranking/{id}', name: 'app_rank')]
-    public function rank(CallApiService $api,int $id): Response
-    {       
-        $leagues = $api->getRanking($id);
-        $leagues = json_decode($leagues, true);
-        return $this->render('ranking.html.twig', 
-        [
-            "league" => $leagues['response'][0]["league"],
-        ]);
-    }
-
-
-    #[Route('/author', name:'author')]
+    #[Route('/author', name:'app_author')]
+    #[isGranted("ROLE_AUTHOR")]
     public function post(Request $request, ManagerRegistry $manager){     
         $post = new Post();
         $user = $this->getUser();
@@ -203,6 +174,7 @@ class DefaultController extends AbstractController
     /**
     * @Route("admin-utilisateurs/{role}/{page}", name="app_admin", defaults={"page"=0})
     * requirements={"user" : ["user", "author", "admin"]}
+    * @isGranted("ROLE_ADMIN")
     */
     public function admin($page ,UserRepository $userRepo, $role, PostRepository $post): Response
     {
@@ -223,10 +195,9 @@ class DefaultController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("admin/listing/articles", name="app_admin_articles")
-     * @isGranted("ROLE_ADMIN")
-     */
+     
+    #[Route("admin/listing/articles", name : "app_admin_articles")]
+    #[isGranted("ROLE_ADMIN")]
     public function adminallArticles(PostRepository $postRepo, UserRepository $userRepo): Response
     {
         $authors = $userRepo->findByRoles('["ROLE_AUTHOR"]',null);
@@ -242,28 +213,28 @@ class DefaultController extends AbstractController
         ]);
     }
 
-    #[Route('author/my-articles', name: 'myarticles')]
+    #[Route('author/my-articles', name: 'app_my_articles')]
+    #[isGranted("ROLE_AUTHOR")]
     public function myArticles( PostRepository $postRepo){
         $posts = $postRepo->findByUserDesc($this->getUser());
-         return $this->render("articles/mesarticles.html.twig", [
+         return $this->render("admin/mesarticles.html.twig", [
             "posts" => $posts
         ]);
     }
 
-    #[Route('author/my-brouillons', name: 'mybrouillons')]
+    #[Route('author/my-brouillons', name: 'app_my_brouillons')]
     public function myBrouillons( PostRepository $postRepo){
            
         $posts = $postRepo->findBy(["user" => $this->getUser(), "published" => false]);
         
-         return $this->render("articles/mesbrouillons.html.twig", [
+         return $this->render("admin/mesbrouillons.html.twig", [
             "posts" => $posts
         ]);
     }
         
-    /**
-     * @isGranted("ROLE_ADMIN")
-     */
-    #[Route('admin/comments/{id}', name: 'adminComments')]
+
+    #[Route('admin/comments/{id}', name: 'app_admin_comments')]
+    #[isGranted("ROLE_ADMIN")]
     public function adminComments($id, PostRepository $postRepo){
            
         $post = $postRepo->findById($id);
@@ -273,7 +244,8 @@ class DefaultController extends AbstractController
     }
 
 
-    #[Route('author/edit-article/{id}', name: 'edit-article')]
+    #[Route('author/edit-article/{id}', name: 'app_edit_article')]
+    #[isGranted("ROLE_AUTHOR")]
     public function edit_article($id, PostRepository $repo, Request $request,ManagerRegistry $manager){
            
         $post = $repo->findOneBy(["id" => $id]);
@@ -309,17 +281,6 @@ class DefaultController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-
-    #[Route('/password-reset', name: 'forgetPassword')]
-    public function ForgetPassword(){
-        
-        $form =  $this->createForm(NewPasswordType::class);
-        
-        return $this->render("forms/forget.html.twig", [
-            "form" => $form->createView()
-        ]);
-    }
-
 
     // /**
     //  * @Route("/create-admin", name="app_create_admin")

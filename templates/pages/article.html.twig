@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container article">
+        <div id='data-article' data-article="{{article.id}}">
+            <h1 class="text-center pt-4 pb-4 pb-md-0" >{{article.title}}</h1>
+            <div class="justify-center p-md-5">
+                {# <img  class=" border10" src="{{asset('Upload/'~article.picture)}}"></img> #}
+                <img  class="img-100 border10" src="{{asset(article.picture)}}"></img>
+            </div>  
+            <div>Ecrit par {{article.user.fullname}} le {{article.createdAt|date("d/m/Y") }} à {{article.createdAt|date("G:i") }} </div>  
+            {% if average %}
+            <div class="d-flex align-items-center">
+                {{average|round(2,"ceil")}}
+                <svg xmlns="http://www.w3.org/2000/svg" width="1.2rem" height="1.2rem" fill="currentColor" class="bi gold bi-star-fill" viewBox="0 0 16 16">
+                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                </svg>
+            </div>
+            {% endif %}     
+            <h2 class="my-3 ">{{article.description}}</h2>
+            <div class=" article-content">{{article.content | raw}}</div>
+            <div class="pb-5">
+            {% if stars %}
+            <div id="data" class="mt-2" data-post={{article.id}}></div>
+            <div id="my-rating"></div>
+            {% endif %}
+            <h2 class="pt-5">Commentaires</h2>
+            {% for message in app.flashes('success') %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% for message in app.flashes('danger') %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {{ form_start(form) }}
+                {{ form_row(form.content) }}
+                <div class="d-flex justify-content-between mb-4 counter">
+                    <button class="btn btn-success">Valider</button>
+                    <div><span id="count-chars">0</span>/400</div>
+                </div>
+            {{ form_end(form) }}
+            {% if comments|length > 0 %}
+                {% for comment in comments %}
+                <div class="comment-box">
+                    {% if (comment.author.id == app.user.id ) or ( is_granted('ROLE_ADMIN')) %}
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="bold">{{comment.author.fullname}}</div>
+                            <div class="grey">~ {{comment.date|date("G:i d/m/Y ") }}</div> 
+                        </div>
+                        <div>
+                            <a href="{{path("delete_comment", {id : comment.id})}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1.2rem" height="1.2rem" fill="currentColor" class="bi bi-trash3-fill red" viewBox="0 0 16 16">
+                                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    {% else %}    
+                        <div class="d-flex align-items-center">
+                            <div class="bold">{{comment.author.fullname}}</div>
+                            <div class="grey">~ {{comment.date|date("G:i d/m/Y ") }}</div> 
+                        </div>
+                    {% endif %}    
+                    <p>{{comment.content}}</p>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="bold">Aucun commentaire pour le moment</div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+<script>
+$("document").ready(()=>{
+    setTimeout(() => {
+       let element = document.getElementById("data-article")
+       let data = element.dataset.article
+       let url = new URL(window.location.origin)
+       url = url + "article/add-view?article="+data;
+       $.ajax({
+        type: "GET",
+        url: url,
+        success: function(data){
+
+        },
+    })
+    }, 15000);
+
+
+postId = $('#data').data('post')
+$("#my-rating").starRating({
+    starSize: 30,
+    ratedColor : "gold",
+    activeColor : "gold",
+    hoverColor : "gold",
+    ratedColors : ["gold", "gold", "gold", "gold", "gold"],
+    callback: function(currentRating, $el){
+        let url = new URL(window.location.origin)
+        url = url + "rating-article?rate="+currentRating+"?&post="+postId;
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(data){
+                $("#my-rating").html("Merci pour votre vote !");
+            },
+        })
+    }
+});
+
+
+$('#comment_content').bind('keyup', function(e){
+
+    $("#count-chars").text($(this).val().length);
+    if($(this).val().length > 389){
+        console.log("less")
+        $("#count-chars").addClass( "red" );
+    }else{
+        console.log("more")
+        $("#count-chars").removeClass("red");
+    }    
+});
+
+})  
+</script>  
+{% endblock %}

@@ -38,7 +38,7 @@ a:link, a:hover, a:visited{
 	text-decoration: underline;
 	color: blue;
 }
-.img-full-100{
+.img-article{
 	height : 100%; 
 	width : 90%;
 	border-radius: 8px;
@@ -56,10 +56,13 @@ a:link, a:hover, a:visited{
 	border-radius : 8px;
 }
 h1{
+	font-size : 1.9rem;
+}
+h2{
 	font-size : 1.7rem;
 }
 
-//Header
+/***Header***/
 header{
   	background-color : rgb(18,22,64);
   	header a:hover, a:visited, a:link {
@@ -104,10 +107,18 @@ header{
 	.navbar-toggler{
 		outline-width: 0;
 	}
+	.header-small{
+		.dropdown{
+			padding-top : 10px;
+		}
+		.dropdown-menu{
+			padding: 0px;
+		}
+	}
 }
 
 
-//sub-header
+/***sub-header***/
 .sub-header{
 	font-size : 1.25rem;
 	width : 100%;
@@ -125,7 +136,7 @@ header{
 }
 
 
-//home page
+/***home page***/
 .bi-search{
 	border : 0 0 1px 0 solid black;
 }
@@ -139,10 +150,16 @@ header{
 		border : none;
 	}
 }
-
 .logo-league{
 	height : 30px;
 	width : auto;
+}
+.btn-read{
+	padding : 10px;
+	background-color : rgb(183, 45, 45);
+	border-radius : 10px;
+	border : none;
+	color : white;
 }
   
 /***Article Form***/
@@ -153,19 +170,12 @@ header{
 	textarea{
 		min-height : 400px;
 	}
+	.small-input{
+		max-width : 250px;
+	} 
 	label{
 		color : white
 	}
-}
-.small-input{
-	max-width : 250px;
-} 
-.btn-read{
-	padding : 10px;
-	background-color : rgb(183, 45, 45);
-	border-radius : 10px;
-	border : none;
-	color : white;
 }
 
 /***Sign-in Form***/
@@ -177,7 +187,8 @@ header{
 	  color : purple
 	}
 }
-//sign-in
+
+/***Form pages***/
 .page-100{
     height : 100%;
     width: 100%;
@@ -205,59 +216,28 @@ header{
 		max-width : 440px;
 	}
 }
+.badge-danger{
+	display : none;
+}
 @media all and (min-width : 576px){
 	.page-100{
 		min-height : calc(100vh - 132px);
 	}
 }
 
-h1{
-	color :#313131
-}
-p{
-	color : rgb(49, 53, 49);
-	font-size : 1rem;
-}
-
-
 /***article***/
 .article{
-	.image400{
-		width : 80%;
-		max-width : 600px;
-		height : auto;
-	}
 	.article-content{
 		font-size : 1.07rem;
 	}
 	h2{
-		color :#313131;
 		font-size : 1.32rem;
 	}
 	.counter{
 		margin-top : -10px;
 	}
 }
-
-.my-articles h1{
-  font-size: 1.75rem;
-  padding : 15px 20px;
- color : black
-}
-
-.wrapper-profile{
-  background-color : white;
-  border-radius : 10px;
-  padding : 20px;
-  margin-left : 10px;
-  height : 25rem;
-  width : 800%;
-  min-width: 300px;
-  max-width : 440px;
-  font-size : 1.4rem;
-  margin-top  : 70px
-}
-
+/***Pages Admin***/
 .link-article:hover, .link-article:visited, .link-article:link {
 	color : black;
   font-size : 1rem;
@@ -272,92 +252,6 @@ p{
 a.edit{
   color : rgba(42, 66, 131, 0.795);
 }
-a.trash{
-  color : red
-}
-@media screen and (min-width : 500px ){
-  .wrapper-profile{
-	  margin-left: 60px;
-  }
-}
-
-.logo-teams{
-	height : 28px;
-	width : auto;
-}
-
-  //comment
-.comment-box{
-	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-	padding : 12px;
-	margin-bottom : 10px;
-	border-radius : 12px;
-}
-
-
-//stars
-.jq-stars {
-	display: inline-block;
-  }
-  
-  .jq-rating-label {
-	font-size: 22px;
-	display: inline-block;
-	position: relative;
-	vertical-align: top;
-	font-family: helvetica, arial, verdana;
-  }
-  
-  .jq-star {
-	width: 100px;
-	height: 100px;
-	display: inline-block;
-	cursor: pointer;
-  }
-  
-  .jq-star-svg {
-	padding-left: 3px;
-	width: 100%;
-	height: 100% ;
-  }
-.jq-star-svg path {
-	stroke-linejoin: round;
-}
-
-.jq-shadow {
- 	-webkit-filter: drop-shadow( -2px -2px 2px #888 );
-	filter: drop-shadow( -2px -2px 2px #888 );
-}
-
-//live
-.banner{
-	background-color :#e9ecef;
-	padding : 6px;
-	margin-bottom : 8px;
-}
-  
-//page all articles  
-#form-select {
-  	input, select{
-	    height : 30Px
-	}
-}
-//popover
-.popover-header{
-	background-color: rgb(245, 245, 245);
-}
-.popover-body{
-	padding : 0 !important;
-
-	.content-popover div{
-		height : 40px;
-		width : 100%;
-		&:hover{
-			filter: brightness(74%);;
-		}
-	}
-}
-// Pages Administration
 .button-delete{
 	background-color : transparent;
 	border : none;
@@ -365,7 +259,74 @@ a.trash{
 		outline : none;
 	}
 }
-.badge-danger{
-	display : none;
+#form-select {
+	input, select{
+	  height : 30Px
+  }
+}
+  
+//comments
+.comment-box{
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+	padding : 12px;
+	margin-bottom : 10px;
+	border-radius : 12px;
+}
+
+/***live***/
+.banner{
+	background-color :#e9ecef;
+	padding : 6px;
+	margin-bottom : 8px;
+}
+.logo-teams{
+	height : 28px;
+	width : auto;
+}
+
+/***stars***/
+.jq-stars {
+	display: inline-block;
+}  
+.jq-rating-label {
+	font-size: 22px;
+	display: inline-block;
+	position: relative;
+	vertical-align: top;
+	font-family: helvetica, arial, verdana;
+}
+.jq-star {
+	width: 100px;
+	height: 100px;
+	display: inline-block;
+	cursor: pointer;
+}  
+.jq-star-svg {
+	padding-left: 3px;
+	width: 100%;
+	height: 100% ;
+}
+.jq-star-svg path {
+	stroke-linejoin: round;
+}
+.jq-shadow {
+ 	-webkit-filter: drop-shadow( -2px -2px 2px #888 );
+	filter: drop-shadow( -2px -2px 2px #888 );
+}
+
+
+//popover
+.popover-header{
+	background-color: rgb(245, 245, 245);
+}
+.popover-body{
+	padding : 0 !important;
+	.content-popover div{
+		height : 40px;
+		width : 100%;
+		&:hover{
+			filter: brightness(74%);;
+		}
+	}
 }
 
