@@ -1,1 +1,1 @@
-web: heroku-php-apache2 public/
+web: bin/start-pgbouncer-stunnel heroku-php-apache2 public/
