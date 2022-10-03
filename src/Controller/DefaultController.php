@@ -283,24 +283,24 @@ class DefaultController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/create-admin", name="app_create_admin")
-     */
-    public function createadmin( ManagerRegistry $manager, UserPasswordHasherInterface $passwordHasher)
-    {
-        $user = new User();
-        $user->setEmail("jolan.aubry@hotmail.fr");
-        $user->setFullname("Jolan Aubry");
-        $hashedPassword = $passwordHasher->hashPassword($user, "Admin");
-        $user->setPassword($hashedPassword);
-        $user->setRoles(["ROLE_ADMIN"]);
+    // /**
+    //  * @Route("/create-admin", name="app_create_admin")
+    //  */
+    // public function createadmin( ManagerRegistry $manager, UserPasswordHasherInterface $passwordHasher)
+    // {
+    //     $user = new User();
+    //     $user->setEmail("admin@hotmail.fr");
+    //     $user->setFullname("Administrateur");
+    //     $hashedPassword = $passwordHasher->hashPassword($user, "Admin");
+    //     $user->setPassword($hashedPassword);
+    //     $user->setRoles(["ROLE_ADMIN"]);
 
-        $entity = $manager->getManager();
-        $entity->persist($user);
-        $entity->flush();
+    //     $entity = $manager->getManager();
+    //     $entity->persist($user);
+    //     $entity->flush();
 
-        return new Response("admin créé");
-    }
+    //     return new Response("admin créé");
+    // }
 
     
 
