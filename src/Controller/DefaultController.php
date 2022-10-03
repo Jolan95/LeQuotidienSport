@@ -28,10 +28,9 @@ class DefaultController extends AbstractController
     public function index(): Response
     {
         return $this->redirectToRoute('app_sport', ["sport" =>"actualité"]);
-
     }
 
-    #[Route('/journal/{sport}', name: 'app_sport')]
+    #[Route('/journal/{sport}', name: 'app_sport', requirements: ['sport' => 'actualité|football|basketball|rugby|tennis|cyclisme|autres'])]
     public function articles(string $sport, PostRepository $postRepo, Request $request){
         if($sport == "actualité"){
             $sport = null;
