@@ -23,12 +23,6 @@ class UserType extends AbstractType
         ->add('password', RepeatedType::class, [
             'type' => PasswordType::class,
             'first_options' => [
-                "constraints" => [
-                    new Length([
-                        'min' => 8,
-                        'minMessage' => 'Votre mot de passe doit comporter au moins 8 caractères',
-                    ]),
-                ],
                 'label' => 'Mot de passe'],
             'second_options' => array('label' => 'Confirmation du mot de passe'),
             'invalid_message' => 'Les deux mot de passes doivent être identiques.',

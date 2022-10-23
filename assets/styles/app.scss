@@ -1,6 +1,16 @@
+//Font 
+@import url('https://fonts.googleapis.com/css2?family=Abyssinica+SIL&family=Poppins&display=swap');
+
 //Variables
-
-
+$font1 : 'Abyssinica SIL';
+$font2 : 'Poppins';
+h1, h2, h3, h4, h5{
+	font-family: $font2;
+	font-weight : 600;
+}
+body{
+	font-family : $font1;
+}
 //Global
 .full-center{
 	display : flex;

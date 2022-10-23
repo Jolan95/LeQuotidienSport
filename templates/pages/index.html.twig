@@ -62,8 +62,9 @@ $("document").ready(()=>{
         e.preventDefault();
     })
 
-
+    //function to display new articles on the home page
     fetchMore = function(){
+        // throw the ajax request if the scroll reach 200px of the bottom of the page.
         if ($(window).scrollTop() > ($(document).height() - 200 )- $(window).height()){
             if(input.value.length < 3){
                 $(window).unbind('scroll', fetchMore);

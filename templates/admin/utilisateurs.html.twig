@@ -6,8 +6,19 @@
 	    {{ message }}
 	</div>
 	{% endfor %}
+	<h1 class="text-center py-3">
+	{% if role == "user" %}
+	Utilisateurs
+	{% elseif role == "auteurs" %}
+	Auteurs
+	{% else %}
+	Administrateurs
+	{% endif %}
+	</h1>
+
+
 	<div>
-	    <ul class="nav nav-tabs my-4 ml-2" >
+	    <ul class="nav nav-tabs mb-4 ml-2" >
 	     	<li class="nav-item">
 	     	  	<a class="nav-link {{ (role == "user") ? 'active' : '' }}" aria-current="page"  href="{{path("app_admin", {role : "user", page : 1})}}">Utilisateurs</a>
 	     	</li>

@@ -92,7 +92,7 @@ $("document").ready(()=>{
     })
     }, 15000);
 
-
+// display stars through librairy star rating
 postId = $('#data').data('post')
 $("#my-rating").starRating({
     starSize: 30,
@@ -113,7 +113,7 @@ $("#my-rating").starRating({
     }
 });
 
-
+// display current number of charactere inputed
 $('#comment_content').bind('keyup', function(e){
 
     $("#count-chars").text($(this).val().length);

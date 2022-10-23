@@ -154,6 +154,7 @@ class DefaultController extends AbstractController
                 $message = 'Votre article a été ajouté à vos brouillons avec succès !';
             }
             $post->setPicture($data->getPicture());
+            // uncomment if you want to proceed with upload image instead of url images 
             // $file = $post->getPicture();
             // $fileName = md5(uniqid()).'.'.$file->guessExtension();
             // $file->move($this->getParameter('upload_directory'), $fileName);
@@ -282,7 +283,7 @@ class DefaultController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-
+    
     // /**
     //  * @Route("/create-admin", name="app_create_admin")
     //  */
@@ -291,7 +292,7 @@ class DefaultController extends AbstractController
     //     $user = new User();
     //     $user->setEmail("admin@hotmail.fr");
     //     $user->setFullname("Administrateur");
-    //     $hashedPassword = $passwordHasher->hashPassword($user, "Admin");
+    //     $hashedPassword = $passwordHasher->hashPassword($user, "Administrateur");
     //     $user->setPassword($hashedPassword);
     //     $user->setRoles(["ROLE_ADMIN"]);
 

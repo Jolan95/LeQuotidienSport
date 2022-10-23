@@ -85,6 +85,7 @@
                         const content = document.querySelector("#content");
                         content.innerHTML = data.content[0];
                         let page  = data.content["page"]
+                        // display input page only if content of the request doesn't fit in one page
                         if(page > 1){
                             formPage.hidden = false;
                         } else{
@@ -95,6 +96,7 @@
                     },
                 })
             }
+            // throw ajax request on inputs change
             selectInputs.forEach(input => { 
                 input.addEventListener("change", ()=>{
                     ajaxToFilter();
@@ -107,7 +109,7 @@
                 e.preventDefault();
             })
         })
-
+        //handle modals
         $('.button-delete').click(function() {
           $('#modal-logout'+this.getAttribute("data-id")).modal('show');
         })

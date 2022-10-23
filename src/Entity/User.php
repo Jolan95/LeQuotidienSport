@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -26,15 +27,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[Assert\Email( message: 'The email {{ value }} is not a valid email.')]
     private $email;
 
     #[ORM\Column(type: 'string', length : 60)]
+    #[Assert\Length(min: 3, minMessage: 'Votre nom complet doit au moins comporter 3 caractères', )]
     private $fullname;
 
     #[ORM\Column(type: 'json')]
     private $roles = [];
 
     #[ORM\Column(type: 'string')]
+    #[Assert\Length(min: 8, minMessage: 'Le mot de passe doit comporter au moins 8 caractères', )]
     private $password;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class, orphanRemoval: true)]
