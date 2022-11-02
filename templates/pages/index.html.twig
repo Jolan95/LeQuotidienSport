@@ -46,7 +46,6 @@ $("document").ready(()=>{
             //url
             let url = new URL(window.location.href)
             url = url.pathname + "?search="+data+"&ajax=1";
-            console.log(url);
             $.ajax({
                 type: "GET",
                 url: url,
@@ -71,7 +70,6 @@ $("document").ready(()=>{
                 offset = offset + 10;
                 let url = new URL(window.location.href)
                 url = url.pathname + "?offset="+offset+"&ajax=2";
-                console.log(url)
                 $.ajax({
                     type: "GET",
                     url: url,

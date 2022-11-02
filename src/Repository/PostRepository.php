@@ -50,6 +50,7 @@ class PostRepository extends ServiceEntityRepository
         return $qb->getQuery()
         ->getResult();
     }
+    
     public function findNumberPagesRateAverage( $order, $user = null, $offset = null )
     {
         $qb =  $this->createQueryBuilder('p')

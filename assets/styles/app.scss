@@ -4,6 +4,8 @@
 //Variables
 $font1 : 'Abyssinica SIL';
 $font2 : 'Poppins';
+
+
 h1, h2, h3, h4, h5{
 	font-family: $font2;
 	font-weight : 600;
@@ -11,7 +13,13 @@ h1, h2, h3, h4, h5{
 body{
 	font-family : $font1;
 }
+
 //Global
+.img-100{
+	width : 100%;
+	height : auto; 
+	border-radius: 2px;
+}
 .full-center{
 	display : flex;
 	justify-content: center;
@@ -53,11 +61,7 @@ a:link, a:hover, a:visited{
 	width : 90%;
 	border-radius: 8px;
 }
-.img-100{
-	width : 100%;
-	height : auto; 
-	border-radius: 2px;
-}
+
 .priority{
 	background-color : rgb(228, 246, 242);
 }
