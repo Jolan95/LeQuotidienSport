@@ -88,7 +88,9 @@
     <div class="container-fluid d-sm-none header-small">
         <nav class="navbar p-0">
             <div >
-                <img src="{{ asset('image/LogoSport.png') }}" class="logo-header-mobile" alt="logo">   
+                <a href="{{ path("app_sport", {sport : "actualité"})}}">
+                    <img src="{{ asset('image/LogoSport.png') }}" class="logo-header-mobile" alt="logo">    
+                </a>   
             </div>
             <button class="navbar-toggler p-1" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <img src="{{asset('image/menu-burger.png')}}" class="menu-burger" alt="icône menu mobile" >
@@ -104,22 +106,22 @@
                         <div class="dropdown-menu pb-4 ">
                            <ul>
                                <li class="nav-item">
-                                   <a  href="{{path("app_sport", {sport : 'Football'})}}">Football</a>
+                                   <a  href={{path("app_sport", {sport : 'Football'})}}>Football</a>
                                </li>
                                <li class="nav-item">
-                                   <a  href="{{path("app_sport", {sport : 'Basketball'})}}">Basketball</a>
+                                   <a  href={{path("app_sport", {sport : 'Basketball'})}}>Basketball</a>
                                </li>
                                <li class="nav-item">
-                                   <a  href="{{path("app_sport", {sport : 'Rugby'})}}">Rugby</a>
+                                   <a  href={{path("app_sport", {sport : 'Rugby'})}}>Rugby</a>
                                </li>
                                <li class="nav-item">
-                                   <a  href="{{path("app_sport", {sport : 'Tennis'})}}">Tennis</a>
+                                   <a  href={{path("app_sport", {sport : 'Tennis'})}}>Tennis</a>
                                </li>
                                <li class="nav-item">
-                                   <a  href="{{path("app_sport", {sport : 'Cyclisme'})}}">Cyclisme</a>
+                                   <a  href={{path('app_sport', {sport : "cyclisme"})}}>Cyclisme</a>
                                </li>
                                <li class="nav-item">
-                                   <a  href="{{path("app_sport", {sport : 'Autres'})}}">Autres</a>
+                                   <a  href={{path("app_sport", {sport : 'Autres'})}}>Autres</a>
                                </li>
                            </ul>
                        </div>
