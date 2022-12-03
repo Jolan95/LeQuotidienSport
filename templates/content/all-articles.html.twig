@@ -38,7 +38,7 @@
 	 	{{ post.category }}
        </div>
        <div class="col-2 d-none d-lg-flex  full-center">
-       	{{ convertDate(post.createdAt) }}
+       	{{ post.createdAt|date('Y-m-d') }}
        </div>
        <div class="col-1 d-none d-lg-flex  full-center">
        	{{ post.views }}

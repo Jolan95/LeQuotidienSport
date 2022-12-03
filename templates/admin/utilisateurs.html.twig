@@ -145,7 +145,7 @@
 	    		 	<i>{{user.email}}</i>
 	    		</div>
 	    		<div class="col-1 d-none d-lg-flex justify-center" >
-	    		  	<p>{{ nbPost(user.id, posts) }}<p>
+	    		  	<p>{{ user.posts|length }}<p>
 	    		</div>
 				<div class=" col-2 col-lg-2 justify-center">
 					<button data-id="{{user.id}}" class="button-downgrade full-center btn-danger rounded" data-toggle="modal" data-target=".bd-example-modal-sm">
@@ -266,7 +266,7 @@
 			 	  {{user.email}}
 			 	</div>
 			 	<div class="col-3 justify-center">
-			 	  {{ nbPost(user.id, posts) }}
+			 	  {{ user.posts|length }}
 			 	</div>
 			</div>
 			<hr/>
