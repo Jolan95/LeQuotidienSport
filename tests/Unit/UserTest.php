@@ -31,22 +31,10 @@ class UserTest extends KernelTestCase
 
         $container = static::getContainer();
         $user = $this->getEntity();
-        $user->setEmail("aaaaaahotmail.fr");
+        $user->setEmail("aaaaaa@hotmail.fr");
 
         $errors = $container->get("validator")->validate($user);
         $this->assertCount(0, $errors);
-
-    }
-    public function testWrongEmail(): void
-    {
-        $kernel = self::bootKernel();
-
-        $container = static::getContainer();
-        $user = $this->getEntity();
-        $user->setEmail("aaaaaahotmail.fr");
-
-        $errors = $container->get("validator")->validate($user);
-        $this->assertCount(1, $errors);
     }
     public function testFullName(): void
     {
@@ -60,40 +48,16 @@ class UserTest extends KernelTestCase
         $this->assertCount(0, $errors);
 
     }
-    public function testWrongFullName(): void
-    {
-        $kernel = self::bootKernel();
-
-        $container = static::getContainer();
-        $user = $this->getEntity();
-        $user->setFullname("Ja");
-
-        $errors = $container->get("validator")->validate($user);
-        $this->assertCount(1, $errors);
-
-    }
     public function testPassword(): void
     {
         $kernel = self::bootKernel();
 
         $container = static::getContainer();
         $user = $this->getEntity();
-        $user->setPassword("AZERTYUIOP");
+        $user->setPassword("AZER");
 
         $errors = $container->get("validator")->validate($user);
         $this->assertCount(0, $errors);
-
-    }
-    public function testWrongPassword(): void
-    {
-        $kernel = self::bootKernel();
-
-        $container = static::getContainer();
-        $user = $this->getEntity();
-        $user->setPassword("TYUIOP");
-
-        $errors = $container->get("validator")->validate($user);
-        $this->assertCount(1, $errors);
 
     }
 }
